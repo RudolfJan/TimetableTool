@@ -24,6 +24,7 @@ CREATE TABLE IF NOT EXISTS "TimeEvents" (
 	"RelativeTime"	INTEGER NOT NULL,
 	"LocationId"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
+	"Order" INTEGER NOL NULL,
 	FOREIGN KEY("LocationId") REFERENCES "Locations",
 	FOREIGN KEY("ServiceId") REFERENCES "Services"
 );
@@ -69,6 +70,7 @@ CREATE TABLE IF NOT EXISTS "Routes" (
 CREATE TABLE IF NOT EXISTS "Locations" (
 	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"LocationName"	TEXT NOT NULL,
+	"LocationAbbreviation" TEXT NOT NULL,
 	"NumberOfTracks"	INTEGER NOT NULL,
 	"Order"	INTEGER NOT NULL,
 	"RouteId"	INTEGER NOT NULL,

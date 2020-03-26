@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Models\AppIcon.ico" />
+    <None Remove="Models\delete.ico" />
+    <None Remove="Models\filter.png" />
+    <None Remove="Models\folder.png" />
+    <None Remove="Models\page_delete.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Caliburn.Micro" Version="4.0.105-alpha" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="3.1.2" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="3.1.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\FancyTrainsimToolsApp\Logging.Library\Logging.Library.csproj" />
+    <ProjectReference Include="..\..\FancyTrainsimToolsApp\Styles.Library\Styles.Library.csproj" />
+    <ProjectReference Include="..\DataAccess.Library\DataAccess.Library.csproj" />
+    <ProjectReference Include="..\SQLiteDataAcces.Library\SQLiteDataAcces.Library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\AppIcon.ico" />
+    <Resource Include="Images\delete.ico" />
+    <Resource Include="Images\filter.png" />
+    <Resource Include="Images\folder.png" />
+    <Resource Include="Images\page_delete.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

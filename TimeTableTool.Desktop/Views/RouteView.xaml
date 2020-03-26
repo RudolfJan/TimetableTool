@@ -1,0 +1,127 @@
+﻿<UserControl x:Class="TimeTableTool.Desktop.Views.RouteView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimeTableTool.Desktop.Views"
+             xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800">
+    <Border Style="{StaticResource DefaultBorder}">
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="auto"/>
+          <ColumnDefinition Width="auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+ <!-- Left column -->
+
+ <!-- Row 0 Title -->
+    <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Routes</TextBlock>
+
+<!-- Row 1 RoutesDatagrid -->
+    <DataGrid x:Name="RouteList" 
+              Grid.Row="1" Grid.Column="0" 
+              Style="{StaticResource DefaultDataGrid}"
+              ItemsSource="{Binding Path=RouteList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+              SelectedItem="{Binding SelectedRoute}"
+              Height="400"
+              CanUserAddRows="False"
+              CanUserDeleteRows="False"
+              AutoGenerateColumns="False"
+              >
+      <DataGrid.Columns>
+        <DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock
+                  Text="Id"
+                  HorizontalAlignment="Center"/>
+                <Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+                        Command="{Binding ElementName=RouteList, Path= DataContext.SetFilterCommand}">
+                  <Image Source="../Images/filter.png" />
+                </Button>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+ 
+        </DataGridTextColumn>
+
+        <DataGridTextColumn Binding="{Binding RouteAbbreviation, NotifyOnSourceUpdated=True}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock
+                  Text="Abbrev" 
+                  HorizontalAlignment="Center" />
+                <TextBox x:Name="RouteAbbreviationFilterTextBox" Width="80" 
+                         Text="{Binding ElementName=RouteList, Path= DataContext.Filter.RouteAbbreviation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+
+        </DataGridTextColumn>
+
+        <DataGridTextColumn Binding="{Binding RouteName, NotifyOnSourceUpdated=True}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock
+                  Text="Route" 
+                  HorizontalAlignment="Center"/>
+                <TextBox x:Name="RouteNameFilterTextBox" Width="220" 
+                         Text="{Binding ElementName=RouteList, Path= DataContext.Filter.RouteName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+ 
+        </DataGridTextColumn>
+      </DataGrid.Columns>
+ 
+    </DataGrid>
+
+<!-- Row 2 Controls -->
+<StackPanel Grid.Row="2" Grid.Column="0" >
+<WrapPanel>
+  <Button x:Name="EditRoute" Style="{StaticResource DefaultButton}">Edit</Button>
+  <Button x:Name="DeleteRoute" Style="{StaticResource DefaultButton}">Delete</Button>
+</WrapPanel>
+
+</StackPanel>
+
+<!-- Right column -->
+
+<!-- Row 0 Header -->
+ <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Route editor</TextBlock>
+
+ <!-- Row 1 detail view -->
+
+ <StackPanel Grid.Row="1" Grid.Column="1" MinWidth="300">
+
+   <userControls:LabelTextBox x:Name="RouteAbbreviationTextBox" LabelText="Abbrev" 
+                              TextBoxText="{Binding RoutesUI.RouteAbbreviatiton}"/>
+   <userControls:LabelTextBox x:Name="RouteNameTextBox" LabelText="Route"
+                              TextBoxText="{Binding RoutesUI.RouteName}"/>
+<TextBlock Style="{StaticResource DefaultTextBlock}">Description:</TextBlock>
+   <TextBox x:Name="DescriptionTextBox" Style="{StaticResource BigTextBox}"
+            Text="{Binding RoutesUI.Description}"/>
+<WrapPanel>
+  <Button x:Name="UpdateRoute" Style="{StaticResource DefaultButton}">Update</Button>
+  <Button x:Name="SaveNewRoute" Style="{StaticResource DefaultButton}">Save new</Button>
+   <Button x:Name="ClearRoute" Style="{StaticResource DefaultButton}">Clear</Button>
+</WrapPanel>
+ </StackPanel>
+
+ 
+      </Grid>
+            
+    </Border>
+</UserControl>
