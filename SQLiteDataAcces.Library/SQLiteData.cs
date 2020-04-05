@@ -123,7 +123,7 @@ namespace SQLiteDataAccess.Library
         CreateTable("SQL\\TimeTableDb.sql");
         
         // ViewCreation
-
+        CreateTable("SQL\\CreateFullTimeEvents.sql");
         // Index creation
 
         // Create testdata
@@ -190,13 +190,14 @@ namespace SQLiteDataAccess.Library
     /// <param name="sqlStatement">The SQL statement.</param>
     /// <param name="parameters">The parameters.</param>
     /// <param name="connectionString">The connection string.</param>
-    public static void SaveData<T>(string sqlStatement, T parameters, string connectionString)
+    public static int SaveData<T>(string sqlStatement, T parameters, string connectionString)
       {
+      var output = -1;
       try
         {
         using (IDbConnection connection = new SQLiteConnection(connectionString))
           {
-          connection.Execute(sqlStatement, parameters);
+          output=connection.Execute(sqlStatement, parameters);
           }
         }
       catch (Exception e)
@@ -204,6 +205,7 @@ namespace SQLiteDataAccess.Library
         Log.Trace($"Cannot save data in database using {sqlStatement}",e,LogEventType.Error);
         throw;
         }
+      return output;
       }
     #endregion
     }

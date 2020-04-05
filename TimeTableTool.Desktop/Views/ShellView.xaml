@@ -4,30 +4,31 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Style="{StaticResource AllWindows}" WindowState="Maximized" 
-        WindowStartupLocation="CenterScreen"
-        Title="Time Table Tool" MinHeight="450" MinWidth="800">
+        Style="{StaticResource AllWindows}"
+        WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="600"
+        Title="Time Table Tool">
     <ScrollViewer>
         <DockPanel>
-            <Menu DockPanel.Dock="Top" FontSize="12">
-                <MenuItem Header="_File">
+            <Menu x:Name="Menu" DockPanel.Dock="Top" FontSize="12">
+                <MenuItem  x:Name="FileMenu"  Header="_File">
                     <MenuItem x:Name="Export" Header="E_xport ..."></MenuItem>
                     <MenuItem x:Name="View" Header="_View"></MenuItem>
                     <MenuItem x:Name="Print" Header="_Print"></MenuItem>
-                    <MenuItem x:Name="Exit" Header="_Exit"></MenuItem>
+                    <MenuItem x:Name="ExitApplication" Header="E_xit"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="_Route">
-                    <MenuItem x:Name="Route" Header="_Route"></MenuItem>
-                    <MenuItem x:Name="Branch" Header="_Branch"></MenuItem>
-                    <MenuItem x:Name="Location" Header="_Location"></MenuItem>
-                    <MenuItem x:Name="Section" Header="_Section"></MenuItem>
+                <MenuItem x:Name="RouteMenu" Header="_Route">
+                    <MenuItem x:Name="EditRoutes" Header="_Route"></MenuItem>
+                    <MenuItem x:Name="EditBranches" Header="_Branch"></MenuItem>
+                    <MenuItem x:Name="EditLocations" Header="_Location" IsEnabled="{Binding IsEditLocationsEnabled}"/>
+                    <MenuItem x:Name="EditSections" Header="_Section"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="_Services">
-                    <MenuItem x:Name="Services" Header="_Services"></MenuItem>
-                    <MenuItem x:Name="TimeEvents" Header="_Time Events"></MenuItem>
-                    <MenuItem x:Name="ServiceInstances" Header="_Service Instances"></MenuItem>
+                <MenuItem  x:Name="TimeTablesMenu" Header="Time tables">
+                    <MenuItem x:Name="EditTimeTables" Header="_Time tables" IsEnabled="{Binding IsEditTimeTablesEnabled}"/>
+                    <MenuItem x:Name="EditServices" Header="_Services" IsEnabled="{Binding IsEditServicesEnabled}"></MenuItem>
+                    <MenuItem x:Name="EditTimeEvents" Header="Time E_vents" IsEnabled="{Binding IsEditTimeEventsEnabled}"></MenuItem>
+                    <MenuItem x:Name="EditServiceInstances" Header="_Service Instances"></MenuItem>
                 </MenuItem>
-                <MenuItem Header="_Help">
+                <MenuItem x:Name="HelpMenu"  Header="_Help">
                     <MenuItem x:Name="Manual" Header="_Manual"></MenuItem>
                     <MenuItem x:Name="About" Header="_About"></MenuItem>
                     <MenuItem x:Name="Logging" Header="_Logging"></MenuItem>

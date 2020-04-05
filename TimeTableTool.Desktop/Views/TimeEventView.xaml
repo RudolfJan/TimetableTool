@@ -1,0 +1,76 @@
+﻿<UserControl x:Class="TimeTableTool.Desktop.Views.TimeEventView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800">
+  <StackPanel>
+    <WrapPanel HorizontalAlignment="Center" >
+      <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Time Events for Service:</TextBlock>
+      <TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding SelectedService.ServiceName}" FontSize="16"/>
+    </WrapPanel>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="Auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+
+      <!-- Left column is for Locations -->
+      <StackPanel Grid.Row="0" Grid.Column="0">
+        <TextBlock Style="{StaticResource HeaderTextBlock}">Locations</TextBlock>
+        <DataGrid x:Name="LocationDataGrid" Style="{StaticResource DefaultDataGrid}" 
+                  AutoGenerateColumns="False" Height="400"
+                  ItemsSource="{Binding Path=TimeEvents.LocationList }">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Location" Width="150"
+                      Binding="{Binding LocationName }" 
+                      />
+          </DataGrid.Columns>
+        </DataGrid>
+      </StackPanel>
+
+      <!-- Middle column is for action buttons -->
+
+      <!-- Third column is for TimeEvents -->
+
+      <StackPanel Grid.Row="0" Grid.Column="2">
+        <TextBlock Style="{StaticResource HeaderTextBlock}">Time events</TextBlock>
+        <DataGrid x:Name="EventTimeEventDaraGrid" Style="{StaticResource DefaultDataGrid}" 
+                  AutoGenerateColumns="False" Height="400"
+                  ItemsSource="{Binding TimeEvents.FilteredFullTimeEventList}"
+                  >
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Location" Width="150"
+                                Binding="{Binding LocationName}" />
+            <DataGridTextColumn Header="Type" Width="40"
+                                Binding="{Binding EventType}" />
+            <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding RelativeTime}" />
+            <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding Order}"      />   
+
+          </DataGrid.Columns>
+
+        </DataGrid>
+        </StackPanel>
+
+<!-- Fourth column has the edit form -->
+          <StackPanel Grid.Row="0" Grid.Column="3">
+        <TextBlock Style="{StaticResource HeaderTextBlock}">Time events editor</TextBlock>
+            <Button x:Name="SetLocation" Style="{StaticResource DefaultButton}">Set location</Button>
+      
+
+        </StackPanel>
+    </Grid>
+
+  </StackPanel>
+</UserControl>

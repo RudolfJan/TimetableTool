@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS "TimeEvents" (
 	"RelativeTime"	INTEGER NOT NULL,
 	"LocationId"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
-	"Order" INTEGER NOL NULL,
+	"Order" INTEGER NOT NULL,
 	FOREIGN KEY("LocationId") REFERENCES "Locations",
 	FOREIGN KEY("ServiceId") REFERENCES "Services"
 );

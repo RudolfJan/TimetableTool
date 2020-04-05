@@ -28,10 +28,10 @@ namespace DataAccess.Library.Logic
       return route;
       }
 
-    public static void InsertRoute(RouteModel route)
+    public static int InsertRoute(RouteModel route)
       {
-      string sql = "INSERT OR IGNORE RouteName, RouteAbbreviation, RouteDescription VALUES(@RouteName, @RouteAbbreviation, @RouteDescription)";
-      SQLiteData.SaveData<dynamic>(sql,new {route.RouteName, route.RouteAbbreviation, route.RouteDescription}, SQLiteData.GetConnectionString());
+      string sql = "INSERT OR IGNORE INTO Routes (RouteName, RouteAbbreviation, RouteDescription) VALUES(@RouteName, @RouteAbbreviation, @RouteDescription)";
+      return SQLiteData.SaveData<dynamic>(sql,new {route.RouteName, route.RouteAbbreviation, route.RouteDescription}, SQLiteData.GetConnectionString());
       }
     }
   }

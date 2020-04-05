@@ -1,0 +1,139 @@
+﻿<UserControl x:Class="TimeTableTool.Desktop.Views.ServiceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimeTableTool.Desktop.Views"
+             xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
+             mc:Ignorable="d" 
+            d:DesignHeight="650" d:DesignWidth="800">
+
+  <Border Style="{StaticResource DefaultBorder}">
+    <StackPanel>
+      <WrapPanel HorizontalAlignment="Center">
+        <TextBlock Style="{StaticResource HeaderTextBlock}">Route:</TextBlock>
+        <TextBox x:Name="RouteNameTextBox" Style="{StaticResource StaticTextBox}"
+               Text="{Binding Path=ServicesUI.RouteName}"  MinWidth="200"></TextBox>
+      </WrapPanel>
+      <Grid>
+        <Grid.ColumnDefinitions>
+          <ColumnDefinition Width="auto"/>
+          <ColumnDefinition Width="auto"/>
+          <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="auto"/>
+          <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <!-- Left column -->
+
+        <!-- Row 0 Title -->
+        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Time tables</TextBlock>
+
+        <!-- Row 1 ServicesDatagrid -->
+        <DataGrid x:Name="ServiceList" 
+                Grid.Row="1" Grid.Column="0" 
+                Style="{StaticResource DefaultDataGrid}"
+                ItemsSource="{Binding Path=ServicesUI.ServiceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedService}"
+                Height="400" MinWidth="400"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False"
+      >
+          <DataGrid.Columns>
+            <DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+              <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock
+                  Text="Id"
+                  HorizontalAlignment="Center"/>
+                    <Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+                        Command="{Binding ElementName=ServiceList, Path= DataContext.SetFilterCommand}">
+                      <Image Source="../Images/filter.png" />
+                    </Button>
+                  </StackPanel>
+                </DataTemplate>
+              </DataGridTextColumn.HeaderTemplate>
+            </DataGridTextColumn>
+
+            <DataGridTextColumn Binding="{Binding ServiceAbbreviation, NotifyOnSourceUpdated=True}">
+              <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock
+                  Text="Abbrev" 
+                  HorizontalAlignment="Center" />
+                    <TextBox x:Name="ServiceAbbreviationFilterTextBox" Width="80" 
+                          Text="{Binding ElementName=ServiceList, 
+                          Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
+                          UpdateSourceTrigger=PropertyChanged}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </DataGridTextColumn.HeaderTemplate>
+            </DataGridTextColumn>
+
+            <DataGridTextColumn Binding="{Binding ServiceName, NotifyOnSourceUpdated=True}">
+              <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock
+                  Text="Service" 
+                  HorizontalAlignment="Center"/>
+                    <TextBox x:Name="ServiceNameFilterTextBox" Width="220" 
+                         Text="{Binding ElementName=ServiceList, 
+                         Path= DataContext.Filter.ServiceName, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+                  </StackPanel>
+                </DataTemplate>
+              </DataGridTextColumn.HeaderTemplate>
+            </DataGridTextColumn>
+          </DataGrid.Columns>
+
+        </DataGrid>
+
+        <!-- Row 2 Controls -->
+        <StackPanel Grid.Row="2" Grid.Column="0" >
+          <WrapPanel>
+            <Button x:Name="EditService" Style="{StaticResource DefaultButton}">Edit</Button>
+            <Button x:Name="DeleteService" Style="{StaticResource DefaultButton}">Delete</Button>
+          </WrapPanel>
+        </StackPanel>
+
+        <!-- Right column -->
+
+        <!-- Row 0 Header -->
+        <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Service editor</TextBlock>
+
+        <!-- Row 1 detail view -->
+
+        <StackPanel Grid.Row="1" Grid.Column="1" MinWidth="300">
+          <WrapPanel>
+            <userControls:LabelTextBox x:Name="ServiceAbbreviationTextBox" LabelText="Abbrev" 
+                             TextBoxText="{Binding ServicesUI.ServiceAbbreviatiton}"/>
+            <userControls:LabelTextBox x:Name="ServiceTypeTextBox" LabelText="Type" Width="140" LabelWidth="40"
+                                       TextBoxText="{Binding ServicesUI.ServiceType}"/>
+            <userControls:LabelTextBox x:Name="ServiceCalculatedDurationTextBox" LabelText="Duration" 
+                                       TextBoxText="{Binding ServicesUI.CalculatedDuration}"/>
+
+          </WrapPanel>
+          <userControls:LabelTextBox x:Name="ServiceNameTextBox" LabelText="Service"
+                               TextBoxText="{Binding ServicesUI.ServiceName}"/>
+          <TextBlock Style="{StaticResource DefaultTextBlock}">Description:</TextBlock>
+          <TextBox x:Name="DescriptionTextBox" Style="{StaticResource BigTextBox}"
+                 Text="{Binding RoutesUI.Description}"/>
+          <WrapPanel>
+
+            <Button x:Name="UpdateService" Style="{StaticResource DefaultButton}">Update</Button>
+            <Button x:Name="SaveNewService" Style="{StaticResource DefaultButton}">Save new</Button>
+            <Button x:Name="ClearService" Style="{StaticResource DefaultButton}">Clear</Button>
+          </WrapPanel>
+        </StackPanel>
+      </Grid>
+    </StackPanel>
+  </Border>
+</UserControl>

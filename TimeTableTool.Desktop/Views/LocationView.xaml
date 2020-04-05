@@ -1,0 +1,148 @@
+﻿<UserControl x:Class="TimeTableTool.Desktop.Views.LocationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimeTableTool.Desktop.Views" xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="800">
+  <Border Style="{StaticResource DefaultBorder}">
+    <StackPanel>
+    <WrapPanel HorizontalAlignment="Center">
+<TextBlock Style="{StaticResource HeaderTextBlock}">Route: </TextBlock>
+      <TextBox x:Name="RouteNameTextBox" Style="{StaticResource StaticTextBox}"
+               Text="{Binding Path=LocationsUI.RouteName}"  MinWidth="200"></TextBox>
+    </WrapPanel>
+    <Grid>
+      <Grid.ColumnDefinitions>
+        <ColumnDefinition Width="auto"/>
+        <ColumnDefinition Width="auto"/>
+        <ColumnDefinition Width="*"/>
+      </Grid.ColumnDefinitions>
+      <Grid.RowDefinitions>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <!-- Left column -->
+
+      <!-- Row 0 Title -->
+      <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Locations</TextBlock>
+
+      <!-- Row 1 RoutesDatagrid -->
+      <DataGrid x:Name="LocationList" 
+                Grid.Row="1" Grid.Column="0" 
+                Style="{StaticResource DefaultDataGrid}"
+                ItemsSource="{Binding Path=LocationsUI.LocationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedLocation}"
+                Height="400" MinWidth="400"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False"
+      >
+        <DataGrid.Columns>
+       <DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock
+                  Text="Id"
+                  HorizontalAlignment="Center"/>
+                <Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+                        Command="{Binding ElementName=LocationList, Path= DataContext.SetFilterCommand}">
+                  <Image Source="../Images/filter.png" />
+                </Button>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+        </DataGridTextColumn>
+
+          <DataGridTextColumn Binding="{Binding Order, NotifyOnSourceUpdated=True}">
+            <DataGridTextColumn.HeaderTemplate>
+              <DataTemplate>
+                <StackPanel>
+                  <TextBlock
+                    Text="Order" 
+                    HorizontalAlignment="Center"/>
+                  <TextBox x:Name="LocationNameFilterTextBox" Width="40" 
+                           Text="{Binding ElementName=LocationList, Path= DataContext.Filter.Order, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                </StackPanel>
+              </DataTemplate>
+            </DataGridTextColumn.HeaderTemplate>
+          </DataGridTextColumn>
+
+        <DataGridTextColumn Binding="{Binding LocationAbbreviation, NotifyOnSourceUpdated=True}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock
+                  Text="Abbrev" 
+                  HorizontalAlignment="Center" />
+                <TextBox x:Name="LocationAbbreviationFilterTextBox" Width="80" 
+                         Text="{Binding ElementName=LocationList, Path= DataContext.Filter.LocationAbbreviation, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+        </DataGridTextColumn>
+
+        <DataGridTextColumn Binding="{Binding LocationName, NotifyOnSourceUpdated=True}">
+          <DataGridTextColumn.HeaderTemplate>
+            <DataTemplate>
+              <StackPanel>
+                <TextBlock
+                  Text="Location" 
+                  HorizontalAlignment="Center"/>
+                <TextBox x:Name="LocationNameFilterTextBox" Width="220" 
+                         Text="{Binding ElementName=LocationList, Path= DataContext.Filter.LocationName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+              </StackPanel>
+            </DataTemplate>
+          </DataGridTextColumn.HeaderTemplate>
+        </DataGridTextColumn>
+        </DataGrid.Columns>
+ 
+      </DataGrid>
+
+      <!-- Row 2 Controls -->
+      <StackPanel Grid.Row="2" Grid.Column="0" >
+        <WrapPanel>
+          <Button x:Name="EditLocation" Style="{StaticResource DefaultButton}">Edit</Button>
+          <Button x:Name="DeleteLocation" Style="{StaticResource DefaultButton}">Delete</Button>
+        </WrapPanel>
+      </StackPanel>
+
+      <!-- Right column -->
+
+      <!-- Row 0 Header -->
+      <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Location editor</TextBlock>
+
+      <!-- Row 1 detail view -->
+
+      <StackPanel Grid.Row="1" Grid.Column="1" MinWidth="300">
+<WrapPanel>
+  <userControls:LabelTextBox x:Name="OrderTextBox" LabelText="Order" 
+                             TextBoxText="{Binding LocationsUI.Order}"/>
+  <userControls:LabelTextBox x:Name="LocationAbbreviationTextBox" LabelText="Abbrev" 
+                             TextBoxText="{Binding RoutesUI.LocationAbbreviatiton}"/>
+  <userControls:LabelTextBox x:Name="NumberOfTracksTextBox" LabelText="Tracks"
+                             Width="90"
+                             TextBoxText="{Binding RoutesUI.NumberOftracks}"/>
+</WrapPanel>
+        <userControls:LabelTextBox x:Name="LocationNameTextBox" LabelText="Location"
+                                   TextBoxText="{Binding RoutesUI.LocationName}"/>
+ 
+
+        <WrapPanel>
+          <Button x:Name="UpdateRoute" Style="{StaticResource DefaultButton}">Update</Button>
+          <Button x:Name="SaveNewRoute" Style="{StaticResource DefaultButton}">Save new</Button>
+          <Button x:Name="ClearRoute" Style="{StaticResource DefaultButton}">Clear</Button>
+        </WrapPanel>
+      </StackPanel>
+
+
+
+    </Grid>
+    </StackPanel>    
+  </Border>
+</UserControl>
