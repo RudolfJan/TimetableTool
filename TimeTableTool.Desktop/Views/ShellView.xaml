@@ -29,9 +29,9 @@
                     <MenuItem x:Name="EditServiceInstances" Header="_Service Instances"></MenuItem>
                 </MenuItem>
                 <MenuItem x:Name="HelpMenu"  Header="_Help">
-                    <MenuItem x:Name="Manual" Header="_Manual"></MenuItem>
-                    <MenuItem x:Name="About" Header="_About"></MenuItem>
-                    <MenuItem x:Name="Logging" Header="_Logging"></MenuItem>
+                    <MenuItem x:Name="ShowManual" Header="_Manual"></MenuItem>
+                    <MenuItem x:Name="ShowAbout" Header="_About"></MenuItem>
+                    <MenuItem x:Name="ShowLogging" Header="_Logging"></MenuItem>
                 </MenuItem>
             </Menu>
             <Grid>

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Images\AboutImage.png" />
     <None Remove="Models\AppIcon.ico" />
     <None Remove="Models\delete.ico" />
     <None Remove="Models\filter.png" />
@@ -28,6 +29,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\AboutImage.png" />
     <Resource Include="Images\AppIcon.ico" />
     <Resource Include="Images\delete.ico" />
     <Resource Include="Images\filter.png" />

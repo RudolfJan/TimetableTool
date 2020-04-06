@@ -1,0 +1,55 @@
+﻿<Window x:Class="TimeTableTool.Desktop.Views.AboutView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" FontSize="12pt"
+        Style="{StaticResource AllWindows}" WindowStartupLocation="CenterOwner"
+        Title="About Timetable Tool">
+    <Border Style="{StaticResource DefaultBorder}">
+        <StackPanel>
+            <Image Source="../Images/AboutImage.png" MaxWidth="390"/>
+            <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+<Grid.ColumnDefinitions>
+    <ColumnDefinition Width="Auto"/>
+    <ColumnDefinition Width="*"/>
+</Grid.ColumnDefinitions>
+                <StackPanel Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                    <TextBlock x:Name="ApplicationName" Style="{StaticResource DefaultTextBlock}" FontSize="14pt" HorizontalAlignment="Center"/>
+                    <TextBlock x:Name="Description" Style="{StaticResource DefaultTextBlock}" TextWrapping="Wrap"/>
+                </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="0">
+            <TextBlock Style="{StaticResource DefaultTextBlock}">Author:</TextBlock>
+                    <TextBlock Style="{StaticResource DefaultTextBlock}">Version and date:</TextBlock> 
+                    <TextBlock Style="{StaticResource DefaultTextBlock}">Copyright:</TextBlock>
+                    <TextBlock Style="{StaticResource DefaultTextBlock}">Download location:</TextBlock>
+            </StackPanel>
+                <StackPanel Grid.Row="1" Grid.Column="1">
+                    <TextBlock x:Name="Author" Style="{StaticResource DefaultTextBlock}"/>
+                    <WrapPanel>
+                        <TextBlock x:Name="Version" Style="{StaticResource DefaultTextBlock}"/>
+                        <TextBlock x:Name="VersionDate" Style="{StaticResource DefaultTextBlock}"/>
+                    </WrapPanel>
+                    <TextBlock x:Name="Copyright" Style="{StaticResource DefaultTextBlock}"/>
+                    <TextBlock  Style="{StaticResource DefaultTextBlock}">
+                        <Hyperlink RequestNavigate="Hyperlink_RequestNavigate"
+                                   NavigateUri="{Binding WebSite}">
+                            <TextBlock Text="{Binding WebSite}"/>
+                        </Hyperlink>
+                    </TextBlock>
+
+                </StackPanel>
+
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <Button x:Name="CloseAboutScreen" Style="{StaticResource OKButton}" HorizontalAlignment="Right" VerticalAlignment="Bottom">Close</Button>
+        </StackPanel>
+    </Grid>
+        </StackPanel>
+    </Border>
+</Window>

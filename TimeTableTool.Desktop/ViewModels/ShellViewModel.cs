@@ -11,6 +11,7 @@ namespace TimeTableTool.Desktop.ViewModels
     //, IHandle<LocationSelectedEvent>, IHandle<ServiceSelectedEvent>
     {
     private readonly IEventAggregator _events;
+    private readonly IWindowManager _windowManager;
 
     public bool IsEditLocationsEnabled
       {
@@ -63,9 +64,10 @@ namespace TimeTableTool.Desktop.ViewModels
         }
       }
 
-    public ShellViewModel(IEventAggregator events)
+    public ShellViewModel(IEventAggregator events, IWindowManager windowManager)
       {
       _events = events;
+      _windowManager = windowManager;
       _events.SubscribeOnPublishedThread(this);
       }
 
@@ -112,7 +114,14 @@ namespace TimeTableTool.Desktop.ViewModels
       timeEventsVM.ServiceId = SelectedService.Id;
       await ActivateItemAsync(timeEventsVM, new CancellationToken());
       }
-    
+
+
+    public async Task ShowAbout()
+      {
+      await _windowManager.ShowDialogAsync(IoC.Get<AboutViewModel>());
+      }
+
+
     #region event handlers
  
     public Task HandleAsync(ServiceSelectedEvent message, CancellationToken cancellationToken)
