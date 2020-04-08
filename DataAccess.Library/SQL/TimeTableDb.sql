@@ -10,11 +10,11 @@ CREATE TABLE IF NOT EXISTS "ServiceInstances" (
 	FOREIGN KEY("TimeTableId") REFERENCES "TimeTables",
 	FOREIGN KEY("ServiceId") REFERENCES "Services"
 );
-CREATE TABLE IF NOT EXISTS "TimeTables" (
+CREATE TABLE IF NOT EXISTS "Timetables" (
 	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-	"TimeTableName"	TEXT NOT NULL,
-	"TimeTableAbbreviation"	TEXT NOT NULL,
-	"TimeTableDescription"	TEXT NOT NULL,
+	"TimetableName"	TEXT NOT NULL,
+	"TimetableAbbreviation"	TEXT NOT NULL,
+	"TimetableDescription"	TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
 	FOREIGN KEY("RouteId") REFERENCES "Routes"
 );

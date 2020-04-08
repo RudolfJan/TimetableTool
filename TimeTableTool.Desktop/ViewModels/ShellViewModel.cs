@@ -3,9 +3,9 @@ using DataAccess.Library.Models;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using TimeTableTool.Desktop.EventModels;
+using TimetableTool.Desktop.EventModels;
 
-namespace TimeTableTool.Desktop.ViewModels
+namespace TimetableTool.Desktop.ViewModels
   {
   public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceSelectedEvent>
     //, IHandle<LocationSelectedEvent>, IHandle<ServiceSelectedEvent>
@@ -18,7 +18,7 @@ namespace TimeTableTool.Desktop.ViewModels
       get { return SelectedRoute != null; }
       }
 
-    public bool IsEditTimeTablesEnabled
+    public bool IsEditTimetablesEnabled
       {
       get { return SelectedRoute != null; }
       }
@@ -47,7 +47,7 @@ namespace TimeTableTool.Desktop.ViewModels
         {
         _selectedRoute = value;
         NotifyOfPropertyChange(()=>IsEditLocationsEnabled);
-        NotifyOfPropertyChange(()=>IsEditTimeTablesEnabled);
+        NotifyOfPropertyChange(()=>IsEditTimetablesEnabled);
         NotifyOfPropertyChange(()=> IsEditServicesEnabled);
         NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
         }
@@ -74,7 +74,7 @@ namespace TimeTableTool.Desktop.ViewModels
     protected override async void OnViewLoaded(object view)
       {
       base.OnViewLoaded(view);
-      await ActivateItemAsync(IoC.Get<RouteViewModel>(), new CancellationToken());
+      await EditRoutes();
       }
     void Location()
       {
@@ -86,6 +86,12 @@ namespace TimeTableTool.Desktop.ViewModels
       await TryCloseAsync();
       }
 
+    public async Task EditRoutes()
+      {
+      var routeVM = IoC.Get<RouteViewModel>();
+      await ActivateItemAsync(routeVM, new CancellationToken());
+      }
+
     public async Task EditLocations()
       {
       var locationVM = IoC.Get<LocationViewModel>();
@@ -93,11 +99,11 @@ namespace TimeTableTool.Desktop.ViewModels
       await ActivateItemAsync(locationVM, new CancellationToken());
       }
 
-    public async Task EditTimeTables()
+    public async Task EditTimetables()
       {
-      var timeTableVM = IoC.Get<TimeTableViewModel>();
-      timeTableVM.RouteId = SelectedRoute.Id;
-      await ActivateItemAsync(timeTableVM, new CancellationToken());
+      var timetableVM = IoC.Get<TimetableViewModel>();
+      timetableVM.RouteId = SelectedRoute.Id;
+      await ActivateItemAsync(timetableVM, new CancellationToken());
       }
 
     public async Task EditServices()
@@ -115,12 +121,10 @@ namespace TimeTableTool.Desktop.ViewModels
       await ActivateItemAsync(timeEventsVM, new CancellationToken());
       }
 
-
     public async Task ShowAbout()
       {
       await _windowManager.ShowDialogAsync(IoC.Get<AboutViewModel>());
       }
-
 
     #region event handlers
  
@@ -130,16 +134,17 @@ namespace TimeTableTool.Desktop.ViewModels
       return Task.CompletedTask;
       }
   
-    #endregion
-
-    /// <summary>Handles the message.</summary>
-    /// <param name="message">The message.</param>
-    /// <param name="cancellationToken">A cancellation token that can be used by other objects or threads to receive notice of cancellation.</param>
-    /// <returns>A task that represents the asynchronous coroutine.</returns>
     public Task HandleAsync(RouteSelectedEvent message, CancellationToken cancellationToken)
       {
+      // If you change the selected route, you must reselect the service, because it is attached to the route.
+      if (SelectedRoute?.Id != message.SelectedRoute.Id)
+        {
+        SelectedService = null;
+        NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
+        }
       SelectedRoute = message.SelectedRoute;
       return Task.CompletedTask;
       }
+    #endregion
     }
   }

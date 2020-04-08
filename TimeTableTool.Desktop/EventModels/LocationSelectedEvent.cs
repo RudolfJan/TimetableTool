@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TimeTableTool.Desktop.EventModels
+namespace TimetableTool.Desktop.EventModels
   {
   public class LocationSelectedEvent
     {

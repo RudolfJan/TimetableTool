@@ -4,7 +4,7 @@ using System.Windows.Threading;
 
 // TODO bring this in MVVM structures
 
-namespace TimeTableTool.Desktop.Views
+namespace TimetableTool.Desktop.Views
   {
   /// <summary>
   /// Interaction logic for NotificationView.xaml

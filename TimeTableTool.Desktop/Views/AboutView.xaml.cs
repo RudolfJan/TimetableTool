@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Windows;
 
-namespace TimeTableTool.Desktop.Views
+namespace TimetableTool.Desktop.Views
   {
   /// <summary>
   /// Interaction logic for AboutView.xaml

@@ -35,5 +35,14 @@ namespace DataAccess.Library.Logic
                       service.ServiceType, service.CalculatedDuration, service.RouteId}, 
                       SQLiteData.GetConnectionString());
       }
+
+    public static void UpdateService(ServiceModel service)
+      {
+      string sql = "UPDATE OR IGNORE Services SET ServiceName=@ServiceName, ServiceAbbreviation=@ServiceAbbreviation, ServiceDescription=@ServiceDescription, ServiceType=@ServiceType, CalculatedDuration=@CalculatedDuration,RouteId=@RouteId  WHERE Id=@Id";
+      SQLiteData.SaveData<dynamic>(sql,
+        new {service.ServiceName, service.ServiceAbbreviation, service.ServiceDescription, 
+          service.ServiceType, service.CalculatedDuration, service.RouteId, service.Id}, 
+        SQLiteData.GetConnectionString());
+      }
     }
   }

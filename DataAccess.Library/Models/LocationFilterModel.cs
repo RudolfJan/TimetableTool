@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TimeTableTool.Desktop.Models
+namespace TimetableTool.Desktop.Models
   {
   public class LocationFilterModel
     {

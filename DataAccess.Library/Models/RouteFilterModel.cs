@@ -1,4 +1,4 @@
-﻿namespace TimeTableTool.Desktop.Models
+﻿namespace TimetableTool.Desktop.Models
   {
   public class RouteFilterModel
     {

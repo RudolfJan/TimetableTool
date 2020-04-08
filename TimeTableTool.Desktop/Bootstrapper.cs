@@ -5,10 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
-using TimeTableTool.Desktop.ViewModels;
-using TimeTableTool.Desktop.Views;
+using TimetableTool.Desktop.ViewModels;
+using TimetableTool.Desktop.Views;
 
-namespace TimeTableTool.Desktop
+namespace TimetableTool.Desktop
   {
   public class Bootstrapper : BootstrapperBase
     {

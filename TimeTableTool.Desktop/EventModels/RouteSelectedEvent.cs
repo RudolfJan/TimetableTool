@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using TimeTableTool.Desktop.Models;
+using TimetableTool.Desktop.Models;
 
-namespace TimeTableTool.Desktop.EventModels
+namespace TimetableTool.Desktop.EventModels
   {
   public class RouteSelectedEvent
     {

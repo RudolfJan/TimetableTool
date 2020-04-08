@@ -1,5 +1,6 @@
 ﻿using DataAccess.Library.Models;
 using SQLiteDataAccess.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -27,8 +28,15 @@ namespace DataAccess.Library.Logic
 
     public static int InsertLocationForRoute(LocationModel location)
       {
-      string sql = "INSERT OR IGNORE INTO Locations (LocationName, LocationAbbreviation, NumberOfTracks, Order, RouteId) VALUES(@LocationName, @LocationAbbreviation, @NumberOfTracks, @Order, @RouteId)";
+      string sql = "INSERT OR IGNORE INTO Locations (LocationName, LocationAbbreviation, NumberOfTracks, [Order], RouteId) VALUES(@LocationName, @LocationAbbreviation, @NumberOfTracks, @Order, @RouteId)";
       return SQLiteData.SaveData<dynamic>(sql,new {location.LocationName, location.LocationAbbreviation, location.NumberOfTracks, location.Order, location.RouteId}, SQLiteData.GetConnectionString());
+      }
+
+    public static void UpdateLocationForRoute(LocationModel location)
+      {
+      string sql = "UPDATE OR IGNORE Locations SET LocationName=@LocationName, LocationAbbreviation=@LocationAbbreviation, NumberOfTracks=@NumberOfTracks, [Order]=@Order, RouteId=@RouteId WHERE Id=@Id";
+      SQLiteData.SaveData<dynamic>(sql,new {location.LocationName, location.LocationAbbreviation, location.NumberOfTracks, location.Order, location.RouteId, location.Id}, SQLiteData.GetConnectionString());
+
       }
     }
   }

@@ -1,9 +1,9 @@
-﻿<UserControl x:Class="TimeTableTool.Desktop.Views.LocationView"
+﻿<UserControl x:Class="TimetableTool.Desktop.Views.LocationView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TimeTableTool.Desktop.Views" xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
+             xmlns:local="clr-namespace:TimetableTool.Desktop.Views" xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="800">
   <Border Style="{StaticResource DefaultBorder}">
@@ -122,21 +122,20 @@
       <StackPanel Grid.Row="1" Grid.Column="1" MinWidth="300">
 <WrapPanel>
   <userControls:LabelTextBox x:Name="OrderTextBox" LabelText="Order" 
-                             TextBoxText="{Binding LocationsUI.Order}"/>
+                             TextBoxText="{Binding Order, Mode=TwoWay}"/>
   <userControls:LabelTextBox x:Name="LocationAbbreviationTextBox" LabelText="Abbrev" 
-                             TextBoxText="{Binding RoutesUI.LocationAbbreviatiton}"/>
+                                                                                                                                                 TextBoxText="{Binding LocationAbbreviation, Mode=TwoWay}"/>
   <userControls:LabelTextBox x:Name="NumberOfTracksTextBox" LabelText="Tracks"
                              Width="90"
-                             TextBoxText="{Binding RoutesUI.NumberOftracks}"/>
+                             TextBoxText="{Binding NumberOfTracks, Mode=TwoWay}"/>
 </WrapPanel>
         <userControls:LabelTextBox x:Name="LocationNameTextBox" LabelText="Location"
-                                   TextBoxText="{Binding RoutesUI.LocationName}"/>
+                                   TextBoxText="{Binding LocationName, Mode=TwoWay}"/>
  
 
         <WrapPanel>
-          <Button x:Name="UpdateRoute" Style="{StaticResource DefaultButton}">Update</Button>
-          <Button x:Name="SaveNewRoute" Style="{StaticResource DefaultButton}">Save new</Button>
-          <Button x:Name="ClearRoute" Style="{StaticResource DefaultButton}">Clear</Button>
+          <Button x:Name="SaveLocation" Style="{StaticResource DefaultButton}">Save changes</Button>
+          <Button x:Name="ClearLocation" Style="{StaticResource DefaultButton}">Clear changes</Button>
         </WrapPanel>
       </StackPanel>
 

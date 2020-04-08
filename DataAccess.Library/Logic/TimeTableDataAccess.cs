@@ -7,30 +7,36 @@ using System.Text;
 
 namespace DataAccess.Library.Logic
   {
-  public class TimeTableDataAccess
+  public class TimetableDataAccess
     {
-    public static List<TimeTableModel> GetAllTimeTablesPerRoute(int routeId)
+    public static List<TimetableModel> GetAllTimetablesPerRoute(int routeId)
       {
-      string sql = "SELECT * FROM TimeTables WHERE RouteId=@RouteId";
+      string sql = "SELECT * FROM Timetables WHERE RouteId=@RouteId";
 
-      var timeTableList =
-        SQLiteData.LoadData<TimeTableModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();
-      return timeTableList;
+      var timetableList =
+        SQLiteData.LoadData<TimetableModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();
+      return timetableList;
       }
 
-    public static TimeTableModel GetTimeTableById(int timeTableId)
+    public static TimetableModel GetTimetableById(int timeTableId)
       {
-      string sql = "SELECT * FROM TimeTables WHERE Id= @timeTableId";
+      string sql = "SELECT * FROM Timetables WHERE Id= @timeTableId";
 
       var timeTable =
-        SQLiteData.LoadData<TimeTableModel, dynamic>(sql, new {timeTableId}, SQLiteData.GetConnectionString()).FirstOrDefault();
+        SQLiteData.LoadData<TimetableModel, dynamic>(sql, new {timeTableId}, SQLiteData.GetConnectionString()).FirstOrDefault();
       return timeTable;
       }
 
-    public static int InsertLocationForRoute(TimeTableModel timteTable)
+    public static int InsertTimetableForRoute(TimetableModel timetable)
       {
-      string sql = "INSERT OR IGNORE INTO TimeTables (TimeTableName, TimeTableAbbreviation, TimeTableDescription, RouteId) VALUES(@TimeTableName, @TimeTableAbbreviation, @TimeTableDescription, @RouteId)";
-      return SQLiteData.SaveData<dynamic>(sql,new {timteTable.TimeTableName, timteTable.TimeTableAbbreviation, timteTable.TimeTableDescription, timteTable.RouteId}, SQLiteData.GetConnectionString());
+      string sql = "INSERT OR IGNORE INTO Timetables (TimetableName, TimetableAbbreviation, TimetableDescription, RouteId) VALUES(@TimetableName, @TimetableAbbreviation, @TimetableDescription, @RouteId)";
+      return SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, timetable.TimetableDescription, timetable.RouteId}, SQLiteData.GetConnectionString());
+      }
+
+    public static void UpdateTimetable(TimetableModel timetable)
+      {
+      string sql = "UPDATE OR IGNORE Timetables SET TimetableName=@TimetableName, TimetableAbbreviation=@TimetableAbbreviation, TimetableDescription=@TimetableDescription, RouteId=@RouteId WHERE Id=@Id";
+      SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, timetable.TimetableDescription, timetable.RouteId, timetable.Id}, SQLiteData.GetConnectionString());
       }
     }
   }

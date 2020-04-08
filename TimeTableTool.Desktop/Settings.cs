@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace TimeTableTool.Desktop
+namespace TimetableTool.Desktop
   {
   public static class Settings
     {

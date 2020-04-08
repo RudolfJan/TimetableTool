@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace TimeTableTool.Desktop.Views
+namespace TimetableTool.Desktop.Views
   {
   /// <summary>
   /// Interaction logic for ServiceView.xaml

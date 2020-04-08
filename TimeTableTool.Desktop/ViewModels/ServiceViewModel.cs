@@ -5,18 +5,24 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
-using TimeTableTool.Desktop.EventModels;
-using TimeTableTool.Desktop.Models;
+using TimetableTool.Desktop.EventModels;
+using TimetableTool.Desktop.Models;
 
-namespace TimeTableTool.Desktop.ViewModels
+namespace TimetableTool.Desktop.ViewModels
   {
-  public class ServiceViewModel: Screen
+  public class ServiceViewModel : Screen
     {
     private readonly IEventAggregator _events;
-    public ServiceUIModel  ServicesUI { get; set; }= new ServiceUIModel();
+    public ServiceUIModel ServicesUI { get; set; } = new ServiceUIModel();
     public int RouteId { get; set; } = -1;
+    public int ServiceId { get; set; } = -1;
 
     private ServiceModel _selectedService;
+    private String _serviceName;
+    private String _serviceDescription;
+    private String _serviceAbbreviation;
+    private String _serviceType;
+    private Int32 _calculatedDuration;
 
     public ServiceModel SelectedService
       {
@@ -24,14 +30,84 @@ namespace TimeTableTool.Desktop.ViewModels
       set
         {
         _selectedService = value;
-        ServiceSelectedEvent serviceSelectedEvent=new ServiceSelectedEvent();
+        ServiceSelectedEvent serviceSelectedEvent = new ServiceSelectedEvent();
         serviceSelectedEvent.SelectedService = _selectedService;
         _events.PublishOnUIThreadAsync(serviceSelectedEvent);
         NotifyOfPropertyChange(() => SelectedService);
+        NotifyOfPropertyChange(()=>CanEditService);
+        NotifyOfPropertyChange(()=>CanDeleteService);
         }
       }
 
- 
+    public string ServiceName
+      {
+      get
+        {
+        return _serviceName;
+        }
+      set
+        {
+        _serviceName = value;
+        NotifyOfPropertyChange(() => ServiceName);
+        NotifyOfPropertyChange(()=>CanSaveService);
+        }
+      }
+
+    public string ServiceDescription
+      {
+      get
+        {
+        return _serviceDescription;
+        }
+      set
+        {
+        _serviceDescription = value;
+        NotifyOfPropertyChange(() => ServiceDescription);
+        NotifyOfPropertyChange(()=>CanSaveService);
+        }
+      }
+
+    public string ServiceAbbreviation
+      {
+      get
+        {
+        return _serviceAbbreviation;
+        }
+      set
+        {
+        _serviceAbbreviation = value;
+        NotifyOfPropertyChange(() => ServiceAbbreviation);
+        NotifyOfPropertyChange(()=>CanSaveService);
+        }
+      }
+
+    public string ServiceType
+      {
+      get
+        {
+        return _serviceType;
+        }
+      set
+        {
+        _serviceType = value;
+        NotifyOfPropertyChange(() => ServiceType);
+        NotifyOfPropertyChange(()=>CanSaveService);
+        }
+      }
+
+    public int CalculatedDuration
+      {
+      get
+        {
+        return _calculatedDuration;
+        }
+      set
+        {
+        _calculatedDuration = value;
+        NotifyOfPropertyChange(()=>CalculatedDuration);
+        NotifyOfPropertyChange(()=>CanSaveService);
+        }
+      }
 
     public ServiceViewModel(IEventAggregator events)
       {
@@ -45,7 +121,73 @@ namespace TimeTableTool.Desktop.ViewModels
       ServicesUI.RouteName = rm.RouteName;
       RouteId = rm.Id;
       ServicesUI.ServiceList = new BindingList<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
-      NotifyOfPropertyChange(()=>ServicesUI);
+      NotifyOfPropertyChange(() => ServicesUI);
+      }
+
+    public bool CanEditService
+      {
+      get { return SelectedService != null && ServiceId <= 0; }
+      }
+
+
+    public void EditService()
+      {
+      ServiceName = SelectedService.ServiceName;
+      ServiceAbbreviation = SelectedService.ServiceAbbreviation;
+      ServiceType = SelectedService.ServiceType;
+      ServiceDescription = SelectedService.ServiceDescription;
+      CalculatedDuration = SelectedService.CalculatedDuration;
+      ServiceId = SelectedService.Id;
+      NotifyOfPropertyChange(()=>CanEditService);
+      NotifyOfPropertyChange(()=>CanDeleteService);
+      }
+
+    public bool CanDeleteService
+      {
+      get { return false; }
+      }
+    public bool CanSaveService
+      {
+      get
+        {
+        return ServiceAbbreviation?.Length > 0
+               && ServiceName?.Length > 0
+               && ServiceDescription?.Length > 0
+               && ServiceType?.Length > 0;
+        }
+      }
+
+    public void SaveService()
+      {
+      var newService = new ServiceModel();
+      newService.CalculatedDuration = CalculatedDuration;
+      newService.ServiceAbbreviation = ServiceAbbreviation;
+      newService.ServiceDescription = ServiceDescription;
+      newService.ServiceName = ServiceName;
+      newService.ServiceType = ServiceType;
+      newService.RouteId = RouteId;
+      if (ServiceId <= 0)
+        {
+        ServiceDataAccess.InsertServiceForRoute(newService);
+        }
+      else
+        {
+        newService.Id = ServiceId;
+        ServiceDataAccess.UpdateService(newService);
+        }
+      ClearService();
+      ServicesUI.ServiceList = new BindingList<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
+      NotifyOfPropertyChange(() => ServicesUI);
+      }
+
+    public void ClearService()
+      {
+      ServiceName = "";
+      ServiceAbbreviation = "";
+      ServiceType = "";
+      ServiceDescription = "";
+      CalculatedDuration = 0;
+      ServiceId = 0;
       }
     }
   }

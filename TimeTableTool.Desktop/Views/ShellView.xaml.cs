@@ -10,7 +10,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace TimeTableTool.Desktop.Views
+namespace TimetableTool.Desktop.Views
   {
   /// <summary>
   /// Interaction logic for ShellView.xaml

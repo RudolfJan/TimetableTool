@@ -17,10 +17,10 @@
     <None Update="SQL\CreateFullTimeEvents.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="SQL\TimeTableData.sql">
+    <None Update="SQL\TimetableData.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="SQL\TimeTableDb.sql">
+    <None Update="SQL\TimetableDb.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

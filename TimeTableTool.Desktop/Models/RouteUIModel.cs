@@ -5,12 +5,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
 
-namespace TimeTableTool.Desktop.Models
+namespace TimetableTool.Desktop.Models
   {
   public class RouteUIModel
     {
     public BindingList<RouteModel> RouteList { get; set; }
-    public RouteModel RouteDetails { get; set; }= new RouteModel();
     public RouteFilterModel Filter { get; set; } = new RouteFilterModel();
     }
   }

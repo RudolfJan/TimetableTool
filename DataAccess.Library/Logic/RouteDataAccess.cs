@@ -33,5 +33,11 @@ namespace DataAccess.Library.Logic
       string sql = "INSERT OR IGNORE INTO Routes (RouteName, RouteAbbreviation, RouteDescription) VALUES(@RouteName, @RouteAbbreviation, @RouteDescription)";
       return SQLiteData.SaveData<dynamic>(sql,new {route.RouteName, route.RouteAbbreviation, route.RouteDescription}, SQLiteData.GetConnectionString());
       }
+
+ public static void UpdateRoute(RouteModel route)
+      {
+      string sql = "UPDATE OR IGNORE Routes SET RouteName=@RouteName, RouteAbbreviation=@RouteAbbreviation, RouteDescription=@RouteDescription WHERE Id= @Id";
+      SQLiteData.SaveData<dynamic>(sql,new {route.RouteName, route.RouteAbbreviation, route.RouteDescription, route.Id}, SQLiteData.GetConnectionString());
+      }
     }
   }

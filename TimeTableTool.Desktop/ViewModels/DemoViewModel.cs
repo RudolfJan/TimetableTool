@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace TimeTableTool.Desktop.ViewModels
+namespace TimetableTool.Desktop.ViewModels
   {
   public class DemoViewModel : Screen
     {

@@ -1,16 +1,12 @@
 ﻿using DataAccess.Library.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 
-namespace TimeTableTool.Desktop.Models
+namespace TimetableTool.Desktop.Models
   {
-  public class TimeTableUIModel
+  public class TimetableUIModel
     {
-    public BindingList<TimeTableModel> TimeTableList { get; set; }
-    public TimeTableModel TimeTableDetails { get; set; }= new TimeTableModel();
-    public TimeTableFilterModel Filter { get; set; } = new TimeTableFilterModel();
+    public BindingList<TimetableModel> TimetableList { get; set; }
+    public TimetableFilterModel Filter { get; set; } = new TimetableFilterModel();
     public string RouteName { get; set; }
     }
   }
