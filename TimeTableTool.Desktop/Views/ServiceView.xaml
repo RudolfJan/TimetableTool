@@ -30,7 +30,7 @@
         <!-- Left column -->
 
         <!-- Row 0 Title -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Time tables</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Services</TextBlock>
 
         <!-- Row 1 ServicesDatagrid -->
         <DataGrid x:Name="ServiceList" 

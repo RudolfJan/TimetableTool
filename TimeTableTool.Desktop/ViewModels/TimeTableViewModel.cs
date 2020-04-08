@@ -3,6 +3,7 @@ using DataAccess.Library.Models;
 using System.ComponentModel;
 using TimetableTool.Desktop.Models;
 using Caliburn.Micro;
+using TimetableTool.Desktop.EventModels;
 
 namespace TimetableTool.Desktop.ViewModels
   {
@@ -12,6 +13,7 @@ namespace TimetableTool.Desktop.ViewModels
     private System.String _TimetableAbbreviation;
     private TimetableModel _selectedTimetable;
     private System.String _timetableDescription;
+    private readonly IEventAggregator _events;
 
     #region Properties
     public TimetableUIModel TimetablesUI { get; set; } = new TimetableUIModel();
@@ -70,6 +72,9 @@ namespace TimetableTool.Desktop.ViewModels
       set
         {
         _selectedTimetable = value;
+        TimetableSelectedEvent timetableSelectedEvent = new TimetableSelectedEvent();
+        timetableSelectedEvent.SelectedTimetable = _selectedTimetable;
+        _events.PublishOnUIThreadAsync(timetableSelectedEvent);
         NotifyOfPropertyChange(() => SelectedTimetable);
         NotifyOfPropertyChange(() => CanEditTimetable);
         NotifyOfPropertyChange(() => CanDeleteTimetable);
@@ -79,6 +84,11 @@ namespace TimetableTool.Desktop.ViewModels
     #endregion
 
     #region Initialization
+
+    public TimetableViewModel(IEventAggregator events)
+      {
+      _events = events;
+      }
     protected override async void OnViewLoaded(object view)
       {
       base.OnViewLoaded(view);

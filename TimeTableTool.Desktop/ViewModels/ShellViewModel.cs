@@ -7,7 +7,7 @@ using TimetableTool.Desktop.EventModels;
 
 namespace TimetableTool.Desktop.ViewModels
   {
-  public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceSelectedEvent>
+  public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceSelectedEvent>, IHandle<TimetableSelectedEvent>
     //, IHandle<LocationSelectedEvent>, IHandle<ServiceSelectedEvent>
     {
     private readonly IEventAggregator _events;
@@ -36,6 +36,15 @@ namespace TimetableTool.Desktop.ViewModels
         }
       }
 
+    public bool IsEditServiceInstancesEnabled
+      {
+      get
+        {
+        return SelectedRoute!=null && SelectedTimetable!=null;
+        }
+      }
+
+
   private RouteModel _selectedRoute;
     public RouteModel SelectedRoute
       {
@@ -50,6 +59,7 @@ namespace TimetableTool.Desktop.ViewModels
         NotifyOfPropertyChange(()=>IsEditTimetablesEnabled);
         NotifyOfPropertyChange(()=> IsEditServicesEnabled);
         NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
+        NotifyOfPropertyChange(()=> IsEditServiceInstancesEnabled);
         }
       }
 
@@ -63,6 +73,19 @@ namespace TimetableTool.Desktop.ViewModels
         NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
         }
       }
+
+    private TimetableModel _selectedTimetable;
+    public TimetableModel SelectedTimetable
+      {
+      get { return _selectedTimetable; }
+      set
+        {
+        _selectedTimetable = value;
+        NotifyOfPropertyChange(()=> IsEditServiceInstancesEnabled);
+        }
+      }
+
+
 
     public ShellViewModel(IEventAggregator events, IWindowManager windowManager)
       {
@@ -121,6 +144,15 @@ namespace TimetableTool.Desktop.ViewModels
       await ActivateItemAsync(timeEventsVM, new CancellationToken());
       }
 
+
+    public async Task EditServiceInstances()
+      {
+      var serviceInstanceVM = IoC.Get<ServiceInstanceViewModel>();
+      serviceInstanceVM.RouteId = SelectedRoute.Id;
+      serviceInstanceVM.TimetableId = SelectedTimetable.Id;
+      await ActivateItemAsync(serviceInstanceVM, new CancellationToken());
+      }
+
     public async Task ShowAbout()
       {
       await _windowManager.ShowDialogAsync(IoC.Get<AboutViewModel>());
@@ -140,9 +172,17 @@ namespace TimetableTool.Desktop.ViewModels
       if (SelectedRoute?.Id != message.SelectedRoute.Id)
         {
         SelectedService = null;
+        SelectedTimetable = null;
         NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
+        NotifyOfPropertyChange(()=> IsEditServiceInstancesEnabled);
         }
       SelectedRoute = message.SelectedRoute;
+      return Task.CompletedTask;
+      }
+
+    Task IHandle<TimetableSelectedEvent>.HandleAsync(TimetableSelectedEvent message, CancellationToken cancellationToken)
+      {
+      SelectedTimetable = message.SelectedTimetable;
       return Task.CompletedTask;
       }
     #endregion

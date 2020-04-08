@@ -11,31 +11,31 @@
         <DockPanel>
             <Menu x:Name="Menu" DockPanel.Dock="Top" FontSize="12">
                 <MenuItem  x:Name="FileMenu"  Header="_File">
-                    <MenuItem x:Name="Export" Header="E_xport ..."></MenuItem>
-                    <MenuItem x:Name="View" Header="_View"></MenuItem>
-                    <MenuItem x:Name="Print" Header="_Print"></MenuItem>
-                    <MenuItem x:Name="ExitApplication" Header="E_xit"></MenuItem>
+                    <MenuItem x:Name="Export" Header="E_xport ..."/>
+                    <MenuItem x:Name="View" Header="_View"/>
+                    <MenuItem x:Name="Print" Header="_Print"/>
+                    <MenuItem x:Name="ExitApplication" Header="E_xit"/>
                 </MenuItem>
                 <MenuItem x:Name="RouteMenu" Header="_Routes">
-                    <MenuItem x:Name="EditRoutes" Header="_Route"></MenuItem>
-                    <MenuItem x:Name="EditBranches" Header="_Branch"></MenuItem>
+                    <MenuItem x:Name="EditRoutes" Header="_Route"/>
+                    <MenuItem x:Name="EditBranches" Header="_Branch"/>
                     <MenuItem x:Name="EditLocations" Header="_Location" IsEnabled="{Binding IsEditLocationsEnabled}"/>
-                    <MenuItem x:Name="EditSections" Header="_Section"></MenuItem>
+                    <MenuItem x:Name="EditSections" Header="_Section"/>
                 </MenuItem>
                 <MenuItem  x:Name="TimeTablesMenu" Header="Timetables">
                     <MenuItem x:Name="EditTimetables" Header="_Timetables" IsEnabled="{Binding IsEditTimetablesEnabled}"/>
-                    <MenuItem x:Name="EditServices" Header="_Services" IsEnabled="{Binding IsEditServicesEnabled}"></MenuItem>
-                    <MenuItem x:Name="EditTimeEvents" Header="Time E_vents" IsEnabled="{Binding IsEditTimeEventsEnabled}"></MenuItem>
-                    <MenuItem x:Name="EditServiceInstances" Header="_Service Instances"></MenuItem>
+                    <MenuItem x:Name="EditServices" Header="_Services" IsEnabled="{Binding IsEditServicesEnabled}"/>
+                    <MenuItem x:Name="EditTimeEvents" Header="Time E_vents" IsEnabled="{Binding IsEditTimeEventsEnabled}"/>
+                    <MenuItem x:Name="EditServiceInstances" Header="_Service Instances" IsEnabled="{Binding IsEditServiceInstancesEnabled}"/>
                 </MenuItem>
                 <MenuItem x:Name="HelpMenu"  Header="_Help">
-                    <MenuItem x:Name="ShowManual" Header="_Manual"></MenuItem>
-                    <MenuItem x:Name="ShowAbout" Header="_About"></MenuItem>
-                    <MenuItem x:Name="ShowLogging" Header="_Logging"></MenuItem>
+                    <MenuItem x:Name="ShowManual" Header="_Manual"/>
+                    <MenuItem x:Name="ShowAbout" Header="_About"/>
+                    <MenuItem x:Name="ShowLogging" Header="_Logging"/>
                 </MenuItem>
             </Menu>
             <Grid>
-                <ContentControl x:Name="ActiveItem" Margin="5"></ContentControl>
+                <ContentControl x:Name="ActiveItem" Margin="{StaticResource DefaultMargin}"/>
             </Grid>
         </DockPanel>
     </ScrollViewer>
