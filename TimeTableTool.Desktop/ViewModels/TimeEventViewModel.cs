@@ -176,6 +176,7 @@ namespace TimetableTool.Desktop.ViewModels
         .OrderBy(p => p.Order)
         .ToList();
       TimeEvents.FilteredFullTimeEventList = new BindableCollection<FullTimeEventModel>(temp);
+      UpdateCalculatedDuration();
       NotifyOfPropertyChange(() => TimeEvents);
       ClearTimeEvent();
       }
@@ -196,6 +197,13 @@ namespace TimetableTool.Desktop.ViewModels
       NotifyOfPropertyChange(()=>CanEditTimeEvent);
       NotifyOfPropertyChange(()=>CanSaveTimeEvent);
       NotifyOfPropertyChange(()=>CanSelectLocation);
+      }
+
+    private void UpdateCalculatedDuration()
+      {
+      // TODO do this on the non-filtered list as soon as filtering is implemented
+      int duration = TimeEvents.FilteredFullTimeEventList.Sum(x => x.RelativeTime);
+      ServiceDataAccess.UpdateServiceCalculatedDuration(duration,ServiceId);
       }
     }
   }

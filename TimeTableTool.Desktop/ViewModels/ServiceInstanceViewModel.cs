@@ -2,10 +2,7 @@
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using TimetableTool.Desktop.Helpers;
 
 namespace TimetableTool.Desktop.ViewModels

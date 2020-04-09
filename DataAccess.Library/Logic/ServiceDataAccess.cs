@@ -1,9 +1,7 @@
 ﻿using DataAccess.Library.Models;
 using SQLiteDataAccess.Library;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace DataAccess.Library.Logic
   {
@@ -44,5 +42,13 @@ namespace DataAccess.Library.Logic
           service.ServiceType, service.CalculatedDuration, service.RouteId, service.Id}, 
         SQLiteData.GetConnectionString());
       }
+
+    public static void UpdateServiceCalculatedDuration(int calculatedDuration, int serviceId)
+      {
+      string sql = "UPDATE OR IGNORE Services SET CalculatedDuration=@CalculatedDuration WHERE Id=@ServiceId";
+      SQLiteData.SaveData<dynamic>(sql,
+        new {calculatedDuration, serviceId}, SQLiteData.GetConnectionString());
+      }
+
     }
   }

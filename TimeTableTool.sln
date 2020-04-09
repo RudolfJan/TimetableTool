@@ -7,10 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Library", "DataA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{163114B1-7895-4484-AF4E-D04E1B296D01}"
 	ProjectSection(SolutionItems) = preProject
-		TimeTableDatamodel.vsdx = TimeTableDatamodel.vsdx
+		TimetableDatamodel.vsdx = TimetableDatamodel.vsdx
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimetableTool.Desktop", "TimeTableTool.Desktop\TimetableTool.Desktop.csproj", "{6E11A94C-CFC4-4E63-A497-EE39EA32128E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimetableTool.Desktop", "TimetableTool.Desktop\TimetableTool.Desktop.csproj", "{6E11A94C-CFC4-4E63-A497-EE39EA32128E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Library", "..\FancyTrainsimToolsApp\Logging.Library\Logging.Library.csproj", "{BFE0624C-EA7E-49CB-902F-CD63CE7BA697}"
 EndProject

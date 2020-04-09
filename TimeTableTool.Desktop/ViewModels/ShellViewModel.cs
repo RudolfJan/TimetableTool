@@ -99,10 +99,6 @@ namespace TimetableTool.Desktop.ViewModels
       base.OnViewLoaded(view);
       await EditRoutes();
       }
-    void Location()
-      {
-      ActivateItemAsync(IoC.Get<LocationViewModel>(), new CancellationToken());
-      }
 
     public async Task ExitApplication()
       {
