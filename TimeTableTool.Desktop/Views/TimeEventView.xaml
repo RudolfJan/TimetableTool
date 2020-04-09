@@ -7,12 +7,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="650" d:DesignWidth="800">
   <StackPanel>
-    <WrapPanel HorizontalAlignment="Center" >
-      <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Time Events for Service:</TextBlock>
-      <TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding TimeEvents.SelectedService.ServiceName}" FontSize="16"/>
-      <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Route:</TextBlock>
-      <TextBlock Style="{StaticResource DefaultTextBlock}" Text="{Binding TimeEvents.SelectedRoute.RouteName}" FontSize="16"/>
-    </WrapPanel>
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="Auto"/>
@@ -65,6 +59,7 @@
           </DataGrid.Columns>
 
         </DataGrid>
+        <TextBlock MinHeight="20"/>
         <WrapPanel>
           <Button x:Name="EditTimeEvent" Style="{StaticResource DefaultButton}">Edit</Button>
           <Button x:Name="DeleteTimeEvent" Style="{StaticResource DefaultButton}">Delete</Button>

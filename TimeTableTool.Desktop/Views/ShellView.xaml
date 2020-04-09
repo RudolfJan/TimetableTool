@@ -34,9 +34,20 @@
                     <MenuItem x:Name="ShowLogging" Header="_Logging"/>
                 </MenuItem>
             </Menu>
-            <Grid>
+            <StackPanel>
+                <WrapPanel HorizontalAlignment="Center">
+                    <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Route:</TextBlock>
+                    <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedRoute.RouteName, Mode=TwoWay}" FontSize="16"/>
+                </WrapPanel>
+                <WrapPanel HorizontalAlignment="Center">
+                    <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Timetable:</TextBlock>
+                    <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimetable.TimetableName, Mode=TwoWay}" FontSize="16"/>
+                    <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Service:</TextBlock>
+                    <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedService.ServiceName, Mode=TwoWay}" FontSize="16"/>
+                </WrapPanel>
+                <TextBlock Height="20"/>
                 <ContentControl x:Name="ActiveItem" Margin="{StaticResource DefaultMargin}"/>
-            </Grid>
+            </StackPanel>
         </DockPanel>
     </ScrollViewer>
 </Window>

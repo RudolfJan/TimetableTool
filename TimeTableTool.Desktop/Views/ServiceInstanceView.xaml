@@ -8,14 +8,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1200">
   <StackPanel>
-    <WrapPanel HorizontalAlignment="Center">
-      <TextBlock Style="{StaticResource HeaderTextBlock}">Route:</TextBlock>
-      <TextBox x:Name="RouteName" Style="{StaticResource StaticTextBox}"
-               MinWidth="200"></TextBox>
-      <TextBlock Style="{StaticResource HeaderTextBlock}">Timetable:</TextBlock>
-      <TextBox x:Name="TimetableName" Style="{StaticResource StaticTextBox}"
-                   MinWidth="200"></TextBox>
-    </WrapPanel>
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="auto"/>

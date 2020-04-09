@@ -8,11 +8,6 @@
              d:DesignHeight="650" d:DesignWidth="800">
   <Border Style="{StaticResource DefaultBorder}">
     <StackPanel>
-    <WrapPanel HorizontalAlignment="Center">
-<TextBlock Style="{StaticResource HeaderTextBlock}">Route: </TextBlock>
-      <TextBox x:Name="RouteNameTextBox" Style="{StaticResource StaticTextBox}"
-               Text="{Binding Path=LocationsUI.RouteName}"  MinWidth="200"></TextBox>
-    </WrapPanel>
     <Grid>
       <Grid.ColumnDefinitions>
         <ColumnDefinition Width="auto"/>

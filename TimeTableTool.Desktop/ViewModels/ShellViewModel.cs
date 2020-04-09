@@ -8,7 +8,7 @@ using TimetableTool.Desktop.EventModels;
 namespace TimetableTool.Desktop.ViewModels
   {
   public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceSelectedEvent>, IHandle<TimetableSelectedEvent>
-    //, IHandle<LocationSelectedEvent>, IHandle<ServiceSelectedEvent>
+  //, IHandle<LocationSelectedEvent>, IHandle<ServiceSelectedEvent>
     {
     private readonly IEventAggregator _events;
     private readonly IWindowManager _windowManager;
@@ -32,7 +32,7 @@ namespace TimetableTool.Desktop.ViewModels
       {
       get
         {
-        return SelectedRoute != null && SelectedService!=null;
+        return SelectedRoute != null && SelectedService != null;
         }
       }
 
@@ -40,12 +40,12 @@ namespace TimetableTool.Desktop.ViewModels
       {
       get
         {
-        return SelectedRoute!=null && SelectedTimetable!=null;
+        return SelectedRoute != null && SelectedTimetable != null;
         }
       }
 
 
-  private RouteModel _selectedRoute;
+    private RouteModel _selectedRoute;
     public RouteModel SelectedRoute
       {
       get
@@ -55,11 +55,12 @@ namespace TimetableTool.Desktop.ViewModels
       set
         {
         _selectedRoute = value;
-        NotifyOfPropertyChange(()=>IsEditLocationsEnabled);
-        NotifyOfPropertyChange(()=>IsEditTimetablesEnabled);
-        NotifyOfPropertyChange(()=> IsEditServicesEnabled);
-        NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
-        NotifyOfPropertyChange(()=> IsEditServiceInstancesEnabled);
+        NotifyOfPropertyChange(() => SelectedRoute);
+        NotifyOfPropertyChange(() => IsEditLocationsEnabled);
+        NotifyOfPropertyChange(() => IsEditTimetablesEnabled);
+        NotifyOfPropertyChange(() => IsEditServicesEnabled);
+        NotifyOfPropertyChange(() => IsEditTimeEventsEnabled);
+        NotifyOfPropertyChange(() => IsEditServiceInstancesEnabled);
         }
       }
 
@@ -70,7 +71,8 @@ namespace TimetableTool.Desktop.ViewModels
       set
         {
         _selectedService = value;
-        NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
+        NotifyOfPropertyChange(() => SelectedService);
+        NotifyOfPropertyChange(() => IsEditTimeEventsEnabled);
         }
       }
 
@@ -81,7 +83,8 @@ namespace TimetableTool.Desktop.ViewModels
       set
         {
         _selectedTimetable = value;
-        NotifyOfPropertyChange(()=> IsEditServiceInstancesEnabled);
+        NotifyOfPropertyChange(() => SelectedTimetable);
+        NotifyOfPropertyChange(() => IsEditServiceInstancesEnabled);
         }
       }
 
@@ -155,13 +158,13 @@ namespace TimetableTool.Desktop.ViewModels
       }
 
     #region event handlers
- 
+
     public Task HandleAsync(ServiceSelectedEvent message, CancellationToken cancellationToken)
       {
       SelectedService = message.SelectedService;
       return Task.CompletedTask;
       }
-  
+
     public Task HandleAsync(RouteSelectedEvent message, CancellationToken cancellationToken)
       {
       // If you change the selected route, you must reselect the service, because it is attached to the route.
@@ -169,8 +172,8 @@ namespace TimetableTool.Desktop.ViewModels
         {
         SelectedService = null;
         SelectedTimetable = null;
-        NotifyOfPropertyChange(()=> IsEditTimeEventsEnabled);
-        NotifyOfPropertyChange(()=> IsEditServiceInstancesEnabled);
+        NotifyOfPropertyChange(() => IsEditTimeEventsEnabled);
+        NotifyOfPropertyChange(() => IsEditServiceInstancesEnabled);
         }
       SelectedRoute = message.SelectedRoute;
       return Task.CompletedTask;
