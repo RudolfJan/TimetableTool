@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace TimetableTool.Desktop.Helpers
+namespace TimetableTool.DataAccessLibrary.Logic
   {
   public class TimeConverters
     {

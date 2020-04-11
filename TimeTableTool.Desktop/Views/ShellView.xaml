@@ -12,7 +12,7 @@
             <Menu x:Name="Menu" DockPanel.Dock="Top" FontSize="12">
                 <MenuItem  x:Name="FileMenu"  Header="_File">
                     <MenuItem x:Name="Export" Header="E_xport ..."/>
-                    <MenuItem x:Name="View" Header="_View"/>
+                    <MenuItem x:Name="ViewTimetable" Header="_View timetable"  IsEnabled="{Binding IsEditTimetablesEnabled}"/>
                     <MenuItem x:Name="Print" Header="_Print"/>
                     <MenuItem x:Name="ExitApplication" Header="E_xit"/>
                 </MenuItem>

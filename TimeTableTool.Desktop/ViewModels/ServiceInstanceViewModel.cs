@@ -3,7 +3,7 @@ using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
 using System;
 using System.ComponentModel;
-using TimetableTool.Desktop.Helpers;
+using TimetableTool.DataAccessLibrary.Logic;
 
 namespace TimetableTool.Desktop.ViewModels
   {

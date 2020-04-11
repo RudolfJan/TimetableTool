@@ -103,6 +103,14 @@ namespace TimetableTool.Desktop.ViewModels
       await EditRoutes();
       }
 
+    public async Task ViewTimetable()
+      {
+      var displayTimetableVM=IoC.Get<DisplayTimetableViewModel>();
+      displayTimetableVM.TimetableId= SelectedTimetable.Id;
+      await ActivateItemAsync(displayTimetableVM, new CancellationToken());
+      }
+
+
     public async Task ExitApplication()
       {
       await TryCloseAsync();
