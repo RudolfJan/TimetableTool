@@ -169,5 +169,29 @@ namespace DataAccess.Library.Logic
 				}
 			return myDataTable.DefaultView;
 			}
+
+
+		public static string GetCsvData(string[][] matrix)
+			{
+			var output="";
+			int rowCount= matrix.GetLength(0);
+			int columnCount= matrix[0].GetLength(0);
+
+			for(int i=0;i<rowCount;i++)
+				{
+				for(int j=0;j<columnCount;j++)
+					{
+					if(j<columnCount-1)
+						{
+						output += $"{matrix[i][j]},";
+						}
+					else
+						{
+						output += $"{matrix[i][j]}\n";
+						}
+					}
+				}
+			return output;
+			}
 		}
 	}

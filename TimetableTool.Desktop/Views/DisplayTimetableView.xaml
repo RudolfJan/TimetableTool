@@ -9,6 +9,9 @@
     <Grid>
 		<DataGrid Style="{StaticResource DefaultDataGrid}"
 											ItemsSource="{Binding SimpleTimetable}"
-											Width="400" AutoGenerateColumns="True"/>
+											Width="400" AutoGenerateColumns="True"
+							        FrozenColumnCount="1">
+
+			</DataGrid>
 	</Grid>
 </UserControl>

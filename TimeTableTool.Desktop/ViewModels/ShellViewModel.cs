@@ -1,9 +1,14 @@
 ﻿using Caliburn.Micro;
+using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
+using Microsoft.Win32;
 using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
+using TimetableTool.Desktop.Helpers;
+using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
   {
@@ -88,7 +93,7 @@ namespace TimetableTool.Desktop.ViewModels
         }
       }
 
-
+    public SaveFileModel SaveFileParams { get; set; } = new SaveFileModel();
 
     public ShellViewModel(IEventAggregator events, IWindowManager windowManager)
       {
@@ -101,6 +106,24 @@ namespace TimetableTool.Desktop.ViewModels
       {
       base.OnViewLoaded(view);
       await EditRoutes();
+      }
+
+
+    public void ExportTimetable()
+      {
+      // This one uses the ShellViewModel
+      SaveFileParams.Title="Export timetable as csv file";
+      DataAccess.Library.Models.TimetableMatrixModel matrix = TimetableMatrixDataAccess.ReadTimetableMatrix(SelectedTimetable.Id);
+      var csv= TimetableMatrixDataAccess.GetCsvData(matrix.Matrix);
+      if(csv.Length>0)
+        {
+        var fileName= FileIOHelper.GetSaveFileName(SaveFileParams);
+        if(fileName.Length>0)
+          {
+          File.WriteAllText(fileName,csv);
+          }
+        }
+      
       }
 
     public async Task ViewTimetable()
