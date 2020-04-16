@@ -29,15 +29,16 @@ namespace DataAccess.Library.Logic
 
     public static int InsertTimeEventForService(TimeEventModel timeEvent)
       {
-      string sql = @"INSERT OR IGNORE INTO TimeEvents (EventType, RelativeTime, ServiceId, LocationId, [Order])
-                      VALUES(@EventType, @RelativeTime, @ServiceId, @LocationId, @Order)";
-      return SQLiteData.SaveData<dynamic>(sql,new {timeEvent.EventType, timeEvent.RelativeTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order}, SQLiteData.GetConnectionString());
+      string sql = @"INSERT OR IGNORE INTO TimeEvents (EventType, ArrivalTime, WaitTime, ServiceId, LocationId, [Order])
+                      VALUES(@EventType, @ArrivalTime, @WaitTime, @ServiceId, @LocationId, @Order)";
+      return SQLiteData.SaveData<dynamic>(sql,new {timeEvent.EventType, timeEvent.ArrivalTime, timeEvent.WaitTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order}, SQLiteData.GetConnectionString());
       }
 
     public static void UpdateTimeEvent(TimeEventModel timeEvent)
       {
-      string sql = @"UPDATE OR IGNORE TimeEvents SET EventType=@EventType, RelativeTime=@RelativeTime, ServiceId=@ServiceId, LocationId=@LocationId, [Order]=@Order WHERE Id=@Id";
-      SQLiteData.SaveData<dynamic>(sql,new {timeEvent.EventType, timeEvent.RelativeTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order, timeEvent.Id}, SQLiteData.GetConnectionString());
+      string sql = @"UPDATE OR IGNORE TimeEvents SET EventType=@EventType, ArrivalTime=@ArrivalTime, WaitTime=@WaitTime, ServiceId=@ServiceId, LocationId=@LocationId, [Order]=@Order WHERE Id=@Id";
+      SQLiteData.SaveData<dynamic>(sql,new {timeEvent.EventType, timeEvent.ArrivalTime,
+        timeEvent.WaitTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order, timeEvent.Id}, SQLiteData.GetConnectionString());
       }
     }
   }

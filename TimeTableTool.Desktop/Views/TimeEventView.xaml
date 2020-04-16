@@ -52,7 +52,7 @@
             <DataGridTextColumn Header="Type" Width="40"
                                 Binding="{Binding EventType}" />
             <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
-                                Binding="{Binding RelativeTime}" />
+                                Binding="{Binding ArrivalTime}" />
             <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding Order}"      />
 
@@ -76,14 +76,21 @@
                    MinWidth="150"/>
         </WrapPanel>
         <WrapPanel>
-          <userControls:LabelTextBox x:Name="TimeTypeTextBox" 
+ 
+          <userControls:LabelTextBox x:Name="ArrivalTimeTextBox" 
+                                     Style="{StaticResource DefaultLabelTextBox}" 
+                                     LabelText="Arrival Time" LabelWidth="70"
+                                     TextBoxText="{Binding ArrivalTime, Mode=TwoWay}"/>
+					<userControls:LabelTextBox x:Name="WaitTimeTextBox" LabelWidth="70"
+                                     Style="{StaticResource DefaultLabelTextBox}" 
+                                     LabelText="Wait Time"
+                                     TextBoxText="{Binding WaitTime, Mode=TwoWay}"/>
+			</WrapPanel>
+        <WrapPanel>
+					<userControls:LabelTextBox x:Name="TimeTypeTextBox" 
                                      Style="{StaticResource DefaultLabelTextBox}" 
                                      LabelText="Type" 
                                      TextBoxText="{Binding TimeType, Mode=TwoWay}"/>
-          <userControls:LabelTextBox x:Name="TimeTextBox" 
-                                     Style="{StaticResource DefaultLabelTextBox}" 
-                                     LabelText="Time"
-                                     TextBoxText="{Binding Time, Mode=TwoWay}"/>
           <userControls:LabelTextBox x:Name="OrderTextBox" 
                                      Style="{StaticResource DefaultLabelTextBox}" 
                                      LabelText="Order"

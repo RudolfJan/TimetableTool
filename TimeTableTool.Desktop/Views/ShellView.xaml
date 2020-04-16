@@ -18,9 +18,10 @@
                 </MenuItem>
                 <MenuItem x:Name="RouteMenu" Header="_Routes">
                     <MenuItem x:Name="EditRoutes" Header="_Route"/>
-                    <MenuItem x:Name="EditBranches" Header="_Branch"/>
+									  <MenuItem x:Name="EditServiceDirections" Header="ServiceDirections" IsEnabled="{Binding IsEditServiceDirectionsEnabled}"/>
+                    <MenuItem x:Name="EditBranches" Header="_Branch" Visibility="Hidden"/>
                     <MenuItem x:Name="EditLocations" Header="_Location" IsEnabled="{Binding IsEditLocationsEnabled}"/>
-                    <MenuItem x:Name="EditSections" Header="_Section"/>
+                    <MenuItem x:Name="EditSections" Header="_Section" Visibility="Hidden"/>
                 </MenuItem>
                 <MenuItem  x:Name="TimeTablesMenu" Header="Timetables">
                     <MenuItem x:Name="EditTimetables" Header="_Timetables" IsEnabled="{Binding IsEditTimetablesEnabled}"/>

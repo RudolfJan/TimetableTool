@@ -10,6 +10,8 @@ namespace DataAccess.Library.Models
     public string TimetableName { get; set; }
     public string TimetableAbbreviation { get; set; }
     public string TimetableDescription { get; set; }
+    public bool IsMultiDirection  {get ;set; }
+    public int ServiceDirectionId { get; set; }
     public int RouteId { get; set; }
     }
   }

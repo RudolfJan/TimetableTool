@@ -5,121 +5,316 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TimetableTool.Desktop.Views" xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
              mc:Ignorable="d" 
-            d:DesignHeight="650" d:DesignWidth="800">
+            d:DesignHeight="750" d:DesignWidth="750">
 
-  <Border Style="{StaticResource DefaultBorder}">
-    <StackPanel>
-      <Grid>
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="auto"/>
-          <ColumnDefinition Width="auto"/>
-          <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="auto"/>
-          <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <!-- Left column -->
+	<Border Style="{StaticResource DefaultBorder}">
+		<StackPanel>
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<Grid.RowDefinitions>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+				<!-- Left column -->
 
-        <!-- Row 0 Title -->
-        <TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Timetables</TextBlock>
-
-        <!-- Row 1 RoutesDatagrid -->
-        <DataGrid x:Name="TimetableList" 
+				<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Directions per route</TextBlock>
+				<DataGrid x:Name="ServiceDirectionListDataGrid" 
                 Grid.Row="1" Grid.Column="0" 
+                Style="{StaticResource DefaultDataGrid}"
+                ItemsSource="{Binding Path=ServiceDirectionList, Mode=TwoWay, NotifyOnSourceUpdated=True }"
+                SelectedItem="{Binding SelectedServiceDirection}"
+                Height="250" MinWidth="150"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False">
+					<DataGrid.Columns>
+						<DataGridTextColumn Binding="{Binding ServiceDirectionName, NotifyOnSourceUpdated=True}"/>
+					</DataGrid.Columns>
+				</DataGrid>
+
+				<!-- Middle column -->
+				<!-- Row 0 Title -->
+				<TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Timetables</TextBlock>
+
+				<!-- Row 1 RoutesDatagrid -->
+				<DataGrid x:Name="TimetableList" 
+                Grid.Row="1" Grid.Column="1" 
                 Style="{StaticResource DefaultDataGrid}"
                 ItemsSource="{Binding Path=TimetablesUI.TimetableList, Mode=TwoWay, NotifyOnSourceUpdated=True }"
                 SelectedItem="{Binding SelectedTimetable}"
-                Height="400" MinWidth="400"
+                Height="250" MinWidth="400"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 AutoGenerateColumns="False"
       >
-          <DataGrid.Columns>
-            <DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
-              <DataGridTextColumn.HeaderTemplate>
-                <DataTemplate>
-                  <StackPanel>
-                    <TextBlock
+					<DataGrid.Columns>
+						<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+							<DataGridTextColumn.HeaderTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<TextBlock
                   Text="Id"
                   HorizontalAlignment="Center"/>
-                    <Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+										<Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
                         Command="{Binding ElementName=TimetableList, Path= DataContext.SetFilterCommand}">
-                      <Image Source="../Images/filter.png" />
-                    </Button>
-                  </StackPanel>
-                </DataTemplate>
-              </DataGridTextColumn.HeaderTemplate>
-            </DataGridTextColumn>
+											<Image Source="../Images/filter.png" />
+										</Button>
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTextColumn.HeaderTemplate>
+						</DataGridTextColumn>
 
-            <DataGridTextColumn Binding="{Binding TimetableAbbreviation, NotifyOnSourceUpdated=True}">
-              <DataGridTextColumn.HeaderTemplate>
-                <DataTemplate>
-                  <StackPanel>
-                    <TextBlock
+						<DataGridTextColumn Binding="{Binding TimetableAbbreviation, NotifyOnSourceUpdated=True}">
+							<DataGridTextColumn.HeaderTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<TextBlock
                   Text="Abbrev" 
                   HorizontalAlignment="Center" />
-                    <TextBox x:Name="TimetableAbbreviationFilterTextBox" Width="80" 
+										<TextBox x:Name="TimetableAbbreviationFilterTextBox" Width="80" 
                           Text="{Binding ElementName=TimetableList, 
                           Path= DataContext.Filter.TimetableAbbreviation, Mode=TwoWay, 
                           UpdateSourceTrigger=PropertyChanged}"/>
-                  </StackPanel>
-                </DataTemplate>
-              </DataGridTextColumn.HeaderTemplate>
-            </DataGridTextColumn>
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTextColumn.HeaderTemplate>
+						</DataGridTextColumn>
 
-            <DataGridTextColumn Binding="{Binding TimetableName, NotifyOnSourceUpdated=True}">
-              <DataGridTextColumn.HeaderTemplate>
-                <DataTemplate>
-                  <StackPanel>
-                    <TextBlock
+						<DataGridTextColumn Binding="{Binding TimetableName, NotifyOnSourceUpdated=True}">
+							<DataGridTextColumn.HeaderTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<TextBlock
                   Text="Timetable" 
                   HorizontalAlignment="Center"/>
-                    <TextBox x:Name="TimetableNameFilterTextBox" Width="220" 
+										<TextBox x:Name="TimetableNameFilterTextBox" Width="220" 
                          Text="{Binding ElementName=TimetableList, 
                          Path= DataContext.Filter.TimetableName, Mode=TwoWay, 
                          UpdateSourceTrigger=PropertyChanged}"/>
-                  </StackPanel>
-                </DataTemplate>
-              </DataGridTextColumn.HeaderTemplate>
-            </DataGridTextColumn>
-          </DataGrid.Columns>
+									</StackPanel>
+								</DataTemplate>
+							</DataGridTextColumn.HeaderTemplate>
+						</DataGridTextColumn>
+					</DataGrid.Columns>
 
-        </DataGrid>
+				</DataGrid>
 
-        <!-- Row 2 Controls -->
-        <StackPanel Grid.Row="2" Grid.Column="0" >
-          <WrapPanel>
-            <Button x:Name="EditTimetable" Style="{StaticResource DefaultButton}">Edit</Button>
-            <Button x:Name="DeleteTimetable" Style="{StaticResource DefaultButton}">Delete</Button>
-          </WrapPanel>
-        </StackPanel>
+				<!-- Row 2 Controls -->
+				<StackPanel Grid.Row="2" Grid.Column="1" >
+					<WrapPanel>
+						<Button x:Name="EditTimetable" Style="{StaticResource DefaultButton}">Edit</Button>
+						<Button x:Name="DeleteTimetable" Style="{StaticResource DefaultButton}">Delete</Button>
+					</WrapPanel>
+				</StackPanel>
 
-        <!-- Right column -->
+				<!-- Right column -->
 
-        <!-- Row 0 Header -->
-        <TextBlock Grid.Row="0" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Timetable editor</TextBlock>
+				<!-- Row 0 Header -->
+				<TextBlock Grid.Row="3" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Timetable editor</TextBlock>
 
-        <!-- Row 1 detail view -->
+				<!-- Row 1 detail view -->
 
-        <StackPanel Grid.Row="1" Grid.Column="1" Width="300">
-          <WrapPanel>
-            <userControls:LabelTextBox x:Name="TimetableAbbreviationTextBox" LabelText="Abbrev" 
-                             TextBoxText="{Binding TimetableAbbreviation, Mode=TwoWay}"/>
-          </WrapPanel>
-          <userControls:LabelTextBox x:Name="TimetableNameTextBox" LabelText="Timetable"
+				<StackPanel Grid.Row="4" Grid.Column="0" Width="300">
+					<WrapPanel>
+						<Button x:Name="SelectServiceDirection" Style="{StaticResource DefaultButton}">Set direction</Button>
+						<TextBox x:Name="ServiceDirectionName" Style="{StaticResource StaticTextBox}" MinWidth="175"/>
+					</WrapPanel>
+					<WrapPanel>
+						<CheckBox x:Name="IsMultiDirection">Multiple directions</CheckBox>
+					</WrapPanel>
+					<userControls:LabelTextBox x:Name="TimetableNameTextBox" LabelText="Timetable"
                                TextBoxText="{Binding TimetableName, Mode=TwoWay}"/>
-          <TextBlock Style="{StaticResource DefaultTextBlock}">Description:</TextBlock>
-          <TextBox x:Name="TimetableDescription" Style="{StaticResource BigTextBox}"/>
-          <WrapPanel>
-            <Button x:Name="SaveTimetable" Style="{StaticResource DefaultButton}">Save changes</Button>
-            <Button x:Name="ClearTimetable" Style="{StaticResource DefaultButton}">Clear edit</Button>
-          </WrapPanel>
-        </StackPanel>
-      </Grid>
-    </StackPanel>
-  </Border>
+					<WrapPanel>
+						<userControls:LabelTextBox x:Name="TimetableAbbreviationTextBox" LabelText="Abbrev" 
+                             TextBoxText="{Binding TimetableAbbreviation, Mode=TwoWay}"/>
+
+					</WrapPanel>
+					<TextBlock Style="{StaticResource DefaultTextBlock}">Description:</TextBlock>
+					<TextBox x:Name="TimetableDescription" Style="{StaticResource BigTextBox}"/>
+					<WrapPanel>
+						<Button x:Name="SaveTimetable" Style="{StaticResource DefaultButton}">Save changes</Button>
+						<Button x:Name="ClearTimetable" Style="{StaticResource DefaultButton}">Clear edit</Button>
+					</WrapPanel>
+				</StackPanel>
+
+				<!-- Attach service instances to timetable--> 
+				<TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Connect ServiceInstances</TextBlock>
+				<Grid Grid.Row="4" Grid.Column="1">
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="auto"/>
+						<ColumnDefinition Width="*"/>
+					</Grid.ColumnDefinitions>
+					<Grid.RowDefinitions>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="auto"/>
+						<RowDefinition Height="*"/>
+					</Grid.RowDefinitions>
+
+					<!-- Source table -->
+					<DataGrid x:Name="ServiceInstanceSource" 
+                Grid.Row="0" Grid.Column="0" 
+                Style="{StaticResource DefaultDataGrid}"
+                ItemsSource="{Binding Path=ServiceInstancesSourceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedServiceInstanceSource}"
+                Height="300" 
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False">
+						<DataGrid.Columns>
+							<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+                  Text="Id"
+                  HorizontalAlignment="Center"/>
+											<Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+                        Command="{Binding ElementName=ServiceInstanceSource, Path= DataContext.SetFilterCommand}">
+												<Image Source="../Images/filter.png" />
+											</Button>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+							<DataGridTextColumn Binding="{Binding StartTimeText, NotifyOnSourceUpdated=True}" Width="40">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+                  Text="Time" 
+                  HorizontalAlignment="Center"/>
+											<TextBox x:Name="ServiceNameFilterTextBox" Width="40" 
+                         Text="{Binding ElementName=ServiceInstanceSource, 
+                         Path= DataContext.Filter.ServiceName, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+							<DataGridTextColumn Binding="{Binding ServiceInstanceAbbreviation, NotifyOnSourceUpdated=True}">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+                  Text="Abbrev" 
+                  HorizontalAlignment="Center" />
+											<TextBox x:Name="ServiceAbbreviationFilterTextBox" Width="80" 
+                          Text="{Binding ElementName=ServiceInstanceSource, 
+                          Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
+                          UpdateSourceTrigger=PropertyChanged}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+						</DataGrid.Columns>
+						<DataGrid.RowDetailsTemplate>
+								<DataTemplate>
+								<Border Style="{StaticResource ThinBorder}">
+									<StackPanel>
+										<WrapPanel>
+											<TextBlock Text="{Binding StartTimeText}"/>
+											<TextBlock Text="{Binding EndTimeText}"/>
+											<TextBlock Text="{Binding ServiceInstanceAbbreviation}"/>
+										</WrapPanel>
+										<TextBlock Text="{Binding ServiceInstanceName}"/>
+									</StackPanel>
+								</Border>
+							</DataTemplate>
+						</DataGrid.RowDetailsTemplate>
+					</DataGrid>
+
+					<!-- Buttons to set/reset ServiceInstances -->
+					
+					<StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
+						<Button x:Name="AddServiceInstance" Style="{StaticResource ImageButton}">
+							<Image Source="../arrow_right.png"/>
+						</Button>
+						<Button x:Name = "RemoveServiceInstance" Style="{StaticResource ImageButton}">
+							<Image Source="../arrow_left.png"/>
+						</Button>
+						
+					</StackPanel>
+					
+					<!-- Destination table, -->
+					
+						<DataGrid x:Name="ServiceInstanceDestination" 
+                Grid.Row="0" Grid.Column="2" 
+                Style="{StaticResource DefaultDataGrid}"
+                ItemsSource="{Binding Path=ServiceInstancesDestinationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedServiceInstanceDestination}"
+                Height="300" 
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False"
+      >
+						<DataGrid.Columns>
+							<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+                  Text="Id"
+                  HorizontalAlignment="Center"/>
+											<Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+                        Command="{Binding ElementName=ServiceInstanceDestination, Path= DataContext.SetFilterCommand}">
+												<Image Source="../Images/filter.png" />
+											</Button>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+
+				<DataGridTextColumn Binding="{Binding StartTimeText, NotifyOnSourceUpdated=True}" Width="40">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+                  Text="Time" 
+                  HorizontalAlignment="Center"/>
+											<TextBox Width="40" 
+                         Text="{Binding ElementName=ServiceInstanceDestination, 
+                         Path= DataContext.Filter.ServiceName, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+							<DataGridTextColumn Binding="{Binding ServiceInstanceAbbreviation, NotifyOnSourceUpdated=True}">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+                  Text="Abbrev" 
+                  HorizontalAlignment="Center" />
+											<TextBox Width="80" 
+                          Text="{Binding ElementName=ServiceInstanceDestination, 
+                          Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
+                          UpdateSourceTrigger=PropertyChanged}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+
+						</DataGrid.Columns>
+
+					</DataGrid>
+					
+					
+				</Grid>
+			</Grid>
+		</StackPanel>
+	</Border>
 </UserControl>

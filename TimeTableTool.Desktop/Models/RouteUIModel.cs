@@ -9,7 +9,7 @@ namespace TimetableTool.Desktop.Models
   {
   public class RouteUIModel
     {
-    public BindingList<RouteModel> RouteList { get; set; }
+    public BindableCollection<RouteModel> RouteList { get; set; }
     public RouteFilterModel Filter { get; set; } = new RouteFilterModel();
     }
   }

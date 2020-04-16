@@ -27,19 +27,32 @@ namespace DataAccess.Library.Logic
 
     public static int InsertServiceForRoute(ServiceModel service)
       {
-      string sql = "INSERT OR IGNORE INTO Services (ServiceName, ServiceAbbreviation, ServiceDescription, ServiceType, CalculatedDuration,RouteId) VALUES(@ServiceName, @ServiceAbbreviation, @ServiceDescription, @ServiceType, @CalculatedDuration, @RouteId)";
+      string sql = @"INSERT OR IGNORE INTO Services 
+                      (ServiceName, ServiceAbbreviation, ServiceDescription, 
+                      ServiceType, ServiceDirectionId, CalculatedDuration, RouteId)
+                      VALUES(@ServiceName, @ServiceAbbreviation, @ServiceDescription, 
+                      @ServiceType, @ServiceDirectionId, @CalculatedDuration, @RouteId)";
       return SQLiteData.SaveData<dynamic>(sql,
         new {service.ServiceName, service.ServiceAbbreviation, service.ServiceDescription, 
-                      service.ServiceType, service.CalculatedDuration, service.RouteId}, 
+                      service.ServiceType, service.ServiceDirectionId, service.CalculatedDuration, service.RouteId}, 
                       SQLiteData.GetConnectionString());
       }
 
     public static void UpdateService(ServiceModel service)
       {
-      string sql = "UPDATE OR IGNORE Services SET ServiceName=@ServiceName, ServiceAbbreviation=@ServiceAbbreviation, ServiceDescription=@ServiceDescription, ServiceType=@ServiceType, CalculatedDuration=@CalculatedDuration,RouteId=@RouteId  WHERE Id=@Id";
+      string sql = @"UPDATE OR IGNORE Services 
+                  SET 
+                        ServiceName=@ServiceName, 
+                        ServiceAbbreviation=@ServiceAbbreviation, 
+                        ServiceDescription=@ServiceDescription, 
+                        ServiceType=@ServiceType, 
+                        ServiceDirectionId=@ServiceDirectionId, 
+                        CalculatedDuration=@CalculatedDuration, 
+                        RouteId=@RouteId 
+                  WHERE Id=@Id";
       SQLiteData.SaveData<dynamic>(sql,
         new {service.ServiceName, service.ServiceAbbreviation, service.ServiceDescription, 
-          service.ServiceType, service.CalculatedDuration, service.RouteId, service.Id}, 
+          service.ServiceType, service.ServiceDirectionId, service.CalculatedDuration, service.RouteId, service.Id}, 
         SQLiteData.GetConnectionString());
       }
 

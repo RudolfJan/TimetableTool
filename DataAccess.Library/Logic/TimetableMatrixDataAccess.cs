@@ -10,29 +10,8 @@ using TimetableTool.DataAccessLibrary.Logic;
 
 namespace DataAccess.Library.Logic
 	{
-
-	public class TimetableMatrix
-		{
-		public string[][] Values
-			{
-			get
-				{
-				return new[]
-					{
-						new[] {"---", "ColumnHeader1", "ColumnHeader2", "ColumnHeader3" },
-					new []{ "RowHeader1","Value11", "Value12", "Value13"},
-					new []{ "RowHeader2", "", "Value22", "Value23"},
-					new []{ "RowHeader3", "Value31", "Value32", "Value33"},
-					new []{ "RowHeader4","Value41", "Value42", "Value43"},
-					};
-
-				}
-			}
-		}
 	public class TimetableMatrixDataAccess
 		{
-	
-
 		public static TimetableMatrixModel ReadTimetableMatrix(int timetableId)
 			{
 			// TODO wrap this all in a transaction, for better performance
@@ -47,7 +26,7 @@ namespace DataAccess.Library.Logic
 
 			// Now get a view, representing ServiceInstances
 
-			var serviceInstanceList = ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(timetableId);
+			List<ServiceInstanceModel> serviceInstanceList = ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(timetable.Id);
 			serviceInstanceList = serviceInstanceList.OrderBy(x => x.StartTime).ToList();
 
 			var locationsList = LocationDataAccess.GetAllLocationsPerRoute(matrixModel.RouteId);
@@ -89,7 +68,8 @@ namespace DataAccess.Library.Logic
 						Insert.LocationName= locationsList[i].LocationName;
 						Insert.LocationAbbrev= locationsList[i].LocationAbbreviation;
 						Insert.EventType="";
-						Insert.RelativeTime= 0;
+						Insert.ArrivalTime= 0;
+						Insert.WaitTime=0;
 						Insert.TimeString="--";
 						Insert.LocationsOrder= locationsList[i].Order;
 						Insert.TimeEventId= -1; // TimeEvent is not valid!
@@ -109,8 +89,9 @@ namespace DataAccess.Library.Logic
 					{
 					if(timing[j].TimeEventId>0)
 						{
-						actualTime += timing[j].RelativeTime;
-						timing[j].TimeString= TimeConverters.MinutesToString(actualTime);
+						actualTime += timing[j].ArrivalTime;
+						timing[j].TimeString= TimeConverters.TimeEventToString(actualTime,timing[j].WaitTime);
+						actualTime += timing[j].WaitTime;
 						}
 					matrixModel.Matrix[j+1][i+1]= timing[j].TimeString;
 					}
@@ -132,7 +113,8 @@ namespace DataAccess.Library.Logic
 						Locations.LocationAbbreviation as LocationAbbrev,
 						Locations.[Order] AS LocationsOrder,
 						TimeEvents.EventType as EventType,
-						TimeEvents.RelativeTime as RelativeTime,
+						TimeEvents.ArrivalTime as ArrivalTime,
+						TimeEvents.WaitTime as WaitTime,
 						'--' as TimeString
 								from Locations, timeevents
 								where TimeEvents.LocationId=Locations.Id and

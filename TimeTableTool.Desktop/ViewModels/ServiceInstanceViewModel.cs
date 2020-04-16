@@ -15,13 +15,12 @@ namespace TimetableTool.Desktop.ViewModels
 
     private string _endTimeText;
     private ServiceInstanceModel _selectedServiceInstance;
-    private String _serviceInstanceName;
-    private String _serviceInstanceAbbreviation;
+    private string _serviceInstanceName;
+    private string _serviceInstanceAbbreviation;
     private ServiceModel _service;
     private ServiceModel _selectedService;
 
     public int RouteId { get; set; }
-    public int TimetableId { get; set; }
     public int ServiceInstanceId { get; set; }
     public string RouteName { get; set; }
     public string TimetableName { get; set; }
@@ -54,8 +53,8 @@ namespace TimetableTool.Desktop.ViewModels
         }
       }
 
-    public BindingList<ServiceModel> ServiceList { get; set; }
-    public BindingList<ServiceInstanceModel> ServiceInstanceList { get; set; }
+    public BindableCollection<ServiceModel> ServiceList { get; set; }
+    public BindableCollection<ServiceInstanceModel> ServiceInstanceList { get; set; }
 
     public ServiceInstanceModel SelectedServiceInstance
       {
@@ -127,12 +126,9 @@ namespace TimetableTool.Desktop.ViewModels
       {
       base.OnViewLoaded(view);
       RouteModel rm = RouteDataAccess.GetRouteById(RouteId);
-      TimetableModel tm = TimetableDataAccess.GetTimetableById(TimetableId);
-      TimetableName = tm.TimetableName;
-
       RouteName = rm.RouteName;
-      ServiceList = new BindingList<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
-      ServiceInstanceList = new BindingList<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(TimetableId));
+      ServiceList = new BindableCollection<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
+      ServiceInstanceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId));
       NotifyOfPropertyChange(() => ServiceList);
       NotifyOfPropertyChange(() => ServiceInstanceList);
       NotifyOfPropertyChange(() => RouteName);
@@ -184,7 +180,6 @@ namespace TimetableTool.Desktop.ViewModels
       newInstance.ServiceInstanceName = ServiceInstanceName;
       newInstance.ServiceInstanceAbbreviation = ServiceInstanceAbbreviation;
       newInstance.ServiceId = Service.Id;
-      newInstance.TimetableId = TimetableId;
       newInstance.StartTime = TimeConverters.TimeToMinutes(StartTimeText);
       newInstance.EndTime = TimeConverters.TimeToMinutes(EndTimeText);
       if (ServiceInstanceId <= 0)
@@ -197,7 +192,7 @@ namespace TimetableTool.Desktop.ViewModels
         ServiceInstanceDataAccess.UpdateServiceInstance(newInstance);
         }
       ClearServiceInstance();
-      ServiceInstanceList = new BindingList<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(TimetableId));
+      ServiceInstanceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId));
       NotifyOfPropertyChange(() => ServiceInstanceList);
       }
 

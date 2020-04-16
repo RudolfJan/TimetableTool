@@ -6,7 +6,7 @@
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="1200">
+             d:DesignHeight="500" d:DesignWidth="1200">
   <StackPanel>
     <Grid>
       <Grid.ColumnDefinitions>
@@ -32,7 +32,7 @@
                 Style="{StaticResource DefaultDataGrid}"
                 ItemsSource="{Binding Path=ServiceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
                 SelectedItem="{Binding SelectedService}"
-                Height="400" MinWidth="300"
+                Height="400" MinWidth="250"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 AutoGenerateColumns="False"
@@ -77,7 +77,7 @@
                     <TextBlock
                   Text="Service" 
                   HorizontalAlignment="Center"/>
-                    <TextBox x:Name="ServiceNameFilterTextBox" Width="220" 
+                    <TextBox x:Name="ServiceNameFilterTextBox" Width="190" 
                          Text="{Binding ElementName=ServiceListDataGrid, 
                          Path= DataContext.Filter.ServiceName, Mode=TwoWay, 
                          UpdateSourceTrigger=PropertyChanged}"/>

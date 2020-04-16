@@ -127,8 +127,8 @@ namespace SQLiteDataAccess.Library
         // Index creation
 
         // Create testdata
-
-        CreateTable("SQL\\TimeTableData.sql");
+// TODO temporarily turned off
+ //       CreateTable("SQL\\TimeTableData.sql");
 
         }
       catch (Exception e)

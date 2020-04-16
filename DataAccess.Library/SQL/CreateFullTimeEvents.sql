@@ -8,7 +8,7 @@ AS SELECT
 	,Locations.NumberOfTracks AS NumberOfTracks
 	,Locations.[Order] AS LocationOrder
 	,TimeEvents.EventType AS EventType
-	,TimeEvents.RelativeTime AS RelativeTime
+	,TimeEvents.ArrivalTime AS ArrivalTime
 	,TimeEvents.[Order] AS [Order]
 	,Services.ServiceAbbreviation AS ServiceAbbreviation
 	,Services.ServiceName AS ServiceName

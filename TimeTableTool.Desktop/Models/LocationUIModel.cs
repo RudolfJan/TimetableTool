@@ -1,11 +1,11 @@
-﻿using DataAccess.Library.Models;
-using System.ComponentModel;
+﻿using Caliburn.Micro;
+using DataAccess.Library.Models;
 
 namespace TimetableTool.Desktop.Models
   {
   public class LocationUIModel
     {
-    public BindingList<LocationModel> LocationList { get; set; }
+    public BindableCollection<LocationModel> LocationList { get; set; }
     public LocationFilterModel Filter { get; set; } = new LocationFilterModel();
     public string RouteName { get; set; }
     }

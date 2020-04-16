@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DataAccess.Library.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -28,5 +29,29 @@ namespace TimetableTool.DataAccessLibrary.Logic
       return output;
       }
 
+    // TODO check if this works, maybe markup must be more configurable
+    // his intial setup uses a two line approach.
+    public static string TimeEventToString(int startTime, TimeEventModel timeEvent)
+      {
+      var output= $"{MinutesToString(startTime+timeEvent.ArrivalTime)}";
+      if(timeEvent.WaitTime>0)
+        {
+        output += $" A\n{MinutesToString(startTime+timeEvent.ArrivalTime+timeEvent.WaitTime)} D";
+        }
+
+      return output;
+      }
+
+
+        public static string TimeEventToString(int startTime, int waitTime)
+      {
+      var output= $"{MinutesToString(startTime)}";
+      if(waitTime>0)
+        {
+        output += $" A\n{MinutesToString(startTime+waitTime)} D";
+        }
+
+      return output;
+      }
     }
   }

@@ -99,7 +99,7 @@ namespace TimetableTool.Desktop.ViewModels
       RouteModel rm = RouteDataAccess.GetRouteById(RouteId);
       LocationsUI.RouteName = rm.RouteName;
       RouteId = rm.Id;
-      LocationsUI.LocationList = new BindingList<LocationModel>(LocationDataAccess.GetAllLocationsPerRoute(RouteId));
+      LocationsUI.LocationList = new BindableCollection<LocationModel>(LocationDataAccess.GetAllLocationsPerRoute(RouteId));
       NotifyOfPropertyChange(() => LocationsUI);
       }
     #endregion
@@ -164,7 +164,7 @@ namespace TimetableTool.Desktop.ViewModels
         newLocation.Id = LocationId;
         LocationDataAccess.UpdateLocationForRoute(newLocation);
         }
-      LocationsUI.LocationList = new BindingList<LocationModel>(LocationDataAccess.GetAllLocationsPerRoute(RouteId));
+      LocationsUI.LocationList = new BindableCollection<LocationModel>(LocationDataAccess.GetAllLocationsPerRoute(RouteId));
       NotifyOfPropertyChange(() => LocationsUI.LocationList);
       NotifyOfPropertyChange(() => LocationsUI);
       ClearLocation();

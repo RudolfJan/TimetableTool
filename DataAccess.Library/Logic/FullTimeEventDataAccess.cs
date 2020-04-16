@@ -30,9 +30,9 @@ namespace DataAccess.Library.Logic
     public static int InsertFullTimeEventForService(FullTimeEventModel timeEvent)
       {
       // TODO consider re-use of the timeEven 
-      string sql = @"INSERT OR IGNORE INTO TimeEvents (EventType, RelativeTime, ServiceId, LocationId, Order)
+      string sql = @"INSERT OR IGNORE INTO TimeEvents (EventType, ArrivalTime, WaitTime, ServiceId, LocationId, Order)
                       VALUES(@EventType, @RelativeTime, @ServiceId, @LocationId, @Order)";
-      return SQLiteData.SaveData<dynamic>(sql, new { timeEvent.EventType, timeEvent.RelativeTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order }, SQLiteData.GetConnectionString());
+      return SQLiteData.SaveData<dynamic>(sql, new { timeEvent.EventType, timeEvent.ArrivalTime, timeEvent.WaitTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order }, SQLiteData.GetConnectionString());
       }
     }
   }

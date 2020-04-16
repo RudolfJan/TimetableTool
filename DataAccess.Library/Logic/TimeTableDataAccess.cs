@@ -29,14 +29,31 @@ namespace DataAccess.Library.Logic
 
     public static int InsertTimetableForRoute(TimetableModel timetable)
       {
-      string sql = "INSERT OR IGNORE INTO Timetables (TimetableName, TimetableAbbreviation, TimetableDescription, RouteId) VALUES(@TimetableName, @TimetableAbbreviation, @TimetableDescription, @RouteId)";
-      return SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, timetable.TimetableDescription, timetable.RouteId}, SQLiteData.GetConnectionString());
+      string sql = @"INSERT OR IGNORE INTO Timetables 
+                   (TimetableName, TimetableAbbreviation, TimetableDescription, 
+                    ServiceDirectionId, IsMultiDirection, RouteId) 
+                    VALUES(@TimetableName, @TimetableAbbreviation, @TimetableDescription, 
+                    @ServiceDirectionId, @IsMultiDirection, @RouteId)";
+      return SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, 
+                                          timetable.TimetableDescription, timetable.ServiceDirectionId, 
+                                          timetable.IsMultiDirection, timetable.RouteId}, 
+                                          SQLiteData.GetConnectionString());
       }
 
     public static void UpdateTimetable(TimetableModel timetable)
       {
-      string sql = "UPDATE OR IGNORE Timetables SET TimetableName=@TimetableName, TimetableAbbreviation=@TimetableAbbreviation, TimetableDescription=@TimetableDescription, RouteId=@RouteId WHERE Id=@Id";
-      SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, timetable.TimetableDescription, timetable.RouteId, timetable.Id}, SQLiteData.GetConnectionString());
+      string sql = @"UPDATE OR IGNORE Timetables 
+                          SET 
+                                  TimetableName=@TimetableName, 
+                                  TimetableAbbreviation=@TimetableAbbreviation, 
+                                  TimetableDescription=@TimetableDescription, 
+                                  ServiceDirectionId=@ServiceDirectionId,
+                                  IsMultiDirection=@IsMultiDirection,
+                                  RouteId=@RouteId WHERE Id=@Id";
+      SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, 
+                                            timetable.TimetableDescription, timetable.ServiceDirectionId,
+                                            timetable.IsMultiDirection, timetable.RouteId, timetable.Id}, 
+                                            SQLiteData.GetConnectionString());
       }
     }
   }
