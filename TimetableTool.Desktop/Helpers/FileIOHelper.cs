@@ -1,6 +1,9 @@
-﻿using Microsoft.Win32;
+﻿using Logging.Library;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Text;
 using TimetableTool.Desktop.Models;
 
@@ -34,5 +37,41 @@ namespace TimetableTool.Desktop.Helpers
 			return "";
 			}
 
+		public static void OpenFileWithShell(string FilePath)
+			{
+			 try
+        {
+        if (File.Exists(FilePath))
+          {
+          using (var OpenFileProcess = new Process())
+            {
+            OpenFileProcess.StartInfo.FileName = "explorer.exe";
+            OpenFileProcess.StartInfo.Arguments = QuoteFilename(FilePath);
+            OpenFileProcess.StartInfo.UseShellExecute=true;
+            OpenFileProcess.StartInfo.RedirectStandardOutput = false;
+            OpenFileProcess.Start();
+            }
+          }
+        }
+      catch (Exception E)
+        {
+        Log.Trace("Cannot open file " + FilePath + " reason: " + E.Message,
+          LogEventType.Error);
+        }
+
+      Log.Trace("Cannot find file " + FilePath +
+                        " \r\nMake sure to install it at the correct location");
+			}
+
+		    // Add quotes to a filename in case it contains spaces. If the filepath is already quoted, don't do it again 
+    public static string QuoteFilename(string s)
+      {
+      if(s.StartsWith("\"") && s.EndsWith("\""))
+        {
+        return s; // already quoted
+        }
+      else
+        return $"\"{s}\"";
+      }
 		}
 	}

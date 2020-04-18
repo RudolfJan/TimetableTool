@@ -110,7 +110,8 @@
                   Text="Id"
                   HorizontalAlignment="Center"/>
                     <Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
-                        Command="{Binding ElementName=ServiceInstanceList, Path= DataContext.SetFilterCommand}">
+                        Command="{Binding ElementName=ServiceInstanceListDataGrid, 
+											Path= DataContext.SetFilterCommand}">
                       <Image Source="../Images/filter.png" />
                     </Button>
                   </StackPanel>
@@ -118,6 +119,32 @@
               </DataGridTextColumn.HeaderTemplate>
             </DataGridTextColumn>
 
+           <DataGridTextColumn Binding="{Binding StartTimeText, NotifyOnSourceUpdated=True}">
+              <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock
+                  Text="Start" Width="40"
+                  HorizontalAlignment="Center" />
+                    <TextBlock Height="32"/>
+                  </StackPanel>
+                </DataTemplate>
+              </DataGridTextColumn.HeaderTemplate>
+            </DataGridTextColumn>
+						
+	           <DataGridTextColumn Binding="{Binding EndTimeText, NotifyOnSourceUpdated=True}">
+              <DataGridTextColumn.HeaderTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock
+                  Text="End" Width="40"
+                  HorizontalAlignment="Center" />
+                    <TextBlock Height="32"/>
+                  </StackPanel>
+                </DataTemplate>
+              </DataGridTextColumn.HeaderTemplate>
+            </DataGridTextColumn>
+							
             <DataGridTextColumn Binding="{Binding ServiceInstanceAbbreviation, NotifyOnSourceUpdated=True}">
               <DataGridTextColumn.HeaderTemplate>
                 <DataTemplate>

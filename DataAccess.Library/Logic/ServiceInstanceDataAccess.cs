@@ -11,12 +11,56 @@ namespace DataAccess.Library.Logic
     {
     public static List<ServiceInstanceModel> GetServiceInstancesPerRoute(int routeId)
       {
-      string sql = "SELECT * FROM ServiceInstances, Services WHERE @RouteId=Services.RouteId AND ServiceInstances.ServiceId== Services.Id";
+      string sql = @"SELECT
+                        ServiceInstances.Id AS Id,
+                        ServiceInstances.ServiceInstanceName,
+                        ServiceInstances.ServiceInstanceAbbreviation,
+                        ServiceInstances.StartTime,
+                        ServiceInstances.EndTime,
+                        ServiceInstances.ServiceId
+                      FROM ServiceInstances, Services WHERE @RouteId=Services.RouteId AND ServiceInstances.ServiceId== Services.Id";
 
       var serviceInstanceList =
         SQLiteData.LoadData<ServiceInstanceModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();
       return serviceInstanceList;
       }
+
+   public static List<ServiceInstanceModel> GetServiceInstancesPerRoute(int routeId, int serviceDirectionId)
+      {
+      string sql = @"SELECT
+                        ServiceInstances.Id AS Id,
+                        ServiceInstances.ServiceInstanceName,
+                        ServiceInstances.ServiceInstanceAbbreviation,
+                        ServiceInstances.StartTime,
+                        ServiceInstances.EndTime,
+                        ServiceInstances.ServiceId
+                      FROM ServiceInstances, Services 
+                      WHERE 
+                              @RouteId=Services.RouteId 
+                              AND ServiceInstances.ServiceId== Services.Id 
+                              AND Services.ServiceDirectionId=@ServiceDirectionId;";
+
+      var serviceInstanceList =
+        SQLiteData.LoadData<ServiceInstanceModel, dynamic>(sql, new { routeId, serviceDirectionId}, SQLiteData.GetConnectionString()).ToList();
+      return serviceInstanceList;
+      }
+
+
+   public static int GetServiceDirectionByServiceInstanceId(int serviceInstanceId)
+      {
+      string sql = @"SELECT 
+                         Services.ServiceDirectionId 
+                    FROM Services, ServiceInstances 
+                    WHERE 
+                        Services.Id=ServiceInstances.ServiceId 
+                        AND ServiceInstances.Id=@ServiceInstanceId;";
+
+      var serviceDirectionId =
+        SQLiteData.LoadData<int, dynamic>(sql, new { serviceInstanceId}, SQLiteData.GetConnectionString()).FirstOrDefault();
+      return serviceDirectionId;
+      }
+
+
 
     public static List<ServiceInstanceModel> GetServiceInstancesPerTimetable(int timetableId)
       {

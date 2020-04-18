@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
              mc:Ignorable="d" 
-            d:DesignHeight="650" d:DesignWidth="850">
+            d:DesignHeight="650" d:DesignWidth="900">
 
 	<Border Style="{StaticResource DefaultBorder}">
 		<StackPanel>
@@ -51,11 +51,10 @@
                 Style="{StaticResource DefaultDataGrid}"
                 ItemsSource="{Binding Path=ServicesUI.ServiceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
                 SelectedItem="{Binding SelectedService}"
-                Height="400" MinWidth="350"
+                Height="400" 
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
-                AutoGenerateColumns="False"
-      >
+                AutoGenerateColumns="False">
 					<DataGrid.Columns>
 						<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
 							<DataGridTextColumn.HeaderTemplate>
@@ -72,6 +71,19 @@
 								</DataTemplate>
 							</DataGridTextColumn.HeaderTemplate>
 						</DataGridTextColumn>
+						
+						<DataGridTextColumn Binding="{Binding CalculatedDuration, NotifyOnSourceUpdated=True}" Width="30">
+							<DataGridTextColumn.HeaderTemplate>
+								<DataTemplate>
+									<StackPanel>
+										<TextBlock
+                  Text="Dur" 
+                  HorizontalAlignment="Center" VerticalAlignment="Top" />
+									<TextBlock  Width="30" Height="32" />
+										</StackPanel>
+								</DataTemplate>
+							</DataGridTextColumn.HeaderTemplate>
+						</DataGridTextColumn>
 
 						<DataGridTextColumn Binding="{Binding ServiceAbbreviation, NotifyOnSourceUpdated=True}">
 							<DataGridTextColumn.HeaderTemplate>
@@ -80,7 +92,7 @@
 										<TextBlock
                   Text="Abbrev" 
                   HorizontalAlignment="Center" />
-										<TextBox x:Name="ServiceAbbreviationFilterTextBox" Width="80" 
+										<TextBox x:Name="ServiceAbbreviationFilterTextBox" Width="60" 
                           Text="{Binding ElementName=ServiceList, 
                           Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
                           UpdateSourceTrigger=PropertyChanged}"/>
@@ -109,7 +121,7 @@
 				</DataGrid>
 
 				<!-- Row 2 Controls -->
-				<StackPanel Grid.Row="2" Grid.Column="2" >
+				<StackPanel Grid.Row="2" Grid.Column="1" >
 					<WrapPanel>
 						<Button x:Name="EditService" Style="{StaticResource DefaultButton}">Edit</Button>
 						<Button x:Name="DeleteService" Style="{StaticResource DefaultButton}">Delete</Button>
@@ -140,11 +152,7 @@
 															Width="140" LabelWidth="40"
                               TextBoxText="{Binding ServiceType, Mode=TwoWay}"/>
 					</WrapPanel>
-
-					<userControls:LabelTextBox x:Name="ServiceCalculatedDurationTextBox" 
-															LabelText="Duration" 
-                              TextBoxText="{Binding CalculatedDuration, Mode=TwoWay}"/>
-
+	
 					<userControls:LabelTextBox x:Name="ServiceNameTextBox" 
 															LabelText="Service"
                               TextBoxText="{Binding ServiceName, Mode=TwoWay}"/>

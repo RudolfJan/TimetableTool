@@ -17,7 +17,7 @@ namespace DataAccess.Library.Logic
 
     public static void DeleteConnection(int serviceInstanceId, int timetableId)
       {
-      string sql = "DELETE OR IGNORE FROM ConnectTtSi WHERE ServiceInstanceId=@ServiceInstanceId AND TimetableId=@TimetableId";
+      string sql = "DELETE FROM ConnectTtSi WHERE ServiceInstanceId=@ServiceInstanceId AND TimetableId=@TimetableId";
       SQLiteData.SaveData<dynamic>(sql,
         new {serviceInstanceId, timetableId}, 
         SQLiteData.GetConnectionString());

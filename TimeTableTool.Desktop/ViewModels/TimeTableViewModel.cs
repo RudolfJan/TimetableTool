@@ -119,6 +119,14 @@ namespace TimetableTool.Desktop.ViewModels
 				_events.PublishOnUIThreadAsync(timetableSelectedEvent);
 				if (SelectedTimetable != null)
 					{
+					if(SelectedTimetable.IsMultiDirection)
+						{
+						ServiceInstancesSourceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId));
+						}
+					else
+						{
+						ServiceInstancesSourceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId,SelectedTimetable.ServiceDirectionId));
+						}
 					ServiceInstancesDestinationList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(SelectedTimetable.Id));
 					}
 				NotifyOfPropertyChange(() => SelectedTimetable);
@@ -229,7 +237,7 @@ namespace TimetableTool.Desktop.ViewModels
 			TimetablesUI.TimetableList = new BindableCollection<TimetableModel>(TimetableDataAccess.GetAllTimetablesPerRoute(RouteId));
 			ServiceDirectionList = new BindableCollection<ServiceDirectionModel>(ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId));
 
-			ServiceInstancesSourceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId));
+
 			NotifyOfPropertyChange(() => TimetablesUI);
 			}
 		#endregion

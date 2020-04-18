@@ -4,7 +4,6 @@ using DataAccess.Library.Models;
 using System;
 using TimetableTool.Desktop.EventModels;
 using TimetableTool.Desktop.Models;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace TimetableTool.Desktop.ViewModels
 	{
@@ -18,11 +17,11 @@ namespace TimetableTool.Desktop.ViewModels
 
 		private ServiceModel _selectedService;
 		private ServiceDirectionModel _selectedServiceDirection;
-		private String _serviceName;
-		private String _serviceDescription;
-		private String _serviceAbbreviation;
-		private String _serviceType;
-		private Int32 _calculatedDuration;
+		private string _serviceName;
+		private string _serviceDescription;
+		private string _serviceAbbreviation;
+		private string _serviceType;
+		private int _calculatedDuration;
 
 		public ServiceModel SelectedService
 			{
@@ -178,6 +177,9 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceType = SelectedService.ServiceType;
 			ServiceDescription = SelectedService.ServiceDescription;
 			CalculatedDuration = SelectedService.CalculatedDuration;
+			ServiceDirectionId= SelectedService.ServiceDirectionId;
+			SelectedServiceDirection= ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
+			ServiceDirectionName=SelectedServiceDirection.ServiceDirectionName;
 			ServiceId = SelectedService.Id;
 			NotifyOfPropertyChange(() => CanEditService);
 			NotifyOfPropertyChange(() => CanDeleteService);

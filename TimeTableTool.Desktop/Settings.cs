@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using System.IO;
+using TimetableTool.Desktop.Helpers;
 
 namespace TimetableTool.Desktop
   {
@@ -24,9 +25,9 @@ namespace TimetableTool.Desktop
         }
       }
 
-    public static string ManualFolder
+    public static string ManualPath
       {
-      get { return $"{_config["DataConfig:DataPath"] + _config["DataConfig:ManualPath"]}"; }
+      get { return FileIOHelper.QuoteFilename($"{_config["DataConfig:DataPath"]}{_config["DataConfig:Manual"]}"); }
       }
 
     public static string DatabasePath

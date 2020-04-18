@@ -10,7 +10,7 @@ namespace DataAccess.Library.Logic
     {
     public static List<LocationModel> GetAllLocationsPerRoute(int routeId)
       {
-      string sql = "SELECT * FROM Locations WHERE RouteId=@RouteId";
+      string sql = "SELECT * FROM Locations WHERE RouteId=@RouteId ORDER BY Locations.[Order] ASC";
 
       var locationList =
         SQLiteData.LoadData<LocationModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();

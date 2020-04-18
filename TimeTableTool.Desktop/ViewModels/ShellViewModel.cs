@@ -1,6 +1,9 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
+using Logging.Library;
+using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -195,6 +198,29 @@ namespace TimetableTool.Desktop.ViewModels
 		public async Task ShowAbout()
 			{
 			await _windowManager.ShowDialogAsync(IoC.Get<AboutViewModel>());
+			}
+
+		public void ShowManual()
+			{
+			try
+				{
+				if(File.Exists(Settings.ManualPath))
+					{
+					Process.Start(Settings.ManualPath);
+					}
+				else
+					{
+					Log.Trace($"Cannot open {Settings.ManualPath}. Check if the manual is available there", LogEventType.Error);
+					}
+				}
+			catch(Exception ex)
+				{
+				Log.Trace($"Cannot open {Settings.ManualPath}. Check if the manual is available there",ex, LogEventType.Error);
+				}
+			}
+		public async Task ShowLogging()
+			{
+			await _windowManager.ShowWindowAsync(IoC.Get<LoggingViewModel>());
 			}
 
 		#region event handlers

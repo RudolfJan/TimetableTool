@@ -21,10 +21,10 @@ namespace TimetableTool.Desktop
 
     protected override void Configure()
       {
-      LogCollectionManager logger= new LogCollectionManager();
       _container
           .Singleton<IWindowManager, WindowManager>()
-          .Singleton<IEventAggregator, EventAggregator>();
+          .Singleton<IEventAggregator, EventAggregator>()
+          .Singleton<ILogCollectionManager, LogCollectionManager>();
 
       GetType().Assembly.GetTypes()
           .Where(type => type.IsClass)

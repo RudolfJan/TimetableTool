@@ -53,6 +53,8 @@
                                 Binding="{Binding EventType}" />
             <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding ArrivalTime}" />
+						 <DataGridTextColumn Header="Wait" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding WaitTime}" />
             <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding Order}"      />
 
