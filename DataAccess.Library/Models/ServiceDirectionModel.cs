@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace DataAccess.Library.Models
+﻿namespace DataAccess.Library.Models
 	{
 	public class ServiceDirectionModel
 		{
@@ -10,6 +6,6 @@ namespace DataAccess.Library.Models
 		public string ServiceDirectionName { get; set; }
 		public string ServiceDirectionAbbreviation { get; set; }
 		public int RouteId { get; set; }
-
+		public bool IsDescending { get; set; }
 		}
 	}

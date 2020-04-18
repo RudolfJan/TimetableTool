@@ -29,14 +29,14 @@ namespace DataAccess.Library.Logic
 
     public static int InsertServiceDirection(ServiceDirectionModel serviceDirection)
       {
-      string sql = "INSERT OR IGNORE INTO ServiceDirections (ServiceDirectionName, ServiceDirectionAbbreviation,  RouteId) VALUES(@ServiceDirectionName, @ServiceDirectionAbbreviation, @RouteId)";
-      return SQLiteData.SaveData<dynamic>(sql,new {serviceDirection.ServiceDirectionName, serviceDirection.ServiceDirectionAbbreviation, serviceDirection.RouteId}, SQLiteData.GetConnectionString());
+      string sql = "INSERT OR IGNORE INTO ServiceDirections (ServiceDirectionName, ServiceDirectionAbbreviation,  RouteId, IsDescending) VALUES(@ServiceDirectionName, @ServiceDirectionAbbreviation, @RouteId, @IsDescending)";
+      return SQLiteData.SaveData<dynamic>(sql,new {serviceDirection.ServiceDirectionName, serviceDirection.ServiceDirectionAbbreviation, serviceDirection.RouteId, serviceDirection.IsDescending}, SQLiteData.GetConnectionString());
       }
 
     public static void UpdateServiceDirectionForRoute(ServiceDirectionModel serviceDirection)
       {
-      string sql = "UPDATE OR IGNORE ServiceDirections SET ServiceDirectionName=@ServiceDirectionName, serviceDirectionAbbreviation=@ServiceDirectionAbbreviation, RouteId=@RouteId WHERE Id=@Id";
-      SQLiteData.SaveData<dynamic>(sql,new {serviceDirection.ServiceDirectionName, serviceDirection.ServiceDirectionAbbreviation, serviceDirection.RouteId, serviceDirection.Id}, SQLiteData.GetConnectionString());
+      string sql = "UPDATE OR IGNORE ServiceDirections SET ServiceDirectionName=@ServiceDirectionName, serviceDirectionAbbreviation=@ServiceDirectionAbbreviation, RouteId=@RouteId, IsDescending=@IsDescending WHERE Id=@Id";
+      SQLiteData.SaveData<dynamic>(sql,new {serviceDirection.Id, serviceDirection.ServiceDirectionName, serviceDirection.ServiceDirectionAbbreviation, serviceDirection.RouteId, serviceDirection.IsDescending}, SQLiteData.GetConnectionString());
       }
 		}
 	}

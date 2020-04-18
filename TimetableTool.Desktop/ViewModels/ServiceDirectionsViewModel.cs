@@ -13,6 +13,19 @@ namespace TimetableTool.Desktop.ViewModels
 		{
 		public int RouteId { get; set; } = -1;
 		public int ServiceDirectionId { get; set; } = -1;
+		public bool IsDescending
+			{
+			get
+				{
+				return _isDescending;
+				}
+
+			set
+				{
+				_isDescending = value;
+				NotifyOfPropertyChange(()=>IsDescending);
+				}
+			}
 
 		private BindableCollection<ServiceDirectionModel> _serviceDirectionsList;
 
@@ -47,11 +60,13 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				_ServiceDirectionName = value;
 				NotifyOfPropertyChange(() => ServiceDirectionName);
-				NotifyOfPropertyChange(()=>CanSaveServicesDirection);
+				NotifyOfPropertyChange(() => CanSaveServicesDirection);
 				}
 			}
 
 		private string _serviceDirectionAbbreviation;
+		private bool isDescending;
+		private bool _isDescending;
 
 		public string ServiceDirectionAbbreviation
 			{
@@ -60,7 +75,7 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				_serviceDirectionAbbreviation = value;
 				NotifyOfPropertyChange(() => ServiceDirectionAbbreviation);
-				NotifyOfPropertyChange(()=>CanSaveServicesDirection);
+				NotifyOfPropertyChange(() => CanSaveServicesDirection);
 				}
 			}
 
@@ -88,9 +103,11 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			ServiceDirectionAbbreviation = SelectedServiceDirection.ServiceDirectionAbbreviation;
 			ServiceDirectionName = SelectedServiceDirection.ServiceDirectionName;
-			ServiceDirectionId=SelectedServiceDirection.Id;
+			ServiceDirectionId = SelectedServiceDirection.Id;
+			IsDescending = SelectedServiceDirection.IsDescending;
 			NotifyOfPropertyChange(() => CanEditServiceDirection);
-			NotifyOfPropertyChange(()=>CanSaveServicesDirection);}
+			NotifyOfPropertyChange(() => CanSaveServicesDirection);
+			}
 
 		public bool CanDeleteServiceDirection
 			{
@@ -105,21 +122,26 @@ namespace TimetableTool.Desktop.ViewModels
 			// TODO implement this method
 			}
 
-		public bool CanSaveServicesDirection { get{
-				return ServiceDirectionAbbreviation.Length>0
+		public bool CanSaveServicesDirection
+			{
+			get
+				{
+				return ServiceDirectionAbbreviation.Length > 0
 					&&
-					ServiceDirectionName.Length>0; }
+					ServiceDirectionName.Length > 0;
+				}
 			}
 
 		public void SaveServiceDirection()
 			{
-			ServiceDirectionModel newServicesDirection= new ServiceDirectionModel();
-			newServicesDirection.ServiceDirectionName= ServiceDirectionName;
-			newServicesDirection.ServiceDirectionAbbreviation= ServiceDirectionAbbreviation;
-			newServicesDirection.RouteId=RouteId;
-			if(ServiceDirectionId>0)
+			ServiceDirectionModel newServicesDirection = new ServiceDirectionModel();
+			newServicesDirection.ServiceDirectionName = ServiceDirectionName;
+			newServicesDirection.ServiceDirectionAbbreviation = ServiceDirectionAbbreviation;
+			newServicesDirection.RouteId = RouteId;
+			newServicesDirection.IsDescending = IsDescending;
+			if (ServiceDirectionId > 0)
 				{
-				newServicesDirection.Id=ServiceDirectionId;
+				newServicesDirection.Id = ServiceDirectionId;
 				ServiceDirectionDataAccess.UpdateServiceDirectionForRoute(newServicesDirection);
 				}
 			else
@@ -127,17 +149,18 @@ namespace TimetableTool.Desktop.ViewModels
 				ServiceDirectionDataAccess.InsertServiceDirection(newServicesDirection);
 				}
 			ClearServiceDirection();
-		  ServiceDirectionsList = new BindableCollection<ServiceDirectionModel>(ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId));
+			ServiceDirectionsList = new BindableCollection<ServiceDirectionModel>(ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId));
 			NotifyOfPropertyChange(() => ServiceDirectionsList);
 			}
 
 		public void ClearServiceDirection()
 			{
-			ServiceDirectionName="";
-			ServiceDirectionAbbreviation="";
-			ServiceDirectionId=0;
-			NotifyOfPropertyChange(()=>CanEditServiceDirection);
-			NotifyOfPropertyChange(()=>CanSaveServicesDirection);
+			ServiceDirectionName = "";
+			ServiceDirectionAbbreviation = "";
+			ServiceDirectionId = 0;
+			IsDescending = false;
+			NotifyOfPropertyChange(() => CanEditServiceDirection);
+			NotifyOfPropertyChange(() => CanSaveServicesDirection);
 			}
 		}
 	}

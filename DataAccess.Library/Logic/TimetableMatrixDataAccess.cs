@@ -23,6 +23,8 @@ namespace DataAccess.Library.Logic
 			matrixModel.TimetableName = timetable.TimetableName;
 			matrixModel.TimetableId = timetable.Id;
 			matrixModel.RouteId = timetable.RouteId;
+			var direction = ServiceDirectionDataAccess.GetServiceDirectionById(timetable.ServiceDirectionId);
+			matrixModel.IsDescending = direction.IsDescending;
 
 			// Now get a view, representing ServiceInstances
 
@@ -30,50 +32,66 @@ namespace DataAccess.Library.Logic
 			serviceInstanceList = serviceInstanceList.OrderBy(x => x.StartTime).ToList();
 
 			var locationsList = LocationDataAccess.GetAllLocationsPerRoute(matrixModel.RouteId);
-			locationsList = locationsList.OrderBy(x => x.Order).ToList();
-			var locationsCount= locationsList.Count;
+			if (matrixModel.IsDescending)
+				{
+				locationsList = locationsList.OrderByDescending(x => x.Order).ToList();
+				}
+			else
+				{
+				locationsList = locationsList.OrderBy(x => x.Order).ToList();
+				}
 
-			matrixModel.Matrix = new string[locationsList.Count+1][];
+			var locationsCount = locationsList.Count;
+
+			matrixModel.Matrix = new string[locationsList.Count + 1][];
 			var columncount = serviceInstanceList.Count + 1;
 			string[] columnheaders = new string[columncount];
-			columnheaders[0]="---";
-			for (int i=0;i< columncount-1; i++)
+			columnheaders[0] = "---";
+			for (int i = 0; i < columncount - 1; i++)
 				{
-				columnheaders[i+1]= serviceInstanceList[i].ServiceInstanceAbbreviation;
+				columnheaders[i + 1] = serviceInstanceList[i].ServiceInstanceAbbreviation;
 				}
-			matrixModel.Matrix[0]=columnheaders;
-			for(int i=0; i<locationsCount;i++)
+			matrixModel.Matrix[0] = columnheaders;
+			for (int i = 0; i < locationsCount; i++)
 				{
-				string[] row= new string[columncount];
-				row[0]= locationsList[i].LocationName;
-				matrixModel.Matrix[i+1]= row;
+				string[] row = new string[columncount];
+				row[0] = locationsList[i].LocationName;
+				matrixModel.Matrix[i + 1] = row;
 				}
 
-			for (int index=0;index<serviceInstanceList.Count;index++)
+			for (int index = 0; index < serviceInstanceList.Count; index++)
 				{
-				int actualTime= serviceInstanceList[index].StartTime;
-				var Timing = GetServiceInstanceTiming(serviceInstanceList[index].Id, locationsList);
-				int j=0;
-				for(int i=0;i<locationsCount;)
+				int actualTime = serviceInstanceList[index].StartTime;
+				List<ServiceInstanceTimingModel> Timing;
+				if (matrixModel.IsDescending)
 					{
-					if(j<Timing.Count&&locationsList[i].Order== Timing[j].LocationsOrder)
+					Timing = GetServiceInstanceTiming(serviceInstanceList[index].Id, locationsList).OrderByDescending(x => x.LocationsOrder).ToList();
+					}
+				else
+					{
+					Timing = GetServiceInstanceTiming(serviceInstanceList[index].Id, locationsList);
+					}
+				int j = 0;
+				for (int i = 0; i < locationsCount;)
+					{
+					if (j < Timing.Count && locationsList[i].Order == Timing[j].LocationsOrder)
 						{
 						i++;
 						j++;
 						}
 					else
 						{
-						var Insert=new ServiceInstanceTimingModel();
-						Insert.LocationId= locationsList[i].Id;
-						Insert.LocationName= locationsList[i].LocationName;
-						Insert.LocationAbbrev= locationsList[i].LocationAbbreviation;
-						Insert.EventType="";
-						Insert.ArrivalTime= 0;
-						Insert.WaitTime=0;
-						Insert.TimeString="--";
-						Insert.LocationsOrder= locationsList[i].Order;
-						Insert.TimeEventId= -1; // TimeEvent is not valid!
-						Timing.Insert(j,Insert);
+						var Insert = new ServiceInstanceTimingModel();
+						Insert.LocationId = locationsList[i].Id;
+						Insert.LocationName = locationsList[i].LocationName;
+						Insert.LocationAbbrev = locationsList[i].LocationAbbreviation;
+						Insert.EventType = "";
+						Insert.ArrivalTime = 0;
+						Insert.WaitTime = 0;
+						Insert.TimeString = "--";
+						Insert.LocationsOrder = locationsList[i].Order;
+						Insert.TimeEventId = -1; // TimeEvent is not valid!
+						Timing.Insert(j, Insert);
 						i++;
 						j++;
 						}
@@ -81,19 +99,19 @@ namespace DataAccess.Library.Logic
 				matrixModel.TimingList.Add(Timing);
 				}
 
-			for(int i=0;i<columncount-1;i++) // for each serviceInstance
+			for (int i = 0; i < columncount - 1; i++) // for each serviceInstance
 				{
 				int actualTime = serviceInstanceList[i].StartTime;
-				var timing= matrixModel.TimingList[i];
-				for (int j=0;j<locationsCount;j++) // for each location
+				var timing = matrixModel.TimingList[i];
+				for (int j = 0; j < locationsCount; j++) // for each location
 					{
-					if(timing[j].TimeEventId>0)
+					if (timing[j].TimeEventId > 0)
 						{
 						actualTime += timing[j].ArrivalTime;
-						timing[j].TimeString= TimeConverters.TimeEventToString(actualTime,timing[j].WaitTime);
+						timing[j].TimeString = TimeConverters.TimeEventToString(actualTime, timing[j].WaitTime);
 						actualTime += timing[j].WaitTime;
 						}
-					matrixModel.Matrix[j+1][i+1]= timing[j].TimeString;
+					matrixModel.Matrix[j + 1][i + 1] = timing[j].TimeString;
 					}
 				}
 			return matrixModel;
@@ -104,7 +122,7 @@ namespace DataAccess.Library.Logic
 		// Query to get toe serviceInstanceDetails
 
 
-			public static List<ServiceInstanceTimingModel> GetServiceInstanceTiming(int serviceInstanceId, List<LocationModel> locations)
+		public static List<ServiceInstanceTimingModel> GetServiceInstanceTiming(int serviceInstanceId, List<LocationModel> locations)
 			{
 			var sql = @"
 						select Locations.Id as LocationId, 
@@ -155,15 +173,15 @@ namespace DataAccess.Library.Logic
 
 		public static string GetCsvData(string[][] matrix)
 			{
-			var output="";
-			int rowCount= matrix.GetLength(0);
-			int columnCount= matrix[0].GetLength(0);
+			var output = "";
+			int rowCount = matrix.GetLength(0);
+			int columnCount = matrix[0].GetLength(0);
 
-			for(int i=0;i<rowCount;i++)
+			for (int i = 0; i < rowCount; i++)
 				{
-				for(int j=0;j<columnCount;j++)
+				for (int j = 0; j < columnCount; j++)
 					{
-					if(j<columnCount-1)
+					if (j < columnCount - 1)
 						{
 						output += $"{matrix[i][j]},";
 						}

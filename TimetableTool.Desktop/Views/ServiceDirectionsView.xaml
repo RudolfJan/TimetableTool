@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
 						 mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="550" d:DesignWidth="800">
 	
  <Border Style="{StaticResource DefaultBorder}">
     <StackPanel>
@@ -34,7 +34,7 @@
                 Style="{StaticResource DefaultDataGrid}"
                 ItemsSource="{Binding ServiceDirectionsList, Mode=TwoWay, NotifyOnSourceUpdated=True }"
                 SelectedItem="{Binding SelectedServiceDirection}"
-                Height="400" MinWidth="400"
+                Height="300" MinWidth="400"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 AutoGenerateColumns="False"
@@ -55,6 +55,18 @@
                 </DataTemplate>
               </DataGridTextColumn.HeaderTemplate>
             </DataGridTextColumn>
+						
+					<DataGridCheckBoxColumn Binding="{Binding IsDescending, NotifyOnSourceUpdated=True}">
+              <DataGridCheckBoxColumn.HeaderTemplate>
+                <DataTemplate>
+                  <StackPanel>
+                    <TextBlock Text="Desc?" Width="30" HorizontalAlignment="Center" />
+                    <TextBlock Height="32"/>
+                  </StackPanel>
+                </DataTemplate>
+              </DataGridCheckBoxColumn.HeaderTemplate>
+            </DataGridCheckBoxColumn>
+
 
             <DataGridTextColumn Binding="{Binding ServiceDirectionAbbreviation, NotifyOnSourceUpdated=True}">
               <DataGridTextColumn.HeaderTemplate>
@@ -63,7 +75,7 @@
                     <TextBlock
                   Text="Abbrev" 
                   HorizontalAlignment="Center" />
-                    <TextBox x:Name="ServiceDirectionsAbbreviationFilterTextBox" Width="80" 
+                    <TextBox x:Name="ServiceDirectionsAbbreviationFilterTextBox" Width="60" 
                           Text="{Binding ElementName=ServiceDirectionsListDataGrid, 
                           Path= DataContext.Filter.ServiceDirectionAbbreviation, Mode=TwoWay, 
                           UpdateSourceTrigger=PropertyChanged}"/>
@@ -108,8 +120,9 @@
 
         <StackPanel Grid.Row="1" Grid.Column="1" Width="300">
           <WrapPanel>
-            <userControls:LabelTextBox x:Name="ServiceDirectionAbbreviationTextBox" LabelText="Abbrev" LabelWidth="90"
+            <userControls:LabelTextBox x:Name="ServiceDirectionAbbreviationTextBox" LabelText="Abbrev" LabelWidth="50"
                              TextBoxText="{Binding ServiceDirectionAbbreviation, Mode=TwoWay}"/>
+						<CheckBox x:Name="IsDescendingCheckBox" IsChecked="{Binding IsDescending, Mode=TwoWay}">High to low location order</CheckBox>
           </WrapPanel>
           <userControls:LabelTextBox x:Name="ServiceDirectionNameTextBox" LabelText="Service direction" LabelWidth="90"
                                TextBoxText="{Binding ServiceDirectionName, Mode=TwoWay}"/>

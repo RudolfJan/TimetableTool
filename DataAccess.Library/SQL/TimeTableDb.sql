@@ -47,6 +47,7 @@ CREATE TABLE IF NOT EXISTS "ServiceDirections" (
 	"ServiceDirectionName"	TEXT NOT NULL,
 	"ServiceDirectionAbbreviation" TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
+	"IsDescending" INTEGER NOT NULL DEFAULT 0,
 	FOREIGN KEY("RouteId") REFERENCES "Routes"
 );
 
