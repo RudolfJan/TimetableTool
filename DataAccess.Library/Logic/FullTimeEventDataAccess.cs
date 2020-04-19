@@ -18,6 +18,44 @@ namespace DataAccess.Library.Logic
       return timeEventList;
       }
 
+    public static List<FullTimeEventModel> CreateTimeEventsPerService(int serviceId)
+      {
+      string sql="SELECT ServiceDirections.IsDescending FROM ServiceDirections, Services WHERE Services.Id=@ServiceId AND ServiceDirections.Id=Services.ServiceDirectionId;";
+      var isDescending= SQLiteData.LoadData<int,dynamic>(sql, new{serviceId},SQLiteData.GetConnectionString()).FirstOrDefault();
+      string direction;
+
+      if(isDescending==1)
+        {
+        direction="DESC";
+        }
+      else
+        {
+        direction="ASC";
+        }
+
+      sql = $"SELECT Locations.Id, Locations.LocationName, Locations.LocationAbbreviation, Locations.NumberOfTracks, Locations.[Order], Locations.Routeid FROM Locations, Services WHERE Services.Id=@ServiceId AND Locations.RouteId= Services.RouteId ORDER BY Locations.[Order] {direction};";
+
+      var locations =
+        SQLiteData.LoadData<LocationModel, dynamic>(sql, new { serviceId}, SQLiteData.GetConnectionString()).ToList();
+
+      var timeEventList= new List<FullTimeEventModel>();
+      int order=10;
+      // Warnig: No all columns are filled!
+      // TODO refactor this, using extraneous fields.
+      foreach(var location in locations)
+        {
+        var timeEvent= new FullTimeEventModel();
+        timeEvent.Order=order;
+        order+=10;
+        timeEvent.LocationId= location.Id;
+        timeEvent.ServiceId= serviceId;
+        timeEvent.LocationName= location.LocationName;
+        timeEventList.Add(timeEvent);
+        }
+      return timeEventList;
+      }
+
+
     public static FullTimeEventModel GetFullTimeEventById(int timeEventId)
       {
       string sql = "SELECT * FROM FullTimeEvents WHERE Id= @TimeEventId";

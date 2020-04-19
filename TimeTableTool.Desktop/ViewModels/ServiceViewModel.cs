@@ -1,7 +1,10 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
+using Logging.Library;
 using System;
+using System.Linq;
+using System.Windows.Media.Animation;
 using TimetableTool.Desktop.EventModels;
 using TimetableTool.Desktop.Models;
 
@@ -14,6 +17,36 @@ namespace TimetableTool.Desktop.ViewModels
 		public int RouteId { get; set; } = -1;
 		public int ServiceId { get; set; } = -1;
 		public int ServiceDirectionId { get; set; } = -1;
+		private bool _hasTimeEvents;
+		public bool HasTimeEvents
+			{
+			get
+				{
+				return _hasTimeEvents;
+				}
+			set
+				{
+				_hasTimeEvents = value;
+				NotifyOfPropertyChange(() => HasTimeEvents);
+				}
+			}
+
+		private BindableCollection<FullTimeEventModel> _fullTimeEventsList;
+
+		public BindableCollection<FullTimeEventModel> FullTimeEventsList
+			{
+			get
+				{
+				return _fullTimeEventsList;
+				}
+			set
+				{
+				_fullTimeEventsList = value;
+				NotifyOfPropertyChange(() => FullTimeEventsList);
+				NotifyOfPropertyChange(() => HasTimeEvents);
+				}
+			}
+
 
 		private ServiceModel _selectedService;
 		private ServiceDirectionModel _selectedServiceDirection;
@@ -32,9 +65,19 @@ namespace TimetableTool.Desktop.ViewModels
 				ServiceSelectedEvent serviceSelectedEvent = new ServiceSelectedEvent();
 				serviceSelectedEvent.SelectedService = _selectedService;
 				_events.PublishOnUIThreadAsync(serviceSelectedEvent);
+				if(SelectedService!=null)
+					{
+					FullTimeEventsList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
+					}
+				else
+					{
+					FullTimeEventsList=null;
+					}
+				NotifyOfPropertyChange(() => CanLoadTimeEvents);
 				NotifyOfPropertyChange(() => SelectedService);
 				NotifyOfPropertyChange(() => CanEditService);
 				NotifyOfPropertyChange(() => CanDeleteService);
+				NotifyOfPropertyChange(() => CanLoadTimeEvents);
 				}
 			}
 
@@ -89,7 +132,6 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(() => ServiceDirectionName);
 				}
 			}
-
 
 		public string ServiceDescription
 			{
@@ -177,12 +219,15 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceType = SelectedService.ServiceType;
 			ServiceDescription = SelectedService.ServiceDescription;
 			CalculatedDuration = SelectedService.CalculatedDuration;
-			ServiceDirectionId= SelectedService.ServiceDirectionId;
-			SelectedServiceDirection= ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
-			ServiceDirectionName=SelectedServiceDirection.ServiceDirectionName;
+			ServiceDirectionId = SelectedService.ServiceDirectionId;
+			SelectedServiceDirection = ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
+			ServiceDirectionName = SelectedServiceDirection.ServiceDirectionName;
 			ServiceId = SelectedService.Id;
+			FullTimeEventsList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
+			NotifyOfPropertyChange(() => CanLoadTimeEvents);
 			NotifyOfPropertyChange(() => CanEditService);
 			NotifyOfPropertyChange(() => CanDeleteService);
+
 			}
 
 		public bool CanDeleteService
@@ -211,10 +256,10 @@ namespace TimetableTool.Desktop.ViewModels
 
 		public void SelectServiceDirection()
 			{
-			ServiceDirectionId=SelectedServiceDirection.Id;
-			ServiceDirectionName=SelectedServiceDirection.ServiceDirectionName;
-			NotifyOfPropertyChange(()=>CanSaveService);
-			NotifyOfPropertyChange(()=>ServiceDirectionName);
+			ServiceDirectionId = SelectedServiceDirection.Id;
+			ServiceDirectionName = SelectedServiceDirection.ServiceDirectionName;
+			NotifyOfPropertyChange(() => CanSaveService);
+			NotifyOfPropertyChange(() => ServiceDirectionName);
 			}
 
 		public void SaveService()
@@ -239,6 +284,7 @@ namespace TimetableTool.Desktop.ViewModels
 			ClearService();
 			ServicesUI.ServiceList = new BindableCollection<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
 			NotifyOfPropertyChange(() => ServicesUI);
+			NotifyOfPropertyChange(()=>CanLoadTimeEvents);
 			}
 
 		public void ClearService()
@@ -248,9 +294,58 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceType = "";
 			ServiceDescription = "";
 			CalculatedDuration = 0;
-			ServiceDirectionId=0;
-			ServiceDirectionName="";
+			ServiceDirectionId = 0;
+			ServiceDirectionName = "";
 			ServiceId = 0;
+			}
+
+		public bool CanLoadTimeEvents
+			{
+			get
+				{
+				return SelectedService != null && (FullTimeEventsList==null ||
+						FullTimeEventsList.Count == 0);
+				}
+			}
+
+		public void LoadTimeEvents()
+			{
+			HasTimeEvents = false;
+			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.CreateTimeEventsPerService(SelectedService.Id));
+			NotifyOfPropertyChange(() => FullTimeEventsList);
+			}
+
+		public void SaveTimeEvents()
+			{
+				foreach (var item in FullTimeEventsList)
+					{
+					if (item.EventType?.Length > 0)
+						{
+						var timeEvent = new TimeEventModel();
+						timeEvent.Id = item.Id;
+						timeEvent.EventType = item.EventType;
+						timeEvent.ArrivalTime = item.ArrivalTime;
+						timeEvent.WaitTime = item.WaitTime;
+						timeEvent.LocationId = item.LocationId;
+						timeEvent.ServiceId = item.ServiceId;
+						timeEvent.Order = item.Order;
+					if(item.Id>0)
+						{
+						timeEvent.Id=item.Id;
+						TimeEventDataAccess.UpdateTimeEvent(timeEvent);
+						}
+					else
+						{ 
+						TimeEventDataAccess.InsertTimeEventForService(timeEvent);
+						}
+					}
+				}
+		  int duration = FullTimeEventsList.Sum(x => x.ArrivalTime+x.WaitTime);
+			SelectedService.CalculatedDuration= duration;
+      ServiceDataAccess.UpdateServiceCalculatedDuration(duration,SelectedService.Id);
+			NotifyOfPropertyChange(()=>ServicesUI.ServiceList);
+			FullTimeEventsList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
+			Log.Trace($"Time events for service {SelectedService.ServiceAbbreviation} saved", LogEventType.Event);
 			}
 		}
 	}

@@ -43,14 +43,20 @@ namespace TimetableTool.DataAccessLibrary.Logic
       }
 
 
-        public static string TimeEventToString(int startTime, int waitTime)
+        public static string TimeEventToString(int startTime, int waitTime, bool csvTarget)
       {
       var output= $"{MinutesToString(startTime)}";
       if(waitTime>0)
         {
-        output += $" A\n{MinutesToString(startTime+waitTime)} D";
-        }
-
+        if(csvTarget)
+          {
+          output += $" A {MinutesToString(startTime+waitTime)} D";
+          }
+        else
+          {
+          output += $" A\n{MinutesToString(startTime+waitTime)} D";
+          }
+         }
       return output;
       }
     }

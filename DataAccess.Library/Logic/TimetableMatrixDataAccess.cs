@@ -12,7 +12,7 @@ namespace DataAccess.Library.Logic
 	{
 	public class TimetableMatrixDataAccess
 		{
-		public static TimetableMatrixModel ReadTimetableMatrix(int timetableId)
+		public static TimetableMatrixModel ReadTimetableMatrix(int timetableId, bool csvTarget)
 			{
 			// TODO wrap this all in a transaction, for better performance
 			TimetableMatrixModel matrixModel = new TimetableMatrixModel();
@@ -108,7 +108,7 @@ namespace DataAccess.Library.Logic
 					if (timing[j].TimeEventId > 0)
 						{
 						actualTime += timing[j].ArrivalTime;
-						timing[j].TimeString = TimeConverters.TimeEventToString(actualTime, timing[j].WaitTime);
+						timing[j].TimeString = TimeConverters.TimeEventToString(actualTime, timing[j].WaitTime, csvTarget);
 						actualTime += timing[j].WaitTime;
 						}
 					matrixModel.Matrix[j + 1][i + 1] = timing[j].TimeString;

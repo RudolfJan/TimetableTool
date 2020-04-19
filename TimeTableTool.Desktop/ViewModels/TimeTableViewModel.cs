@@ -134,6 +134,7 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(() => CanDeleteTimetable);
 				NotifyOfPropertyChange(() => CanAddServiceInstance);
 				NotifyOfPropertyChange(() => CanRemoveServiceInstance);
+				NotifyOfPropertyChange(() => CanCopyAllServiceInstances);
 				}
 			}
 
@@ -174,6 +175,7 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				_serviceInstancesSourceList = value;
 				NotifyOfPropertyChange(() => ServiceInstancesSourceList);
+				NotifyOfPropertyChange(() => CanCopyAllServiceInstances);
 				}
 			}
 
@@ -190,6 +192,7 @@ namespace TimetableTool.Desktop.ViewModels
 				_selectedServiceInstanceSource = value;
 				NotifyOfPropertyChange(() => SelectedServiceInstanceSource);
 				NotifyOfPropertyChange(() => CanAddServiceInstance);
+				NotifyOfPropertyChange(() => CopyStatus);
 				}
 			}
 
@@ -203,6 +206,7 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				_serviceInstancesDestinationList = value;
 				NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+				NotifyOfPropertyChange(() => CopyStatus);
 				}
 			}
 
@@ -219,6 +223,30 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		public string CopyStatus 
+			{
+			get
+				{
+				var output="";
+				if(ServiceInstancesSourceList!=null)
+					{
+					output += $"Nr of instances available: {ServiceInstancesSourceList.Count}. ";
+					}
+				else
+					{
+					output +="No instances available to move. ";
+					}
+				if(ServiceInstancesDestinationList!=null)
+					{
+					output += $"Nr of services in timetable: {ServiceInstancesDestinationList.Count}.";
+					}
+				else
+					{
+					output +="No services visible in timetable.";
+					}
+				return output;
+				}
+			}
 
 		#endregion
 
@@ -348,11 +376,28 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
-
 		public void RemoveServiceInstance()
 			{
 			ConnectTtSiDataAccess.DeleteConnection(SelectedServiceInstanceDestination.Id, SelectedTimetable.Id);
 			ServiceInstancesDestinationList.Remove(SelectedServiceInstanceDestination);
+			}
+
+
+		public bool CanCopyAllServiceInstances 
+			{ 
+			get
+				{
+				return ServiceInstancesSourceList!=null && SelectedTimetable!=null;
+				}
+			}
+		public void CopyAllServiceInstances()
+			{
+			foreach(var item in ServiceInstancesSourceList)
+				{
+				ServiceInstancesDestinationList.Add(item);
+				ConnectTtSiDataAccess.InsertConnection(item.Id, SelectedTimetable.Id);
+				NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+				}
 			}
 		}
 	}

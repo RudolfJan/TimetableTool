@@ -239,13 +239,21 @@
 					<!-- Buttons to set/reset ServiceInstances -->
 					
 					<StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
-						<Button x:Name="AddServiceInstance" Style="{StaticResource ImageButton}">
-							<Image Source="../arrow_right.png"/>
+						<Button x:Name="AddServiceInstance" 
+										Style="{StaticResource ButtonTransparentImage}"
+										ToolTip="Copy selected service instance to timetable">
+							<Image Source="../Images/arrow_right.png"/>
 						</Button>
-						<Button x:Name = "RemoveServiceInstance" Style="{StaticResource ImageButton}">
-							<Image Source="../arrow_left.png"/>
+						<Button x:Name = "RemoveServiceInstance" 
+										Style="{StaticResource ButtonTransparentImage}"
+										ToolTip="Remove selected service instance from timetable">
+							<Image Source="../Images/arrow_left.png"/>
 						</Button>
-						
+							<Button x:Name = "CopyAllServiceInstances" 
+											Style="{StaticResource ButtonTransparentImage}"
+											ToolTip="Copy all service instances to timetable">
+							<Image Source="../Images/arrow_join.png"/>
+						</Button>		
 					</StackPanel>
 					
 					<!-- Destination table, -->
@@ -307,12 +315,14 @@
 									</DataTemplate>
 								</DataGridTextColumn.HeaderTemplate>
 							</DataGridTextColumn>
-
 						</DataGrid.Columns>
-
 					</DataGrid>
-					
-					
+
+					<TextBlock x:Name="CopyStatus" 
+										 Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+										 Style="{StaticResource DefaultTextBlock}"
+										 HorizontalAlignment="Center"/>
+
 				</Grid>
 			</Grid>
 		</StackPanel>

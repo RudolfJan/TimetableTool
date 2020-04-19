@@ -121,7 +121,7 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			// This one uses the ShellViewModel
 			SaveFileParams.Title = "Export timetable as csv file";
-			DataAccess.Library.Models.TimetableMatrixModel matrix = TimetableMatrixDataAccess.ReadTimetableMatrix(SelectedTimetable.Id);
+			DataAccess.Library.Models.TimetableMatrixModel matrix = TimetableMatrixDataAccess.ReadTimetableMatrix(SelectedTimetable.Id,true);
 			var csv = TimetableMatrixDataAccess.GetCsvData(matrix.Matrix);
 			if (csv.Length > 0)
 				{
@@ -138,6 +138,14 @@ namespace TimetableTool.Desktop.ViewModels
 			var displayTimetableVM = IoC.Get<DisplayTimetableViewModel>();
 			displayTimetableVM.TimetableId = SelectedTimetable.Id;
 			await ActivateItemAsync(displayTimetableVM, new CancellationToken());
+			}
+
+		public async Task ViewGraph()
+			{
+			var displayTimetableGraphVM = IoC.Get<DisplayTimeTableGraphViewModel>();
+			displayTimetableGraphVM.TimetableId = SelectedTimetable.Id;
+			await ActivateItemAsync(displayTimetableGraphVM, new CancellationToken());
+
 			}
 
 		public async Task ExitApplication()
@@ -204,9 +212,10 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			try
 				{
+				Log.Trace($"Manual path:{Settings.ManualPath}", LogEventType.Event);
 				if(File.Exists(Settings.ManualPath))
 					{
-					Process.Start(Settings.ManualPath);
+					FileIOHelper.OpenFileWithShell(Settings.ManualPath);
 					}
 				else
 					{

@@ -13,14 +13,16 @@
                 <MenuItem  x:Name="FileMenu"  Header="_File">
                     <MenuItem x:Name="ExportTimetable" Header="E_xport ..."  IsEnabled="{Binding IsEditTimetablesEnabled}"/>
                     <MenuItem x:Name="ViewTimetable" Header="_View timetable"  IsEnabled="{Binding IsEditTimetablesEnabled}"/>
+									  <MenuItem x:Name="ViewGraph" Header="View _graph"  IsEnabled="{Binding IsEditTimetablesEnabled}"/>
                     <MenuItem x:Name="Print" Header="_Print"/>
                     <MenuItem x:Name="ExitApplication" Header="E_xit"/>
                 </MenuItem>
                 <MenuItem x:Name="RouteMenu" Header="_Routes">
                     <MenuItem x:Name="EditRoutes" Header="_Route"/>
-									  <MenuItem x:Name="EditServiceDirections" Header="ServiceDirections" IsEnabled="{Binding IsEditServiceDirectionsEnabled}"/>
                     <MenuItem x:Name="EditBranches" Header="_Branch" Visibility="Hidden"/>
                     <MenuItem x:Name="EditLocations" Header="_Location" IsEnabled="{Binding IsEditLocationsEnabled}"/>
+										<MenuItem x:Name="EditServiceDirections" Header="Service _Directions" IsEnabled="{Binding IsEditServiceDirectionsEnabled}"/>
+
                     <MenuItem x:Name="EditSections" Header="_Section" Visibility="Hidden"/>
                 </MenuItem>
                 <MenuItem  x:Name="TimeTablesMenu" Header="Timetables">

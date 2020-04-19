@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <None Remove="Images\AboutImage.png" />
+    <None Remove="Images\arrow_join.png" />
     <None Remove="Images\arrow_left.png" />
     <None Remove="Images\arrow_right.png" />
     <None Remove="Models\AppIcon.ico" />
@@ -34,6 +35,7 @@
   <ItemGroup>
     <Resource Include="Images\AboutImage.png" />
     <Resource Include="Images\AppIcon.ico" />
+    <Resource Include="Images\arrow_join.png" />
     <Resource Include="Images\arrow_left.png" />
     <Resource Include="Images\arrow_right.png" />
     <Resource Include="Images\delete.ico" />

@@ -22,7 +22,7 @@ namespace TimetableTool.Desktop.ViewModels
 		protected override void OnViewLoaded(object view)
 			{
 			base.OnViewLoaded(view);
-			var matrix=TimetableMatrixDataAccess.ReadTimetableMatrix(TimetableId);
+			var matrix=TimetableMatrixDataAccess.ReadTimetableMatrix(TimetableId,false);
 			SimpleTimetable= TimetableMatrixDataAccess.MatrixToDataTable(matrix.Matrix);
 			NotifyOfPropertyChange(()=>SimpleTimetable );
 			}

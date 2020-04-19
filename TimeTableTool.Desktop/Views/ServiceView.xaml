@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
              mc:Ignorable="d" 
-            d:DesignHeight="650" d:DesignWidth="900">
+            d:DesignHeight="650" d:DesignWidth="950">
 
 	<Border Style="{StaticResource DefaultBorder}">
 		<StackPanel>
@@ -21,6 +21,7 @@
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
 					<RowDefinition Height="auto"/>
+					<RowDefinition Height="auto"/>
 					<RowDefinition Height="*"/>
 				</Grid.RowDefinitions>
 
@@ -31,7 +32,7 @@
                 Style="{StaticResource DefaultDataGrid}"
 								ItemsSource="{Binding ServiceDirectionList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
 				        SelectedItem="{Binding SelectedServiceDirection}"
-								Height="400" MinWidth="150"
+								Height="300" MinWidth="150"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 AutoGenerateColumns="False">
@@ -51,12 +52,12 @@
                 Style="{StaticResource DefaultDataGrid}"
                 ItemsSource="{Binding Path=ServicesUI.ServiceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
                 SelectedItem="{Binding SelectedService}"
-                Height="400" 
+                Height="300" 
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
                 AutoGenerateColumns="False">
 					<DataGrid.Columns>
-						<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}" IsReadOnly="True">
 							<DataGridTextColumn.HeaderTemplate>
 								<DataTemplate>
 									<StackPanel>
@@ -72,7 +73,8 @@
 							</DataGridTextColumn.HeaderTemplate>
 						</DataGridTextColumn>
 						
-						<DataGridTextColumn Binding="{Binding CalculatedDuration, NotifyOnSourceUpdated=True}" Width="30">
+						<DataGridTextColumn Binding="{Binding CalculatedDuration, NotifyOnSourceUpdated=True}" 
+																Width="30">
 							<DataGridTextColumn.HeaderTemplate>
 								<DataTemplate>
 									<StackPanel>
@@ -85,13 +87,14 @@
 							</DataGridTextColumn.HeaderTemplate>
 						</DataGridTextColumn>
 
-						<DataGridTextColumn Binding="{Binding ServiceAbbreviation, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn Binding="{Binding ServiceAbbreviation, NotifyOnSourceUpdated=True}" 
+																IsReadOnly="True">
 							<DataGridTextColumn.HeaderTemplate>
 								<DataTemplate>
 									<StackPanel>
 										<TextBlock
                   Text="Abbrev" 
-                  HorizontalAlignment="Center" />
+                  HorizontalAlignment="Center"/>
 										<TextBox x:Name="ServiceAbbreviationFilterTextBox" Width="60" 
                           Text="{Binding ElementName=ServiceList, 
                           Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
@@ -101,7 +104,8 @@
 							</DataGridTextColumn.HeaderTemplate>
 						</DataGridTextColumn>
 
-						<DataGridTextColumn Binding="{Binding ServiceName, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn Binding="{Binding ServiceName, NotifyOnSourceUpdated=True}" 
+																IsReadOnly="True">
 							<DataGridTextColumn.HeaderTemplate>
 								<DataTemplate>
 									<StackPanel>
@@ -117,7 +121,6 @@
 							</DataGridTextColumn.HeaderTemplate>
 						</DataGridTextColumn>
 					</DataGrid.Columns>
-
 				</DataGrid>
 
 				<!-- Row 2 Controls -->
@@ -127,15 +130,52 @@
 						<Button x:Name="DeleteService" Style="{StaticResource DefaultButton}">Delete</Button>
 					</WrapPanel>
 				</StackPanel>
+				
+				<!-- Right column, TimeEvents editor-->
+        <TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource HeaderTextBlock}">Time events</TextBlock>
+        <DataGrid x:Name="EventTimeEventDataGrid" Style="{StaticResource DefaultDataGrid}" 
+                  AutoGenerateColumns="False" Height="300"
+									Grid.Row="1" Grid.Column="2"
+                  ItemsSource="{Binding FullTimeEventsList}"
+									CanUserAddRows="False" CanUserDeleteRows="False">
+          <DataGrid.Columns>
+            <DataGridTextColumn Header="Location" Width="150"
+                                Binding="{Binding LocationName}" IsReadOnly="True" />
+            <DataGridTextColumn Header="Type" Width="40"
+                                Binding="{Binding EventType}" />
+            <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding ArrivalTime}" />
+						 <DataGridTextColumn Header="Wait" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding WaitTime}" />
+            <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding Order}"/>
 
-				<!-- Right column -->
+          </DataGrid.Columns>
 
-				<!-- Row 0 Header -->
-				<TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource HeaderTextBlock}">Service editor</TextBlock>
-
-				<!-- Row 1 detail view -->
-
-				<StackPanel Grid.Row="1" Grid.Column="2" Width="300">
+        </DataGrid>
+        <TextBlock MinHeight="20"/>
+        <WrapPanel Grid.Row="2" Grid.Column="2">
+					<Button x:Name="LoadTimeEvents" Style="{StaticResource DefaultButton}">Load Time Events</Button>
+          <Button x:Name="SaveTimeEvents" Style="{StaticResource DefaultButton}">Save Time Events</Button>
+        </WrapPanel>
+				
+			</Grid>
+			
+			<!-- Edit tools -->
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				
+				<Grid.RowDefinitions>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="Auto"/>
+					<RowDefinition Height="*"/>
+				</Grid.RowDefinitions>
+					<StackPanel Grid.Column="0" Grid.Row="0">
+									<TextBlock  Style="{StaticResource HeaderTextBlock}">Service editor</TextBlock>
 					<WrapPanel>
 						<Button x:Name="SelectServiceDirection" Style="{StaticResource DefaultButton}">
 							Set direction
@@ -156,14 +196,22 @@
 					<userControls:LabelTextBox x:Name="ServiceNameTextBox" 
 															LabelText="Service"
                               TextBoxText="{Binding ServiceName, Mode=TwoWay}"/>
-					<TextBlock Style="{StaticResource DefaultTextBlock}">Description:</TextBlock>
-					<TextBox x:Name="ServiceDescription" Style="{StaticResource BigTextBox}"/>
-					<WrapPanel>
+						</StackPanel>
+				
+				<StackPanel Grid.Column="1" Grid.Row="0">
+										<TextBlock Style="{StaticResource DefaultTextBlock}">Description:</TextBlock>
+					<TextBox x:Name="ServiceDescription" Style="{StaticResource BigTextBox}" Width="220"/>
+
+				</StackPanel>
+									<WrapPanel Grid.Row="1" Grid.ColumnSpan="2" Grid.Column="0">
 						<Button x:Name="SaveService" Style="{StaticResource DefaultButton}">Save changes</Button>
 						<Button x:Name="ClearService" Style="{StaticResource DefaultButton}">Clear edit</Button>
 					</WrapPanel>
-				</StackPanel>
 			</Grid>
-		</StackPanel>
+			
+	
+
+				</StackPanel>
+
 	</Border>
 </UserControl>

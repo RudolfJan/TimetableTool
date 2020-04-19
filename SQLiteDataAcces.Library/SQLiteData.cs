@@ -2,6 +2,7 @@
 using Logging.Library;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Data.SQLite;
 using System.IO;
@@ -41,11 +42,11 @@ namespace SQLiteDataAccess.Library
     //  }
 
 
-    public static void InitDatabase(string connectionString, string databasePath)
+    public static void InitDatabase(string connectionString, string databasePath, bool useDemoData)
       {
       _connectionString = connectionString;
        _databasePath = databasePath;
-      TableFactory();
+      TableFactory(useDemoData);
       }
     #endregion
 
@@ -112,7 +113,7 @@ namespace SQLiteDataAccess.Library
     /// <summary>
     /// Tables the factory.
     /// </summary>
-    public static void TableFactory()
+    public static void TableFactory(bool UseDemoData)
       {
       try
         {
@@ -127,8 +128,10 @@ namespace SQLiteDataAccess.Library
         // Index creation
 
         // Create testdata
-// TODO temporarily turned off
- //       CreateTable("SQL\\TimeTableData.sql");
+      if(UseDemoData)
+          {
+          CreateTable("SQL\\TimeTableData.sql");
+          }
 
         }
       catch (Exception e)

@@ -36,15 +36,14 @@ namespace TimetableTool.Desktop
 
     protected override void OnStartup(object sender, StartupEventArgs e)
       {
-
-      SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath);
+      SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
       LogEventHandler.LogEvent += OnLogEvent;
       DisplayRootViewFor<ShellViewModel>();
       }
 
     private void OnLogEvent(Object Sender, LogEventArgs args)
       {
-      if (args.EntryClass.EventType == LogEventType.Error)
+      if (args.EntryClass.EventType == LogEventType.Error || args.EntryClass.EventType == LogEventType.Event)
         {
         var message = args.EntryClass.LogEntry;
         var form = new NotificationView(message);
