@@ -32,7 +32,6 @@ namespace TimetableTool.Desktop.ViewModels
 			}
 
 		private BindableCollection<FullTimeEventModel> _fullTimeEventsList;
-
 		public BindableCollection<FullTimeEventModel> FullTimeEventsList
 			{
 			get
@@ -46,7 +45,6 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(() => HasTimeEvents);
 				}
 			}
-
 
 		private ServiceModel _selectedService;
 		private ServiceDirectionModel _selectedServiceDirection;
@@ -283,8 +281,7 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			ClearService();
 			ServicesUI.ServiceList = new BindableCollection<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
-			NotifyOfPropertyChange(() => ServicesUI);
-			NotifyOfPropertyChange(()=>CanLoadTimeEvents);
+
 			}
 
 		public void ClearService()
@@ -297,6 +294,9 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceDirectionId = 0;
 			ServiceDirectionName = "";
 			ServiceId = 0;
+			NotifyOfPropertyChange(() => ServicesUI);
+			NotifyOfPropertyChange(()=>CanLoadTimeEvents);
+			NotifyOfPropertyChange(() => CanEditService);
 			}
 
 		public bool CanLoadTimeEvents

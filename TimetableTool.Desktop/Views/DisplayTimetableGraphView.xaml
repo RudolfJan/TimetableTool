@@ -3,10 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:TimetableTool.Desktop.Views"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+             d:DesignHeight="675" d:DesignWidth="975">
+
+	<Border x:Name="GraphBorder" Style="{StaticResource DefaultBorder}" Height="675" Width="975" >
+		<Viewbox Stretch="Fill">
+			<Canvas x:Name="AxisCanvas" Height="450"  Width="650"  Background="LightSkyBlue">
+				<Canvas x:Name="GraphCanvas" Height="330" Width="540" Background="Bisque"
+				        Canvas.Top="90" Canvas.Left="90"  >
+				</Canvas>
+			</Canvas>
+		</Viewbox>
+	</Border>
 </UserControl>

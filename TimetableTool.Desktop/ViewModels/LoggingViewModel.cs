@@ -1,33 +1,88 @@
 ﻿using Caliburn.Micro;
 using Logging.Library;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
-	{
-	public class LoggingViewModel: Screen
+  {
+  public class LoggingViewModel: Screen
 		{
     ILogCollectionManager _logger;
     public LoggingModel Logging { get; set; }= new LoggingModel();
+    public bool _debugLogging =true;
+    public bool DebugLogging
+      {
+      get { return _debugLogging; }
+      set
+        {
+        _debugLogging = value;
+        NotifyOfPropertyChange(()=>DebugLogging);
+        Logging.Filter.DebugChecked = DebugLogging;
+        ChangeFilter();
+        }
+      }
+
+    public bool _messageLogging =true;
+    public bool MessageLogging
+      {
+      get { return _messageLogging; }
+      set
+        {
+        _messageLogging = value;
+        NotifyOfPropertyChange(() => MessageLogging);
+        Logging.Filter.MessageChecked = MessageLogging;
+        ChangeFilter();
+        }
+      }
+
+    public bool _errorLogging =true;
+    public bool ErrorLogging
+      {
+      get { return _errorLogging; }
+      set
+        {
+        _errorLogging = value;
+        NotifyOfPropertyChange(() => ErrorLogging);
+        Logging.Filter.ErrorChecked = ErrorLogging;
+        ChangeFilter();
+        }
+      }
+
+    public bool _eventLogging = true;
+    public bool EventLogging
+      {
+      get { return _eventLogging; }
+      set
+        {
+        _eventLogging = value;
+        NotifyOfPropertyChange(() => EventLogging);
+        Logging.Filter.EventChecked = EventLogging;
+        ChangeFilter();
+        }
+      }
 
     public LoggingViewModel(ILogCollectionManager logger)
       {
       _logger=logger;
-      Logging.Logging= _logger;
-      Logging.FilteredLogging= _logger;
-      
+
       }
 
       protected override void OnViewLoaded(object view)
       {
       base.OnViewLoaded(view);
+      Logging.Logging= _logger;
+      Logging.FilteredLogging= new BindableCollection<LogEntryClass>();
       CreateTestData();
+      // Setup initial values for logging filter
+      ChangeFilter();
+      LogEventHandler.LogEvent += LogEventHandlerOnLogEvent;
       }
 
+    private void LogEventHandlerOnLogEvent(Object sender, LogEventArgs e)
+      {
+      ChangeFilter();
+      }
 
     private void CreateTestData()
       {
@@ -42,20 +97,23 @@ namespace TimetableTool.Desktop.ViewModels
 
     private void ChangeFilter()
       {
-      Logging.FilteredLogging.LogEvents = GetFilteredLogging(Logging.Filter, Logging.Logging);
+      Logging.FilteredLogging.Clear();
+      foreach (var item in Logging.Logging.LogEvents)
+        {
+        if (Logging.Filter.EventTypeFilter(item))
+          {
+          Logging.FilteredLogging.Add(item);
+          }
+        }
       }
 
     private void ClearLog()
       {
+      Logging.FilteredLogging.Clear();
       Logging.Logging.LogEvents.Clear();
-      Logging.FilteredLogging.LogEvents.Clear();
+      NotifyOfPropertyChange(() => Logging.FilteredLogging);
       }
 
-    static List<LogEntryClass> GetFilteredLogging(LogFilter filter,ILogCollectionManager logging)
-      {
-      return logging.LogEvents.Where(filter.EventTypeFilter).ToList();
-      }
- 
      public void SaveLog()
       {
       // TODO

@@ -281,10 +281,20 @@ namespace TimetableTool.Desktop.ViewModels
 			TimetableAbbreviation = SelectedTimetable.TimetableAbbreviation;
 			TimetableDescription = SelectedTimetable.TimetableDescription;
 			TimetableId = SelectedTimetable.Id;
-			ServiceDirectionId = SelectedTimetable.Id;
-			ServiceDirection = ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
-			ServiceDirectionName = ServiceDirection.ServiceDirectionName;
 			IsMultiDirection = SelectedTimetable.IsMultiDirection;
+			if (IsMultiDirection)
+				{
+				ServiceDirectionId = -1;
+				ServiceDirection = null;
+				ServiceDirectionName = "";
+				}
+			else
+				{
+				ServiceDirectionId = SelectedTimetable.ServiceDirectionId;
+				ServiceDirection = ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
+				ServiceDirectionName = ServiceDirection.ServiceDirectionName;
+				}
+
 			}
 
 		public bool CanDeleteTimetable
@@ -327,7 +337,14 @@ namespace TimetableTool.Desktop.ViewModels
 			newTimetable.TimetableAbbreviation = TimetableAbbreviation;
 			newTimetable.RouteId = RouteId;
 			newTimetable.IsMultiDirection = IsMultiDirection;
-			newTimetable.ServiceDirectionId = ServiceDirectionId;
+			if (IsMultiDirection)
+				{
+				newTimetable.ServiceDirectionId = -1;
+				}
+			else
+				{
+				newTimetable.ServiceDirectionId = ServiceDirectionId;
+				}
 			if (TimetableId <= 0)
 				{
 				TimetableDataAccess.InsertTimetableForRoute(newTimetable);
@@ -348,6 +365,7 @@ namespace TimetableTool.Desktop.ViewModels
 			TimetableAbbreviation = "";
 			TimetableName = "";
 			TimetableId = 0;
+			IsMultiDirection = false;
 			ServiceDirectionName = "";
 			ServiceDirectionId = 0;
 			ServiceDirection = null;

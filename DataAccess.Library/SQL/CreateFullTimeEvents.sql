@@ -9,6 +9,7 @@ AS SELECT
 	,Locations.[Order] AS LocationOrder
 	,TimeEvents.EventType AS EventType
 	,TimeEvents.ArrivalTime AS ArrivalTime
+	,TimeEvents.WaitTime AS WaitTime
 	,TimeEvents.[Order] AS [Order]
 	,Services.ServiceAbbreviation AS ServiceAbbreviation
 	,Services.ServiceName AS ServiceName

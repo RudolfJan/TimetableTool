@@ -97,10 +97,18 @@ namespace TimetableTool.Desktop.ViewModels
 			set
 				{
 				_selectedTimetable = value;
+				// Note for some timetable displays it is assumed they are unidirectional. Therefore we use two conditions here to enable the views.
+				IsTimetableSelected= SelectedTimetable != null && SelectedTimetable.IsMultiDirection==false;
+				IsTimetableSelectedMultiDirection = SelectedTimetable != null;
 				NotifyOfPropertyChange(() => SelectedTimetable);
 				NotifyOfPropertyChange(() => IsEditServiceInstancesEnabled);
+				NotifyOfPropertyChange(()=>IsTimetableSelected);
+				NotifyOfPropertyChange(()=>IsTimetableSelectedMultiDirection);
 				}
 			}
+
+		public bool IsTimetableSelected { get; set; }
+		public bool IsTimetableSelectedMultiDirection { get; set; }
 
 		public SaveFileModel SaveFileParams { get; set; } = new SaveFileModel();
 
@@ -142,7 +150,7 @@ namespace TimetableTool.Desktop.ViewModels
 
 		public async Task ViewGraph()
 			{
-			var displayTimetableGraphVM = IoC.Get<DisplayTimeTableGraphViewModel>();
+			var displayTimetableGraphVM = IoC.Get<DisplayTimetableGraphViewModel>();
 			displayTimetableGraphVM.TimetableId = SelectedTimetable.Id;
 			await ActivateItemAsync(displayTimetableGraphVM, new CancellationToken());
 

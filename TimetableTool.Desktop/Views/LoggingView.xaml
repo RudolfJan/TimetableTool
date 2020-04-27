@@ -9,7 +9,7 @@
     <StackPanel>
       <ListView Name="LogView" Style="{StaticResource DefaultListView}"
                 Height="400"
-                ItemsSource="{Binding Logging.FilteredLogging.LogEvents}">
+                ItemsSource="{Binding Logging.FilteredLogging}">
         <ListView.View>
           <GridView>
             <GridViewColumn Width="150"
@@ -42,20 +42,16 @@
         <Border Grid.Column="0" Style="{StaticResource DefaultBorder}">
           <StackPanel>
             <Label>Filters</Label>
-            <CheckBox Name="DebugCheckBox"
-                      IsChecked="{Binding Logging.Filter.DebugChecked}">
+            <CheckBox Name="DebugLogging">
               Debug
             </CheckBox>
-            <CheckBox Name="ErrorCheckBox"
-                      IsChecked="{Binding Logging.Filter.ErrorChecked}">
+            <CheckBox Name="ErrorLogging">
               Error
             </CheckBox>
-            <CheckBox Name="MessageCheckBox"
-                      IsChecked="{Binding Logging.Filter.MessageChecked}">
+            <CheckBox Name="MessageLogging">
               Message
             </CheckBox>
-            <CheckBox Name="EventCheckBox"
-                      IsChecked="{Binding Logging.Filter.EventChecked}">
+            <CheckBox Name="EventLogging">
               Event
             </CheckBox>
           </StackPanel>
