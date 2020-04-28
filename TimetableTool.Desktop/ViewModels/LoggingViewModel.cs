@@ -1,149 +1,140 @@
 ﻿using Caliburn.Micro;
 using Logging.Library;
 using System;
+using System.IO;
 using System.Threading.Tasks;
+using TimetableTool.Desktop.Helpers;
 using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
-  {
-  public class LoggingViewModel: Screen
+	{
+	public class LoggingViewModel : Screen
 		{
-    ILogCollectionManager _logger;
-    public LoggingModel Logging { get; set; }= new LoggingModel();
-    public bool _debugLogging =true;
-    public bool DebugLogging
-      {
-      get { return _debugLogging; }
-      set
-        {
-        _debugLogging = value;
-        NotifyOfPropertyChange(()=>DebugLogging);
-        Logging.Filter.DebugChecked = DebugLogging;
-        ChangeFilter();
-        }
-      }
+		public LoggingModel Logging { get; set; } = new LoggingModel();
+		public bool _debugLogging = true;
+		public bool DebugLogging
+			{
+			get { return _debugLogging; }
+			set
+				{
+				_debugLogging = value;
+				NotifyOfPropertyChange(() => DebugLogging);
+				Logging.Filter.DebugChecked = DebugLogging;
+				ChangeFilter();
+				}
+			}
 
-    public bool _messageLogging =true;
-    public bool MessageLogging
-      {
-      get { return _messageLogging; }
-      set
-        {
-        _messageLogging = value;
-        NotifyOfPropertyChange(() => MessageLogging);
-        Logging.Filter.MessageChecked = MessageLogging;
-        ChangeFilter();
-        }
-      }
+		public bool _messageLogging = true;
+		public bool MessageLogging
+			{
+			get { return _messageLogging; }
+			set
+				{
+				_messageLogging = value;
+				NotifyOfPropertyChange(() => MessageLogging);
+				Logging.Filter.MessageChecked = MessageLogging;
+				ChangeFilter();
+				}
+			}
 
-    public bool _errorLogging =true;
-    public bool ErrorLogging
-      {
-      get { return _errorLogging; }
-      set
-        {
-        _errorLogging = value;
-        NotifyOfPropertyChange(() => ErrorLogging);
-        Logging.Filter.ErrorChecked = ErrorLogging;
-        ChangeFilter();
-        }
-      }
+		public bool _errorLogging = true;
+		public bool ErrorLogging
+			{
+			get { return _errorLogging; }
+			set
+				{
+				_errorLogging = value;
+				NotifyOfPropertyChange(() => ErrorLogging);
+				Logging.Filter.ErrorChecked = ErrorLogging;
+				ChangeFilter();
+				}
+			}
 
-    public bool _eventLogging = true;
-    public bool EventLogging
-      {
-      get { return _eventLogging; }
-      set
-        {
-        _eventLogging = value;
-        NotifyOfPropertyChange(() => EventLogging);
-        Logging.Filter.EventChecked = EventLogging;
-        ChangeFilter();
-        }
-      }
+		public bool _eventLogging = true;
+		public bool EventLogging
+			{
+			get { return _eventLogging; }
+			set
+				{
+				_eventLogging = value;
+				NotifyOfPropertyChange(() => EventLogging);
+				Logging.Filter.EventChecked = EventLogging;
+				ChangeFilter();
+				}
+			}
 
-    public LoggingViewModel(ILogCollectionManager logger)
-      {
-      _logger=logger;
+		public LoggingViewModel()
+			{
+			}
 
-      }
+		protected override void OnViewLoaded(object view)
+			{
+			base.OnViewLoaded(view);
+			Logging.FilteredLogging = new BindableCollection<LogEntryClass>();
+			CreateTestData();
+			// Setup initial values for logging filter
+			ChangeFilter();
+			LogEventHandler.LogEvent += LogEventHandlerOnLogEvent;
+			}
 
-      protected override void OnViewLoaded(object view)
-      {
-      base.OnViewLoaded(view);
-      Logging.Logging= _logger;
-      Logging.FilteredLogging= new BindableCollection<LogEntryClass>();
-      CreateTestData();
-      // Setup initial values for logging filter
-      ChangeFilter();
-      LogEventHandler.LogEvent += LogEventHandlerOnLogEvent;
-      }
+		private void LogEventHandlerOnLogEvent(Object sender, LogEventArgs e)
+			{
+			ChangeFilter();
+			}
 
-    private void LogEventHandlerOnLogEvent(Object sender, LogEventArgs e)
-      {
-      ChangeFilter();
-      }
+		private void CreateTestData()
+			{
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 1, "Test line Message", null, LogEventType.Message));
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 2, "Test line Message", null, LogEventType.Message));
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 2, "Test line Debug", null, LogEventType.Debug));
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 2, "Test line Error", null, LogEventType.Error));
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 2, "Test line Error", null, LogEventType.Error));
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 2, "Test line Event", null, LogEventType.Event));
+			LogCollectionManager.LogEvents.Add(new LogEntryClass("", "", 2, "Test line Error", null, LogEventType.Error));
+			}
 
-    private void CreateTestData()
-      {
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",1,"Test line Message",null,LogEventType.Message));
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",2,"Test line Message",null,LogEventType.Message));
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",2,"Test line Debug",null,LogEventType.Debug));
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",2,"Test line Error",null,LogEventType.Error));
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",2,"Test line Error",null,LogEventType.Error));
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",2,"Test line Event",null,LogEventType.Event));
-      Logging.Logging.LogEvents.Add(new LogEntryClass("","",2,"Test line Error",null,LogEventType.Error));
-      }
+		private void ChangeFilter()
+			{
+			Logging.FilteredLogging.Clear();
+			foreach (var item in LogCollectionManager.LogEvents)
+				{
+				if (Logging.Filter.EventTypeFilter(item))
+					{
+					Logging.FilteredLogging.Add(item);
+					}
+				Logging.FilteredLogging.Refresh();
+				}
+			}
 
-    private void ChangeFilter()
-      {
-      Logging.FilteredLogging.Clear();
-      foreach (var item in Logging.Logging.LogEvents)
-        {
-        if (Logging.Filter.EventTypeFilter(item))
-          {
-          Logging.FilteredLogging.Add(item);
-          }
-        }
-      }
+		public void ClearLog()
+			{
+			Logging.FilteredLogging.Clear();
+			LogCollectionManager.LogEvents.Clear();
+			Logging.FilteredLogging.Refresh();
+			}
 
-    private void ClearLog()
-      {
-      Logging.FilteredLogging.Clear();
-      Logging.Logging.LogEvents.Clear();
-      NotifyOfPropertyChange(() => Logging.FilteredLogging);
-      }
+		public void SaveLog()
+			{
+			var fileSaveParams = new SaveFileModel
+				{
+				Title = "Save log file as csv",
+				InitialDirectory = Settings.DataPath
+				};
+			var outputFile = FileIOHelper.GetSaveFileName(fileSaveParams); if (outputFile.Length > 0)
+				{
+				var allText = LogEntryClass.WriteCsvHeaderLine();
+				foreach (var X in LogCollectionManager.LogEvents)
+					{
+					allText += X.WriteAsCsv();
+					}
+				File.WriteAllText(outputFile, allText);
+				}
+			}
 
-     public void SaveLog()
-      {
-      // TODO
-
-           //var FileDialog = new SaveFileDialog
-      //  {
-        //InitialDirectory = CLuaCreatorOptions.LuaCreatorDirectory + "Temp",
-        //  RestoreDirectory = true,
-        //  Title = "Save log file",
-        //  Filter = "Text file (*.txt)|*.txt|All files (*.*)|*.*"
-        //  };
-
-        //if (FileDialog.ShowDialog() == true)
-        //  {
-        //  var AllText = String.Empty;
-        //  foreach (var X in Log.LogManager)
-        //    {
-        //    AllText += X + "\r\n";
-        //    }
-
-        //  File.WriteAllText(FileDialog.FileName, AllText);
-        //  }
-
-
-
-      }
-    public async Task OKButton()
-      {
-      await TryCloseAsync();
-      }
+		public async Task OKButton()
+			{
+			await TryCloseAsync();
+			}
 
 		}
 	}

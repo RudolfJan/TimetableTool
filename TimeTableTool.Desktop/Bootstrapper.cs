@@ -22,9 +22,8 @@ namespace TimetableTool.Desktop
     protected override void Configure()
       {
       _container
-          .Singleton<IWindowManager, WindowManager>()
-          .Singleton<IEventAggregator, EventAggregator>()
-          .Singleton<ILogCollectionManager, LogCollectionManager>();
+        .Singleton<IWindowManager, WindowManager>()
+        .Singleton<IEventAggregator, EventAggregator>();
 
       GetType().Assembly.GetTypes()
           .Where(type => type.IsClass)
@@ -45,6 +44,7 @@ namespace TimetableTool.Desktop
       {
       if (args.EntryClass.EventType == LogEventType.Error || args.EntryClass.EventType == LogEventType.Event)
         {
+        LogCollectionManager.LogEvents.Add(args.EntryClass);
         var message = args.EntryClass.LogEntry;
         var form = new NotificationView(message);
         form.Show();
