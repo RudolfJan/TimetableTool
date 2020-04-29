@@ -264,8 +264,6 @@ namespace TimetableTool.Desktop.ViewModels
 			RouteId = rm.Id;
 			TimetablesUI.TimetableList = new BindableCollection<TimetableModel>(TimetableDataAccess.GetAllTimetablesPerRoute(RouteId));
 			ServiceDirectionList = new BindableCollection<ServiceDirectionModel>(ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId));
-
-
 			NotifyOfPropertyChange(() => TimetablesUI);
 			}
 		#endregion
@@ -384,6 +382,7 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceInstancesDestinationList.Add(SelectedServiceInstanceSource);
 			ConnectTtSiDataAccess.InsertConnection(SelectedServiceInstanceSource.Id, SelectedTimetable.Id);
 			NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+			NotifyOfPropertyChange(()=>CopyStatus);
 			}
 
 		public bool CanRemoveServiceInstance
@@ -398,6 +397,8 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			ConnectTtSiDataAccess.DeleteConnection(SelectedServiceInstanceDestination.Id, SelectedTimetable.Id);
 			ServiceInstancesDestinationList.Remove(SelectedServiceInstanceDestination);
+			NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+			NotifyOfPropertyChange(()=>CopyStatus);
 			}
 
 
@@ -415,6 +416,7 @@ namespace TimetableTool.Desktop.ViewModels
 				ServiceInstancesDestinationList.Add(item);
 				ConnectTtSiDataAccess.InsertConnection(item.Id, SelectedTimetable.Id);
 				NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+				NotifyOfPropertyChange(()=>CopyStatus);
 				}
 			}
 		}

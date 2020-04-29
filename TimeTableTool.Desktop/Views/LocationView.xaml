@@ -35,7 +35,8 @@
                 Height="400" MinWidth="400"
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
-                AutoGenerateColumns="False"
+                AutoGenerateColumns="False" LoadingRow="OnLoadingRow"
+
       >
         <DataGrid.Columns>
        <DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">

@@ -63,13 +63,13 @@ namespace TimetableTool.Desktop.ViewModels
 				ServiceSelectedEvent serviceSelectedEvent = new ServiceSelectedEvent();
 				serviceSelectedEvent.SelectedService = _selectedService;
 				_events.PublishOnUIThreadAsync(serviceSelectedEvent);
-				if(SelectedService!=null)
+				if (SelectedService != null)
 					{
-					FullTimeEventsList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
+					FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
 					}
 				else
 					{
-					FullTimeEventsList=null;
+					FullTimeEventsList = null;
 					}
 				NotifyOfPropertyChange(() => CanLoadTimeEvents);
 				NotifyOfPropertyChange(() => SelectedService);
@@ -221,7 +221,7 @@ namespace TimetableTool.Desktop.ViewModels
 			SelectedServiceDirection = ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
 			ServiceDirectionName = SelectedServiceDirection.ServiceDirectionName;
 			ServiceId = SelectedService.Id;
-			FullTimeEventsList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
+			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
 			NotifyOfPropertyChange(() => CanLoadTimeEvents);
 			NotifyOfPropertyChange(() => CanEditService);
 			NotifyOfPropertyChange(() => CanDeleteService);
@@ -295,7 +295,7 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceDirectionName = "";
 			ServiceId = 0;
 			NotifyOfPropertyChange(() => ServicesUI);
-			NotifyOfPropertyChange(()=>CanLoadTimeEvents);
+			NotifyOfPropertyChange(() => CanLoadTimeEvents);
 			NotifyOfPropertyChange(() => CanEditService);
 			}
 
@@ -303,7 +303,7 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			get
 				{
-				return SelectedService != null && (FullTimeEventsList==null ||
+				return SelectedService != null && (FullTimeEventsList == null ||
 						FullTimeEventsList.Count == 0);
 				}
 			}
@@ -317,34 +317,34 @@ namespace TimetableTool.Desktop.ViewModels
 
 		public void SaveTimeEvents()
 			{
-				foreach (var item in FullTimeEventsList)
+			foreach (var item in FullTimeEventsList)
+				{
+				if (item.EventType?.Length > 0)
 					{
-					if (item.EventType?.Length > 0)
+					var timeEvent = new TimeEventModel();
+					timeEvent.Id = item.Id;
+					timeEvent.EventType = item.EventType;
+					timeEvent.ArrivalTime = item.ArrivalTime;
+					timeEvent.WaitTime = item.WaitTime;
+					timeEvent.LocationId = item.LocationId;
+					timeEvent.ServiceId = item.ServiceId;
+					timeEvent.Order = item.Order;
+					if (item.Id > 0)
 						{
-						var timeEvent = new TimeEventModel();
 						timeEvent.Id = item.Id;
-						timeEvent.EventType = item.EventType;
-						timeEvent.ArrivalTime = item.ArrivalTime;
-						timeEvent.WaitTime = item.WaitTime;
-						timeEvent.LocationId = item.LocationId;
-						timeEvent.ServiceId = item.ServiceId;
-						timeEvent.Order = item.Order;
-					if(item.Id>0)
-						{
-						timeEvent.Id=item.Id;
 						TimeEventDataAccess.UpdateTimeEvent(timeEvent);
 						}
 					else
-						{ 
+						{
 						TimeEventDataAccess.InsertTimeEventForService(timeEvent);
 						}
 					}
 				}
-		  int duration = FullTimeEventsList.Sum(x => x.ArrivalTime+x.WaitTime);
-			SelectedService.CalculatedDuration= duration;
-      ServiceDataAccess.UpdateServiceCalculatedDuration(duration,SelectedService.Id);
-			NotifyOfPropertyChange(()=>ServicesUI.ServiceList);
-			FullTimeEventsList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
+			int duration = FullTimeEventsList.Sum(x => x.ArrivalTime + x.WaitTime);
+			SelectedService.CalculatedDuration = duration;
+			ServiceDataAccess.UpdateServiceCalculatedDuration(duration, SelectedService.Id);
+			ServicesUI.ServiceList.Refresh();
+			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
 			Log.Trace($"Time events for service {SelectedService.ServiceAbbreviation} saved", LogEventType.Event);
 			}
 		}

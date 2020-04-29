@@ -101,7 +101,7 @@ namespace DataAccess.Library.Logic
 
     public static void UpdateServiceInstance(ServiceInstanceModel serviceInstance)
       {
-      string sql = "UPDATE OR IGNORE ServiceInstances SET ServiceInstanceName=@ServiceInstanceName, ServiceInstanceAbbreviation=@ServiceInstanceAbbreviation, StartTime=@StartTime, EndTime=@EndTime, ServiceId=@ServiceId)  WHERE Id=@Id";
+      string sql = "UPDATE OR IGNORE ServiceInstances SET ServiceInstanceName=@ServiceInstanceName, ServiceInstanceAbbreviation=@ServiceInstanceAbbreviation, StartTime=@StartTime, EndTime=@EndTime, ServiceId=@ServiceId  WHERE Id=@Id";
       SQLiteData.SaveData<dynamic>(sql,
         new {serviceInstance.ServiceInstanceName, serviceInstance.ServiceInstanceAbbreviation, 
           serviceInstance.StartTime, serviceInstance.EndTime, serviceInstance.ServiceId, serviceInstance.Id}, 
