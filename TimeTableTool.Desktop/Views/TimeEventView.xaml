@@ -45,7 +45,8 @@
         <DataGrid x:Name="EventTimeEventDataGrid" Style="{StaticResource DefaultDataGrid}" 
                   AutoGenerateColumns="False" Height="400"
                   ItemsSource="{Binding TimeEvents.FilteredFullTimeEventList}"
-                  SelectedItem="{Binding SelectedTimeEvent}">
+                  SelectedItem="{Binding SelectedTimeEvent}" LoadingRow="OnLoadingRow"
+                  >
           <DataGrid.Columns>
             <DataGridTextColumn Header="Location" Width="150"
                                 Binding="{Binding LocationName}" />
