@@ -6,6 +6,7 @@
         mc:Ignorable="d"
         Style="{StaticResource AllWindows}"
         WindowStartupLocation="CenterScreen" MinWidth="800" MinHeight="600"
+        Icon="..\Images\chart_line.png"
         Title="Time Table Tool">
     <ScrollViewer>
         <DockPanel>
