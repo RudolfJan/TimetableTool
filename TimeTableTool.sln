@@ -20,6 +20,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Styles.Library", "..\FancyT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLiteDataAcces.Library", "SQLiteDataAcces.Library\SQLiteDataAcces.Library.csproj", "{F892D1FD-186B-4D8B-89BD-2C301E64340D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manual", "Manual", "{9D49B5A6-ABB4-40BD-BFAC-9DA3AF3486F6}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
