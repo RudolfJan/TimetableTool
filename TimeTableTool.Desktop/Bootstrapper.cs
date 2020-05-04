@@ -7,6 +7,7 @@ using System.Linq;
 using System.Windows;
 using TimetableTool.Desktop.ViewModels;
 using TimetableTool.Desktop.Views;
+using System.Threading.Tasks;
 
 namespace TimetableTool.Desktop
   {

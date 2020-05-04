@@ -5,13 +5,6 @@ VisualStudioVersion = 16.0.29905.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess.Library", "DataAccess.Library\DataAccess.Library.csproj", "{8243AEB8-3767-4CA1-88B1-5438C70DE803}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{163114B1-7895-4484-AF4E-D04E1B296D01}"
-	ProjectSection(SolutionItems) = preProject
-		TimetableDatamodel.vsdx = TimetableDatamodel.vsdx
-		TimetableTool Manual.docx = TimetableTool Manual.docx
-		TimetableTool Manual.pdf = TimetableTool Manual.pdf
-	EndProjectSection
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TimetableTool.Desktop", "TimetableTool.Desktop\TimetableTool.Desktop.csproj", "{6E11A94C-CFC4-4E63-A497-EE39EA32128E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Logging.Library", "..\FancyTrainsimToolsApp\Logging.Library\Logging.Library.csproj", "{BFE0624C-EA7E-49CB-902F-CD63CE7BA697}"
@@ -19,6 +12,27 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Styles.Library", "..\FancyTrainsimToolsApp\Styles.Library\Styles.Library.csproj", "{E89BF1E6-426B-458F-A52C-4BCDDBE69C74}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLiteDataAcces.Library", "SQLiteDataAcces.Library\SQLiteDataAcces.Library.csproj", "{F892D1FD-186B-4D8B-89BD-2C301E64340D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{7EE6A5A2-DC27-4F8A-856F-08F7DC945159}"
+	ProjectSection(SolutionItems) = preProject
+		Installer\CSXicon.bmp = Installer\CSXicon.bmp
+		Installer\License.txt = Installer\License.txt
+		Installer\Readme.txt = Installer\Readme.txt
+		Installer\Setup.bmp = Installer\Setup.bmp
+		Installer\TimetableData.sql = Installer\TimetableData.sql
+		Installer\TimetableDb.db = Installer\TimetableDb.db
+		Installer\TimetableDb.db.sql = Installer\TimetableDb.db.sql
+		Installer\TimetableToolSetupv0.1.iss = Installer\TimetableToolSetupv0.1.iss
+		Installer\TSW_Cindy_1489778724_00.png = Installer\TSW_Cindy_1489778724_00.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Manual", "Manual", "{61A0B2FF-6088-4AE1-8150-4338509FF438}"
+	ProjectSection(SolutionItems) = preProject
+		Manual\TimetableDatamodel.vsdx = Manual\TimetableDatamodel.vsdx
+		Manual\Timetabletool images.pub = Manual\Timetabletool images.pub
+		Manual\TimetableTool Manual.docx = Manual\TimetableTool Manual.docx
+		Manual\TimetableTool Manual.pdf = Manual\TimetableTool Manual.pdf
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

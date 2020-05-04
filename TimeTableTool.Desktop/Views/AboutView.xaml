@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" FontSize="12pt"
         Style="{StaticResource AllWindows}" WindowStartupLocation="CenterOwner"
+        Icon="..\Images\chart_line.png" 
         Title="About Timetable Tool">
     <Border Style="{StaticResource DefaultBorder}">
         <StackPanel>
