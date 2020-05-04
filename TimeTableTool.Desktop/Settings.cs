@@ -1,5 +1,7 @@
 ﻿using Logging.Library;
 using Microsoft.Extensions.Configuration;
+using Syroot.Windows.IO;
+using System;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using System.ServiceModel.Syndication;
@@ -7,64 +9,96 @@ using System.Windows.Documents;
 using TimetableTool.Desktop.Helpers;
 
 namespace TimetableTool.Desktop
-  {
-  public static class Settings
-    {
-    private static readonly IConfiguration _config = CreateConfig();
- 
-    static IConfiguration CreateConfig()
-      {
-      var builder = new ConfigurationBuilder()
-        .SetBasePath(Directory.GetCurrentDirectory())
-        .AddJsonFile("appsettings.json");
-      IConfiguration config = builder.Build();
-      return config;
-      }
+	{
+	public static class Settings
+		{
+		private static readonly IConfiguration _config = CreateConfig();
 
-    public static string DataPath
-      {
-      get
-        {
-        return _config["DataConfig:DataPath"];
-        }
-      }
+		static IConfiguration CreateConfig()
+			{
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(Directory.GetCurrentDirectory())
+				.AddJsonFile("appsettings.json");
+			IConfiguration config = builder.Build();
+			return config;
+			}
 
-    public static string ManualPath
-      {
-      get { return $"{_config["DataConfig:DataPath"]}{_config["DataConfig:Manual"]}"; }
-      }
+		public static string MyDocumentsFolder
+			{
+			get
+				{
+				var result = bool.TryParse($"{_config["DataConfig:UseMyDocumentsFolder"]}",
+					out var _useMyDocumentsFolder);
+				if (!result)
+					{
+					Log.Trace(
+						"Configuration error in appsettings.json, UseMyDocumentsFolder is not a valid boolean. Proceed with value false",
+						LogEventType.Error);
+					}
 
-    public static string DatabasePath
-      {
-      get
-        {
-        return $"{_config["DataConfig:DataPath"] + _config["DataConfig:Database"]}";
-        }
-      }
-
-    public static bool UseDemoData
-    {
-    get
-      {
-       bool _useDemoData=false;
-       var result= bool.TryParse($"{_config["DataConfig:UseDemoData"]}",out _useDemoData);
-        if(!result)
-          {
-          Log.Trace("Configuration error in appsettings.json, UseDemoData is not a valid boolean. Proceed with value true", LogEventType.Error);
-          _useDemoData=true;
-          }
-      return _useDemoData;
-      }
-    }
+				if (_useMyDocumentsFolder)
+					{
+					try
+						{
+						var folder=Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+						return $"{folder}\\";
+						}
+					catch (Exception ex)
+						{
+						Log.Trace("Cannot set special folder", ex, LogEventType.Error);
+						throw;
+						}
+					}
+				return string.Empty;
+				}
+			}
 
 
-    public static string ConnectionString
-      {
-      get
-        {
-        return _config["ConnectionStrings:SqLiteDb"].Replace("path",DatabasePath);
-        }
-      }
+		public static string DataPath
+			{
+			get
+				{
+				var output= $"{MyDocumentsFolder}{ _config["DataConfig:DataPath"]}";
+				return output;
+				}
+			}
 
-    }
-  }
+		public static string ManualPath
+			{
+			get { return $"{DataPath}{_config["DataConfig:Manual"]}"; }
+			}
+
+		public static string DatabasePath
+			{
+			get
+				{
+				return $"{DataPath}{_config["DataConfig:Database"]}";
+				}
+			}
+
+		public static bool UseDemoData
+			{
+			get
+				{
+				bool _useDemoData = false;
+				var result = bool.TryParse($"{_config["DataConfig:UseDemoData"]}", out _useDemoData);
+				if (!result)
+					{
+					Log.Trace("Configuration error in appsettings.json, UseDemoData is not a valid boolean. Proceed with value true", LogEventType.Error);
+					_useDemoData = true;
+					}
+				return _useDemoData;
+				}
+			}
+
+
+		public static string ConnectionString
+			{
+			get
+				{
+				return _config["ConnectionStrings:SqLiteDb"].Replace("path", DatabasePath);
+				}
+			}
+
+		}
+	}
