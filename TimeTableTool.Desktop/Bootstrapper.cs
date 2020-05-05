@@ -36,8 +36,8 @@ namespace TimetableTool.Desktop
 
     protected override void OnStartup(object sender, StartupEventArgs e)
       {
-      SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
       LogEventHandler.LogEvent += OnLogEvent;
+      SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
       DisplayRootViewFor<ShellViewModel>();
       }
 

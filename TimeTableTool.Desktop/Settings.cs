@@ -68,6 +68,11 @@ namespace TimetableTool.Desktop
 			get { return $"{DataPath}{_config["DataConfig:Manual"]}"; }
 			}
 
+		public static string BackupPath
+			{
+			get { return $"{DataPath}{_config["DataConfig:BackupPath"]}"; }
+			}
+
 		public static string DatabasePath
 			{
 			get

@@ -17,6 +17,7 @@
     <None Remove="Images\arrow_right.png" />
     <None Remove="Images\chart_line.ico" />
     <None Remove="Images\chart_line.png" />
+    <None Remove="Images\exclamation.png" />
     <None Remove="Models\AppIcon.ico" />
     <None Remove="Models\delete.ico" />
     <None Remove="Models\filter.png" />
@@ -51,6 +52,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="Images\delete.ico" />
+    <Resource Include="Images\exclamation.png" />
     <Resource Include="Images\filter.png" />
     <Resource Include="Images\folder.png" />
     <Resource Include="Images\page_delete.png" />

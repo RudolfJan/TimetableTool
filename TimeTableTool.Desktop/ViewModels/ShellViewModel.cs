@@ -5,6 +5,7 @@ using Logging.Library;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
@@ -153,8 +154,14 @@ namespace TimetableTool.Desktop.ViewModels
 			var displayTimetableGraphVM = IoC.Get<DisplayTimetableGraphViewModel>();
 			displayTimetableGraphVM.TimetableId = SelectedTimetable.Id;
 			await ActivateItemAsync(displayTimetableGraphVM, new CancellationToken());
-
 			}
+
+		public async Task Backup()
+			{
+			var backupVM = IoC.Get<BackupViewModel>();
+			await ActivateItemAsync( backupVM, new CancellationToken());
+			}
+
 
 		public async Task ExitApplication()
 			{
@@ -220,7 +227,6 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			try
 				{
-				Log.Trace($"Manual path:{Settings.ManualPath}", LogEventType.Event);
 				if(File.Exists(Settings.ManualPath))
 					{
 					FileIOHelper.OpenFileWithShell(Settings.ManualPath);

@@ -75,6 +75,7 @@ namespace SQLiteDataAccess.Library
             Directory.CreateDirectory(Dir);
             }
           SQLiteConnection.CreateFile(_databasePath);
+          Log.Trace($"No database found. Created new database{_databasePath}", LogEventType.Event);
           }
         }
       catch (Exception ex)
@@ -210,6 +211,30 @@ namespace SQLiteDataAccess.Library
         }
       return output;
       }
+    #endregion
+
+    #region exportandimport
+
+    public string ExportTableDefinition(string tableName,string connectionString)
+      {
+      string output = string.Empty;
+      var sqlStatement = "";
+      try
+        {
+        using (IDbConnection connection = new SQLiteConnection(connectionString))
+          {
+          connection.Execute(sqlStatement);
+          }
+        }
+      catch (Exception e)
+        {
+        Log.Trace($"Cannot save data in database using {sqlStatement}",e,LogEventType.Error);
+        throw;
+        }
+
+      return "";
+      }
+
     #endregion
     }
   }

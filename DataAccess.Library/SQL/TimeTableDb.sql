@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS "Branches" (
 	"BranchAbbreviation"	TEXT NOT NULL,
 	"BranchDescription"	TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Locations" (
@@ -48,7 +48,7 @@ CREATE TABLE IF NOT EXISTS "ServiceDirections" (
 	"ServiceDirectionAbbreviation" TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
 	"IsDescending" INTEGER NOT NULL DEFAULT 0,
-	FOREIGN KEY("RouteId") REFERENCES "Routes"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Services" (
@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS "Services" (
 	"CalculatedDuration"	INTEGER NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
 	FOREIGN KEY("RouteId") REFERENCES "Routes",
-	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections"
+	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "TimeEvents" (
@@ -72,8 +72,8 @@ CREATE TABLE IF NOT EXISTS "TimeEvents" (
 	"LocationId"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
 	"Order" INTEGER NOT NULL,
-	FOREIGN KEY("LocationId") REFERENCES "Locations",
-	FOREIGN KEY("ServiceId") REFERENCES "Services"
+	FOREIGN KEY("LocationId") REFERENCES "Locations" ON DELETE CASCADE,
+	FOREIGN KEY("ServiceId") REFERENCES "Services" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Timetables" (
@@ -84,8 +84,8 @@ CREATE TABLE IF NOT EXISTS "Timetables" (
 	"IsMultiDirection" INT NOT NULL DEFAULT 0,
 	"ServiceDirectionId"	INT,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes",
-	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE,
+	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "ServiceInstances" (
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS "ServiceInstances" (
 	"StartTime"	INTEGER NOT NULL,
 	"EndTime"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
-	FOREIGN KEY("ServiceId") REFERENCES "Services"
+	FOREIGN KEY("ServiceId") REFERENCES "Services" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "ConnectTtSi" (
@@ -103,8 +103,8 @@ CREATE TABLE IF NOT EXISTS "ConnectTtSi" (
 	"TimetableId"	INTEGER NOT NULL,
 	"ServiceInstanceId"	INTEGER NOT NULL,
 	UNIQUE( "TimetableId","ServiceInstanceId"),
-	FOREIGN KEY("TimetableId") REFERENCES "Timetables",
-	FOREIGN KEY("ServiceInstanceId") REFERENCES "ServiceInstances"
+	FOREIGN KEY("TimetableId") REFERENCES "Timetables" ON DELETE CASCADE,
+	FOREIGN KEY("ServiceInstanceId") REFERENCES "ServiceInstances" ON DELETE CASCADE
 );
 
 COMMIT;

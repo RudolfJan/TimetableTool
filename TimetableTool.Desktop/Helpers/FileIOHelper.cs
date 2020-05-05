@@ -37,6 +37,34 @@ namespace TimetableTool.Desktop.Helpers
 			return "";
 			}
 
+		// Safe way to delete a single file
+		public static void DeleteSingleFile(String FilePath)
+			{
+			if (File.Exists(FilePath))
+				{
+				// Use a try block to catch IOExceptions, to
+				// handle the case of the file already being
+				// opened by another process.
+				try
+					{
+					File.Delete(FilePath);
+					}
+				catch (Exception ex)
+					{
+					Log.Trace($"Cannot delete {FilePath} because ",ex, LogEventType.Message);
+					}
+				}
+			}
+
+		public static void CreateEmptyFile(String Filename)
+			{
+			File.Create(Filename).Dispose();
+			}
+
+
+
+
+
 		public static void OpenFileWithShell(string FilePath)
 			{
 			try
