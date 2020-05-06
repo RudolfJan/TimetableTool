@@ -257,7 +257,7 @@ namespace TimetableTool.Desktop.ViewModels
 		public Task HandleAsync(RouteSelectedEvent message, CancellationToken cancellationToken)
 			{
 			// If you change the selected route, you must reselect the service, because it is attached to the route.
-			if (SelectedRoute?.Id != message.SelectedRoute.Id)
+			if (message.SelectedRoute!=null && SelectedRoute?.Id != message.SelectedRoute.Id)
 				{
 				SelectedService = null;
 				SelectedTimetable = null;

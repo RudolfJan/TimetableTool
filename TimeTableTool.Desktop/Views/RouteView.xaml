@@ -90,6 +90,8 @@
         <WrapPanel>
           <Button x:Name="EditRoute" Style="{StaticResource DefaultButton}">Edit</Button>
           <Button x:Name="DeleteRoute" Style="{StaticResource DefaultButton}">Delete</Button>
+          <Button x:Name="ExportRoute" Style="{StaticResource DefaultButton}">Export</Button>
+          <Button x:Name="ImportRoute" Style="{StaticResource DefaultButton}">Import</Button>
         </WrapPanel>
 
       </StackPanel>

@@ -1,12 +1,24 @@
-﻿using SQLiteDataAccess.Library;
+﻿using DataAccess.Library.Models;
+using SQLiteDataAccess.Library;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace DataAccess.Library.Logic
 	{
 	public class ConnectTtSiDataAccess
 		{
+
+		public static List<ConnectTtSiModel> GetAllConnectTtSiPerRoute(int routeId)
+			{
+			string sql = "SELECT ConnectTtSi.Id, ConnectTtSi.TimetableId, ConnectTtSi.ServiceInstanceId FROM ConnectTtSi, Timetables WHERE ConnectTtSi.TimetableId= Timetables.Id AND Timetables.RouteId=@RouteId";
+
+			var connectList =
+				SQLiteData.LoadData<ConnectTtSiModel, dynamic>(sql, new {routeId }, SQLiteData.GetConnectionString()).ToList();
+			return connectList;
+			}
+
 		  public static void InsertConnection(int serviceInstanceId, int timetableId)
       {
       string sql = @"INSERT OR IGNORE INTO ConnectTtSi (ServiceInstanceId, TimetableId) 

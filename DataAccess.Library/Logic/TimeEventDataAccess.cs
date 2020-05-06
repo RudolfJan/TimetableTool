@@ -18,6 +18,14 @@ namespace DataAccess.Library.Logic
       return timeEventList;
       }
 
+    public static List<TimeEventModel> GetAllTimeEventsPerRoute(int routeId)
+      {
+      string sql = "SELECT * FROM TimeEvents, Services WHERE TimeEvents.ServiceId=Services.Id AND Services.RouteId=@RouteId";
+
+      var timeEventList =
+        SQLiteData.LoadData<TimeEventModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();
+      return timeEventList;
+      }
  
     public static TimeEventModel GetTimeEventById(int timeEventId)
       {

@@ -1,6 +1,10 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
+using Logging.Library;
+using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
 using TimetableTool.Desktop.Models;
@@ -73,6 +77,7 @@ namespace TimetableTool.Desktop.ViewModels
           NotifyOfPropertyChange(() => SelectedRoute);
           NotifyOfPropertyChange(() => CanEditRoute);
           NotifyOfPropertyChange(() => CanDeleteRoute);
+          NotifyOfPropertyChange(() => CanExportRoute);
           }
         }
       }
@@ -102,6 +107,12 @@ namespace TimetableTool.Desktop.ViewModels
       get { return false; }
       }
 
+    public bool CanExportRoute
+      {
+      // Avoid to to interfere 
+      get { return SelectedRoute != null && RouteId == 0; }
+      }
+
     public bool CanSaveRoute
       {
       get
@@ -123,6 +134,7 @@ namespace TimetableTool.Desktop.ViewModels
       //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
+      
       }
 
     public void SaveRoute()
@@ -157,6 +169,32 @@ namespace TimetableTool.Desktop.ViewModels
       //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
+      NotifyOfPropertyChange(() => CanExportRoute);
+      }
+
+
+    public void ExportRoute()
+      {
+      DataAccess.Library.Logic.ExportRouteDataAccess exportRoute= new DataAccess.Library.Logic.ExportRouteDataAccess(SelectedRoute.Id);
+      var output = "";
+      output += exportRoute.ExportRouteTable();
+      output += exportRoute.ExportLocationsTable();
+      output += exportRoute.ExportServiceDirectionTable();
+      output += exportRoute.ExportServiceTable();
+      output += exportRoute.ExportTimeEventsTable();
+      output += exportRoute.ExportServiceInstanceTable();
+      output += exportRoute.ExportTimetableTable();
+      output += exportRoute.ExportConnectTiSi();
+      var path= $"{Settings.DataPath}{SelectedRoute.RouteAbbreviation}-{DateTime.UtcNow.ToShortDateString()}.ttt";
+
+      File.WriteAllText(path,output);
+      Log.Trace($"Exported route to {path}", LogEventType.Event);
+      }
+
+
+    public void ImportRoute()
+      {
+
       }
     }
   }
