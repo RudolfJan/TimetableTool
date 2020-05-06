@@ -33,7 +33,7 @@ namespace DataAccess.Library.Logic
                    (TimetableName, TimetableAbbreviation, TimetableDescription, 
                     ServiceDirectionId, IsMultiDirection, RouteId) 
                     VALUES(@TimetableName, @TimetableAbbreviation, @TimetableDescription, 
-                    @ServiceDirectionId, @IsMultiDirection, @RouteId)";
+                    @ServiceDirectionId, @IsMultiDirection, @RouteId);SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,new {timetable.TimetableName, timetable.TimetableAbbreviation, 
                                           timetable.TimetableDescription, timetable.ServiceDirectionId, 
                                           timetable.IsMultiDirection, timetable.RouteId}, 

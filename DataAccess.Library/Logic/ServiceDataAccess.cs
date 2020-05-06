@@ -31,7 +31,7 @@ namespace DataAccess.Library.Logic
                       (ServiceName, ServiceAbbreviation, ServiceDescription, 
                       ServiceType, ServiceDirectionId, CalculatedDuration, RouteId)
                       VALUES(@ServiceName, @ServiceAbbreviation, @ServiceDescription, 
-                      @ServiceType, @ServiceDirectionId, @CalculatedDuration, @RouteId)";
+                      @ServiceType, @ServiceDirectionId, @CalculatedDuration, @RouteId);SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,
         new {service.ServiceName, service.ServiceAbbreviation, service.ServiceDescription, 
                       service.ServiceType, service.ServiceDirectionId, service.CalculatedDuration, service.RouteId}, 

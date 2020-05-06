@@ -37,6 +37,32 @@ namespace TimetableTool.Desktop.Helpers
 			return "";
 			}
 
+		public static string GetOpenFileName(OpenFileModel openFileParams)
+			{
+			OpenFileDialog dialog = new OpenFileDialog();
+			dialog.CheckFileExists = openFileParams.CheckFileExists;
+			dialog.CheckPathExists = openFileParams.CheckPathExists;
+			dialog.CustomPlaces = openFileParams.CustomPlaces;
+			dialog.DefaultExt =openFileParams.DefaultExt;
+			dialog.DereferenceLinks = openFileParams.DereferenceLinks;
+			dialog.FileName = openFileParams.FileName;
+			// FileNames not supported!
+			dialog.Filter = openFileParams.Filter;
+			dialog.FilterIndex = openFileParams.FilterIndex;
+			dialog.InitialDirectory = openFileParams.InitialDirectory;
+			dialog.Title = openFileParams.Title;
+			if (dialog.ShowDialog() == true)
+				{
+				openFileParams.FileName = dialog.FileName;
+				openFileParams.SafeFileName = dialog.SafeFileName;
+				openFileParams.SafeFileNames = dialog.SafeFileNames;
+				return dialog.FileName;
+				}
+			return "";
+			}
+
+
+
 		// Safe way to delete a single file
 		public static void DeleteSingleFile(String FilePath)
 			{

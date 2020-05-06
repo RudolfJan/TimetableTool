@@ -30,7 +30,7 @@ namespace DataAccess.Library.Logic
 
     public static int InsertRoute(RouteModel route)
       {
-      string sql = "INSERT OR IGNORE INTO Routes (RouteName, RouteAbbreviation, RouteDescription) VALUES(@RouteName, @RouteAbbreviation, @RouteDescription)";
+      string sql = "INSERT OR IGNORE INTO Routes (RouteName, RouteAbbreviation, RouteDescription) VALUES(@RouteName, @RouteAbbreviation, @RouteDescription);SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,new {route.RouteName, route.RouteAbbreviation, route.RouteDescription}, SQLiteData.GetConnectionString());
       }
 

@@ -201,7 +201,7 @@ namespace SQLiteDataAccess.Library
         {
         using (IDbConnection connection = new SQLiteConnection(connectionString))
           {
-          output=connection.Execute(sqlStatement, parameters);
+          output=connection.Query<int>(sqlStatement, parameters).FirstOrDefault();
           }
         }
       catch (Exception e)
@@ -211,30 +211,6 @@ namespace SQLiteDataAccess.Library
         }
       return output;
       }
-    #endregion
-
-    #region exportandimport
-
-    public string ExportTableDefinition(string tableName,string connectionString)
-      {
-      string output = string.Empty;
-      var sqlStatement = "";
-      try
-        {
-        using (IDbConnection connection = new SQLiteConnection(connectionString))
-          {
-          connection.Execute(sqlStatement);
-          }
-        }
-      catch (Exception e)
-        {
-        Log.Trace($"Cannot save data in database using {sqlStatement}",e,LogEventType.Error);
-        throw;
-        }
-
-      return "";
-      }
-
     #endregion
     }
   }

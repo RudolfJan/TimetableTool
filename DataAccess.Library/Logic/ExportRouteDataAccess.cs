@@ -59,7 +59,7 @@ namespace DataAccess.Library.Logic
 			{
 			List<ServiceDirectionModel> serviceDirections =
 				ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId);
-			return "";
+			return WriteServiceDirectionHeader()+ WriteServiceDirectionData(serviceDirections);
 			}
 
 		public string WriteServiceDirectionHeader()
@@ -86,7 +86,7 @@ namespace DataAccess.Library.Logic
 		public string WriteServiceHeader()
 			{
 			return $"\"Services\"{sep}\"Id\"{sep}\"ServiceName\"{sep}\"ServiceAbbreviation\"{sep}\"ServiceDescription\"{sep}" +
-								$"\"ServiceType\",ServiceDirectionId\"{sep}\"CalculatedDuration\"{sep}\"RouteId\"\r\n";
+								$"\"ServiceType\"{sep}\"ServiceDirectionId\"{sep}\"CalculatedDuration\"{sep}\"RouteId\"\r\n";
 			}
 
 		public string WriteServiceData(List<ServiceModel> serviceList)
@@ -95,8 +95,8 @@ namespace DataAccess.Library.Logic
 			foreach (var item in serviceList)
 				{
 				output+=  $"\"Service\"{sep}\"{item.Id}\"{sep}\"{item.ServiceName}\"{sep}\"{item.ServiceAbbreviation}\"{sep}\"" +
-				          $"{item.ServiceDescription}\"{sep}\"{item.ServiceType}\"{sep}\"{item.ServiceDirectionId}\"" +
-				          $"{item.CalculatedDuration}\"{sep}\"{item.RouteId}\"\r\n";
+				          $"{item.ServiceDescription}\"{sep}\"{item.ServiceType}\"{sep}\"{item.ServiceDirectionId}\"{sep}" +
+				          $"\"{item.CalculatedDuration}\"{sep}\"{item.RouteId}\"\r\n";
 				}
 			return output;
 			}
@@ -131,7 +131,8 @@ namespace DataAccess.Library.Logic
 
 		public string WriteServiceInstanceHeader()
 			{
-			return $"\"ServiceInstances\"{sep}\"Id\"{sep}\"ServiceInstanceName\"{sep}\"ServiceInstanceAbbreviation\"{sep}\"StartTime\"{sep}\"EndTime\"\r\n";
+			return $"\"ServiceInstances\"{sep}\"Id\"{sep}\"ServiceInstanceName\"{sep}\"ServiceInstanceAbbreviation\"{sep}" +
+			       $"\"StartTime\"{sep}\"EndTime\"{sep}\"ServiceId\"\r\n";
 			}
 
 		public string WriteServiceInstanceData(List<ServiceInstanceModel> serviceInstanceList)
@@ -139,7 +140,9 @@ namespace DataAccess.Library.Logic
 			var output = "";
 			foreach (var item in serviceInstanceList)
 				{
-				output += $"\"ServiceInstance\"{sep}\"{item.Id}\"{sep}\"{item.ServiceInstanceName}\"{sep}\"{item.ServiceInstanceAbbreviation}\"{sep}\"{item.StartTime}\"{sep}\"{item.EndTime}\"\r\n";
+				output += $"\"ServiceInstance\"{sep}\"{item.Id}\"{sep}\"{item.ServiceInstanceName}\"{sep}" +
+				          $"\"{item.ServiceInstanceAbbreviation}\"{sep}\"{item.StartTime}\"{sep}" +
+				          $"\"{item.EndTime}\"{sep}\"{item.ServiceId}\"\r\n";
 				}
 			return output;
 			}
@@ -171,7 +174,7 @@ namespace DataAccess.Library.Logic
 		public string ExportConnectTiSi()
 			{
 			List<ConnectTtSiModel> connectList = ConnectTtSiDataAccess.GetAllConnectTtSiPerRoute(RouteId);
-			return "";
+			return WriteConnectHeader()+WriteConnectData(connectList);
 			}
 
 		public string WriteConnectHeader()

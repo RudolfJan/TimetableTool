@@ -28,7 +28,9 @@ namespace DataAccess.Library.Logic
 
     public static int InsertLocationForRoute(LocationModel location)
       {
-      string sql = "INSERT OR IGNORE INTO Locations (LocationName, LocationAbbreviation, NumberOfTracks, [Order], RouteId) VALUES(@LocationName, @LocationAbbreviation, @NumberOfTracks, @Order, @RouteId)";
+      string sql = "INSERT OR IGNORE INTO Locations (LocationName, LocationAbbreviation, NumberOfTracks, [Order], RouteId) " +
+                   "VALUES(@LocationName, @LocationAbbreviation, @NumberOfTracks, @Order, @RouteId);" +
+                   "SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,new {location.LocationName, location.LocationAbbreviation, location.NumberOfTracks, location.Order, location.RouteId}, SQLiteData.GetConnectionString());
       }
 

@@ -7,6 +7,7 @@ using System.IO;
 using System.Text;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
+using TimetableTool.Desktop.Helpers;
 using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
@@ -194,7 +195,18 @@ namespace TimetableTool.Desktop.ViewModels
 
     public void ImportRoute()
       {
-
+      var openFile= new OpenFileModel();
+      openFile.CheckFileExists = true;
+      openFile.InitialDirectory = Settings.DataPath;
+      openFile.Filter="ttt files|*.ttt|All Files|*.*";
+      openFile.Title = "Open exported database file";
+      var path = FileIOHelper.GetOpenFileName(openFile);
+      if (path.Length > 0)
+        {
+        var importRoute = new ImportRouteDataAccess(path);
+        RouteList = new BindableCollection<RouteModel>(RouteDataAccess.GetAllRoutes());
+        NotifyOfPropertyChange(() => RoutesUI.RouteList);
+        }
       }
     }
   }

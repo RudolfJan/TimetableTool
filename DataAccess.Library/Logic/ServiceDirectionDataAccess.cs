@@ -29,7 +29,9 @@ namespace DataAccess.Library.Logic
 
     public static int InsertServiceDirection(ServiceDirectionModel serviceDirection)
       {
-      string sql = "INSERT OR IGNORE INTO ServiceDirections (ServiceDirectionName, ServiceDirectionAbbreviation,  RouteId, IsDescending) VALUES(@ServiceDirectionName, @ServiceDirectionAbbreviation, @RouteId, @IsDescending)";
+      string sql = "INSERT OR IGNORE INTO ServiceDirections (ServiceDirectionName, ServiceDirectionAbbreviation,  RouteId, IsDescending) " +
+                   "VALUES(@ServiceDirectionName, @ServiceDirectionAbbreviation, @RouteId, @IsDescending);" +
+                   "SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,new {serviceDirection.ServiceDirectionName, serviceDirection.ServiceDirectionAbbreviation, serviceDirection.RouteId, serviceDirection.IsDescending}, SQLiteData.GetConnectionString());
       }
 

@@ -89,11 +89,11 @@ namespace DataAccess.Library.Logic
       return timeTable;
       }
 
-    public static void InsertServiceInstance(ServiceInstanceModel serviceInstance)
+    public static int InsertServiceInstance(ServiceInstanceModel serviceInstance)
       {
       string sql = @"INSERT OR IGNORE INTO ServiceInstances (ServiceInstanceName, ServiceInstanceAbbreviation, StartTime, EndTime, ServiceId) 
-                                    VALUES(@ServiceInstanceName, @ServiceInstanceAbbreviation, @StartTime, @EndTime, @ServiceId);";
-      SQLiteData.SaveData<dynamic>(sql,
+                                    VALUES(@ServiceInstanceName, @ServiceInstanceAbbreviation, @StartTime, @EndTime, @ServiceId);SELECT last_insert_rowid();";
+      return SQLiteData.SaveData<dynamic>(sql,
         new {serviceInstance.ServiceInstanceName, serviceInstance.ServiceInstanceAbbreviation, 
           serviceInstance.StartTime, serviceInstance.EndTime, serviceInstance.ServiceId}, 
         SQLiteData.GetConnectionString());
