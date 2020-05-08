@@ -1,5 +1,6 @@
 ﻿using DataAccess.Library.Models;
 using SQLiteDataAccess.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,7 +32,7 @@ namespace DataAccess.Library.Logic
                       (ServiceName, ServiceAbbreviation, ServiceDescription, 
                       ServiceType, ServiceDirectionId, CalculatedDuration, RouteId)
                       VALUES(@ServiceName, @ServiceAbbreviation, @ServiceDescription, 
-                      @ServiceType, @ServiceDirectionId, @CalculatedDuration, @RouteId)";
+                      @ServiceType, @ServiceDirectionId, @CalculatedDuration, @RouteId);SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,
         new {service.ServiceName, service.ServiceAbbreviation, service.ServiceDescription, 
                       service.ServiceType, service.ServiceDirectionId, service.CalculatedDuration, service.RouteId}, 
@@ -63,5 +64,10 @@ namespace DataAccess.Library.Logic
         new {calculatedDuration, serviceId}, SQLiteData.GetConnectionString());
       }
 
-    }
+		public static void DeleteService(int serviceId)
+			{
+      string sql = "PRAGMA foreign_keys = ON;DELETE FROM Services WHERE Services.Id=@ServiceId;";
+      SQLiteData.SaveData<dynamic>(sql, new { serviceId }, SQLiteData.GetConnectionString());
+			}
+		}
   }

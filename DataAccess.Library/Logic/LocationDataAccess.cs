@@ -28,7 +28,9 @@ namespace DataAccess.Library.Logic
 
     public static int InsertLocationForRoute(LocationModel location)
       {
-      string sql = "INSERT OR IGNORE INTO Locations (LocationName, LocationAbbreviation, NumberOfTracks, [Order], RouteId) VALUES(@LocationName, @LocationAbbreviation, @NumberOfTracks, @Order, @RouteId)";
+      string sql = "INSERT OR IGNORE INTO Locations (LocationName, LocationAbbreviation, NumberOfTracks, [Order], RouteId) " +
+                   "VALUES(@LocationName, @LocationAbbreviation, @NumberOfTracks, @Order, @RouteId);" +
+                   "SELECT last_insert_rowid();";
       return SQLiteData.SaveData<dynamic>(sql,new {location.LocationName, location.LocationAbbreviation, location.NumberOfTracks, location.Order, location.RouteId}, SQLiteData.GetConnectionString());
       }
 
@@ -36,7 +38,14 @@ namespace DataAccess.Library.Logic
       {
       string sql = "UPDATE OR IGNORE Locations SET LocationName=@LocationName, LocationAbbreviation=@LocationAbbreviation, NumberOfTracks=@NumberOfTracks, [Order]=@Order, RouteId=@RouteId WHERE Id=@Id";
       SQLiteData.SaveData<dynamic>(sql,new {location.LocationName, location.LocationAbbreviation, location.NumberOfTracks, location.Order, location.RouteId, location.Id}, SQLiteData.GetConnectionString());
+      }
+
+    public static void  DeleteLocation(int locationId)
+      {
+      string sql = "PRAGMA foreign_keys = ON;DELETE FROM Locations WHERE Locations.Id=@LocationId";
+      SQLiteData.SaveData<dynamic>(sql,new {locationId}, SQLiteData.GetConnectionString());
 
       }
+
     }
   }

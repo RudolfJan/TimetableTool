@@ -15,6 +15,7 @@
                     <MenuItem x:Name="ExportTimetable" Header="E_xport ..."  IsEnabled="{Binding IsTimetableSelected}"/>
                     <MenuItem x:Name="ViewTimetable" Header="_View timetable"  IsEnabled="{Binding IsTimetableSelected}"/>
                     <MenuItem x:Name="ViewGraph" Header="View _graph"  IsEnabled="{Binding IsTimetableSelectedMultiDirection}"/>
+                    <MenuItem x:Name="Backup" Header="_Backup database"/>
                     <MenuItem x:Name="Print" Header="_Print"/>
                     <MenuItem x:Name="ExitApplication" Header="E_xit"/>
                 </MenuItem>

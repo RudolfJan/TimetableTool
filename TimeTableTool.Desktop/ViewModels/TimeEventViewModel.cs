@@ -49,6 +49,7 @@ namespace TimetableTool.Desktop.ViewModels
         _selectedTimeEvent = value;
         NotifyOfPropertyChange(() => SelectedTimeEvent);
         NotifyOfPropertyChange(() => CanEditTimeEvent);
+        NotifyOfPropertyChange(() => CanDeleteTimeEvent);
         }
       }
     public string TimeType
@@ -220,6 +221,18 @@ namespace TimetableTool.Desktop.ViewModels
       // TODO do this on the non-filtered list as soon as filtering is implemented
       int duration = TimeEvents.FilteredFullTimeEventList.Sum(x => x.ArrivalTime+x.WaitTime);
       ServiceDataAccess.UpdateServiceCalculatedDuration(duration,ServiceId);
+      }
+
+    public bool CanDeleteTimeEvent
+      {
+      get { return SelectedTimeEvent != null  && Settings.DatabaseVersion>=2; }
+      }
+
+    public void DeleteTimeEvent()
+      {
+      TimeEventDataAccess.DeleteTimeEvent(SelectedTimeEvent.Id);
+      TimeEvents.FilteredFullTimeEventList.Remove(SelectedTimeEvent);
+      TimeEventId = 0;
       }
     }
   }

@@ -1,8 +1,13 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
+using Logging.Library;
+using System;
+using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
+using TimetableTool.Desktop.Helpers;
 using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
@@ -73,6 +78,7 @@ namespace TimetableTool.Desktop.ViewModels
           NotifyOfPropertyChange(() => SelectedRoute);
           NotifyOfPropertyChange(() => CanEditRoute);
           NotifyOfPropertyChange(() => CanDeleteRoute);
+          NotifyOfPropertyChange(() => CanExportRoute);
           }
         }
       }
@@ -98,8 +104,13 @@ namespace TimetableTool.Desktop.ViewModels
 
     public bool CanDeleteRoute
       {
-      // TODO implement Delete functions
-      get { return false; }
+      get { return SelectedRoute!=null  && Settings.DatabaseVersion>=2; }
+      }
+
+    public bool CanExportRoute
+      {
+      // Avoid to to interfere 
+      get { return SelectedRoute != null && RouteId == 0; }
       }
 
     public bool CanSaveRoute
@@ -123,6 +134,14 @@ namespace TimetableTool.Desktop.ViewModels
       //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
+      }
+
+    public void DeleteRoute()
+      {
+      RouteDataAccess.DeleteRoute(SelectedRoute.Id);
+      RoutesUI.RouteList.Remove(SelectedRoute);
+      RouteId = 0;
+      NotifyOfPropertyChange(() => RoutesUI.RouteList);
       }
 
     public void SaveRoute()
@@ -157,6 +176,43 @@ namespace TimetableTool.Desktop.ViewModels
       //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
+      NotifyOfPropertyChange(() => CanExportRoute);
+      }
+
+
+    public void ExportRoute()
+      {
+      DataAccess.Library.Logic.ExportRouteDataAccess exportRoute= new DataAccess.Library.Logic.ExportRouteDataAccess(SelectedRoute.Id);
+      var output = "";
+      output += exportRoute.ExportRouteTable();
+      output += exportRoute.ExportLocationsTable();
+      output += exportRoute.ExportServiceDirectionTable();
+      output += exportRoute.ExportServiceTable();
+      output += exportRoute.ExportTimeEventsTable();
+      output += exportRoute.ExportServiceInstanceTable();
+      output += exportRoute.ExportTimetableTable();
+      output += exportRoute.ExportConnectTiSi();
+      var path= $"{Settings.DataPath}{SelectedRoute.RouteAbbreviation}-{DateTime.UtcNow.ToShortDateString()}.ttt";
+
+      File.WriteAllText(path,output);
+      Log.Trace($"Exported route to {path}", LogEventType.Event);
+      }
+
+
+    public void ImportRoute()
+      {
+      var openFile= new OpenFileModel();
+      openFile.CheckFileExists = true;
+      openFile.InitialDirectory = Settings.DataPath;
+      openFile.Filter="ttt files|*.ttt|All Files|*.*";
+      openFile.Title = "Open exported database file";
+      var path = FileIOHelper.GetOpenFileName(openFile);
+      if (path.Length > 0)
+        {
+        var importRoute = new ImportRouteDataAccess(path);
+        RouteList = new BindableCollection<RouteModel>(RouteDataAccess.GetAllRoutes());
+        NotifyOfPropertyChange(() => RoutesUI.RouteList);
+        }
       }
     }
   }

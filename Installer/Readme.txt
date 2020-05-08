@@ -17,5 +17,11 @@ See the manual for details.
 
 Version history:
 
-Version 0.1
+Version 0.2.0:
+Backup and restore of databases
+Import and export of routes at database level
+Delete buttons now working
+Database version system
+
+Version 0.1.0:
 First public alpha version. This version is intended for review and feedback purposes only.

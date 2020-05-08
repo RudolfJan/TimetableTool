@@ -44,9 +44,10 @@
         <TextBlock Style="{StaticResource HeaderTextBlock}">Time events</TextBlock>
         <DataGrid x:Name="EventTimeEventDataGrid" Style="{StaticResource DefaultDataGrid}" 
                   AutoGenerateColumns="False" Height="400"
-                  ItemsSource="{Binding TimeEvents.FilteredFullTimeEventList}"
+                  ItemsSource="{Binding TimeEvents.FilteredFullTimeEventList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
                   SelectedItem="{Binding SelectedTimeEvent}" LoadingRow="OnLoadingRow"
-                  >
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False">
           <DataGrid.Columns>
             <DataGridTextColumn Header="Location" Width="150"
                                 Binding="{Binding LocationName}" />
@@ -54,7 +55,7 @@
                                 Binding="{Binding EventType}" />
             <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding ArrivalTime}" />
-						 <DataGridTextColumn Header="Wait" Width="40" ElementStyle="{StaticResource RightCell}"
+            <DataGridTextColumn Header="Wait" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding WaitTime}" />
             <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding Order}"      />
@@ -79,18 +80,18 @@
                    MinWidth="150"/>
         </WrapPanel>
         <WrapPanel>
- 
+
           <userControls:LabelTextBox x:Name="ArrivalTimeTextBox" 
                                      Style="{StaticResource DefaultLabelTextBox}" 
                                      LabelText="Arrival Time" LabelWidth="70"
                                      TextBoxText="{Binding ArrivalTime, Mode=TwoWay}"/>
-					<userControls:LabelTextBox x:Name="WaitTimeTextBox" LabelWidth="70"
+          <userControls:LabelTextBox x:Name="WaitTimeTextBox" LabelWidth="70"
                                      Style="{StaticResource DefaultLabelTextBox}" 
                                      LabelText="Wait Time"
                                      TextBoxText="{Binding WaitTime, Mode=TwoWay}"/>
-			</WrapPanel>
+        </WrapPanel>
         <WrapPanel>
-					<userControls:LabelTextBox x:Name="TimeTypeTextBox" 
+          <userControls:LabelTextBox x:Name="TimeTypeTextBox" 
                                      Style="{StaticResource DefaultLabelTextBox}" 
                                      LabelText="Type" 
                                      TextBoxText="{Binding TimeType, Mode=TwoWay}"/>

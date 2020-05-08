@@ -42,11 +42,11 @@ namespace SQLiteDataAccess.Library
     //  }
 
 
-    public static void InitDatabase(string connectionString, string databasePath, bool useDemoData)
+    public static int InitDatabase(string connectionString, string databasePath, bool useDemoData)
       {
       _connectionString = connectionString;
        _databasePath = databasePath;
-      TableFactory(useDemoData);
+      return TableFactory(useDemoData);
       }
     #endregion
 
@@ -63,7 +63,7 @@ namespace SQLiteDataAccess.Library
     /// <summary>
     /// Creates the database.
     /// </summary>
-    protected static void CreateDatabase()
+    protected static int CreateDatabase()
       {
       try
         {
@@ -75,7 +75,11 @@ namespace SQLiteDataAccess.Library
             Directory.CreateDirectory(Dir);
             }
           SQLiteConnection.CreateFile(_databasePath);
+          Log.Trace($"No database found. Created new database{_databasePath}", LogEventType.Event);
+          CreateTable("SQL\\CreateVersion.sql");
+          return 0; // created a database
           }
+        return 1; //database already exists
         }
       catch (Exception ex)
         {
@@ -113,26 +117,21 @@ namespace SQLiteDataAccess.Library
     /// <summary>
     /// Tables the factory.
     /// </summary>
-    public static void TableFactory(bool UseDemoData)
+    public static int TableFactory(bool UseDemoData)
       {
+      var output = 0;
       try
         {
         // Make sure database exists
-        CreateDatabase();
+        output=CreateDatabase();
 
         // TableCreation
         CreateTable("SQL\\TimeTableDb.sql");
-        
-        // ViewCreation
-        CreateTable("SQL\\CreateFullTimeEvents.sql");
+
         // Index creation
 
-        // Create testdata
-      if(UseDemoData)
-          {
-          CreateTable("SQL\\TimeTableData.sql");
-          }
 
+        return output;
         }
       catch (Exception e)
         {
@@ -200,7 +199,7 @@ namespace SQLiteDataAccess.Library
         {
         using (IDbConnection connection = new SQLiteConnection(connectionString))
           {
-          output=connection.Execute(sqlStatement, parameters);
+          output=connection.Query<int>(sqlStatement, parameters).FirstOrDefault();
           }
         }
       catch (Exception e)

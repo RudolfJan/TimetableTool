@@ -18,6 +18,14 @@ namespace DataAccess.Library.Logic
       return timeEventList;
       }
 
+    public static List<TimeEventModel> GetAllTimeEventsPerRoute(int routeId)
+      {
+      string sql = "SELECT * FROM TimeEvents, Services WHERE TimeEvents.ServiceId=Services.Id AND Services.RouteId=@RouteId";
+
+      var timeEventList =
+        SQLiteData.LoadData<TimeEventModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();
+      return timeEventList;
+      }
  
     public static TimeEventModel GetTimeEventById(int timeEventId)
       {
@@ -41,5 +49,11 @@ namespace DataAccess.Library.Logic
       SQLiteData.SaveData<dynamic>(sql,new {timeEvent.EventType, timeEvent.ArrivalTime,
         timeEvent.WaitTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order, timeEvent.Id}, SQLiteData.GetConnectionString());
       }
-    }
+
+		public static void DeleteTimeEvent(int timeEventId)
+			{
+      string sql = "PRAGMA foreign_keys = ON;DELETE FROM TimeEvents WHERE TimeEvents.Id=@TimeEventId;";
+      SQLiteData.SaveData<dynamic>(sql, new { timeEventId }, SQLiteData.GetConnectionString());
+			}
+		}
   }

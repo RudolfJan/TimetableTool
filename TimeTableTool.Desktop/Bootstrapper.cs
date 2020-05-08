@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using DataAccess.Library.Logic;
 using Logging.Library;
 using SQLiteDataAccess.Library;
 using System;
@@ -36,8 +37,19 @@ namespace TimetableTool.Desktop
 
     protected override void OnStartup(object sender, StartupEventArgs e)
       {
-      SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
       LogEventHandler.LogEvent += OnLogEvent;
+     int databaseExists=SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
+      Settings.DatabaseVersion = VersionDataAccess.GetCurrentDatabaseVersion();
+      if (Settings.DatabaseVersion < 2)
+        {
+        Log.Trace("Deprecated database version. Check user manual ch3.2 for a solution.",
+          LogEventType.Event);
+        }
+      if (Settings.UseDemoData && databaseExists==0)
+        {
+        var importHH= new ImportRouteDataAccess("SQL\\HH-testset.ttt");
+        var importWSR= new ImportRouteDataAccess("SQL\\WSR-testset.ttt");
+        }
       DisplayRootViewFor<ShellViewModel>();
       }
 

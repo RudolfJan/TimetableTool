@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+
 CREATE TABLE IF NOT EXISTS "Routes" (
 	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"RouteName"	TEXT NOT NULL,
@@ -12,7 +13,7 @@ CREATE TABLE IF NOT EXISTS "Branches" (
 	"BranchAbbreviation"	TEXT NOT NULL,
 	"BranchDescription"	TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Locations" (
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS "Locations" (
 	"NumberOfTracks"	INTEGER NOT NULL,
 	"Order"	INTEGER NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Sections" (
@@ -37,9 +38,9 @@ CREATE TABLE IF NOT EXISTS "Sections" (
 	"ALocationId"	INTEGER NOT NULL,
 	"BLocationId"	INTEGER NOT NULL,
 	"BranchId"	INTEGER NOT NULL,
-	FOREIGN KEY("ALocationId") REFERENCES "Locations",
-	FOREIGN KEY("BLocationId") REFERENCES "Locations",
-	FOREIGN KEY("BranchId") REFERENCES "Branches"	
+	FOREIGN KEY("ALocationId") REFERENCES "Locations" ON DELETE CASCADE,
+	FOREIGN KEY("BLocationId") REFERENCES "Locations" ON DELETE CASCADE,
+	FOREIGN KEY("BranchId") REFERENCES "Branches" ON DELETE CASCADE	
 );
 
 CREATE TABLE IF NOT EXISTS "ServiceDirections" (
@@ -48,7 +49,7 @@ CREATE TABLE IF NOT EXISTS "ServiceDirections" (
 	"ServiceDirectionAbbreviation" TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
 	"IsDescending" INTEGER NOT NULL DEFAULT 0,
-	FOREIGN KEY("RouteId") REFERENCES "Routes"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Services" (
@@ -61,7 +62,7 @@ CREATE TABLE IF NOT EXISTS "Services" (
 	"CalculatedDuration"	INTEGER NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
 	FOREIGN KEY("RouteId") REFERENCES "Routes",
-	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections"
+	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "TimeEvents" (
@@ -72,8 +73,8 @@ CREATE TABLE IF NOT EXISTS "TimeEvents" (
 	"LocationId"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
 	"Order" INTEGER NOT NULL,
-	FOREIGN KEY("LocationId") REFERENCES "Locations",
-	FOREIGN KEY("ServiceId") REFERENCES "Services"
+	FOREIGN KEY("LocationId") REFERENCES "Locations" ON DELETE CASCADE,
+	FOREIGN KEY("ServiceId") REFERENCES "Services" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Timetables" (
@@ -84,8 +85,8 @@ CREATE TABLE IF NOT EXISTS "Timetables" (
 	"IsMultiDirection" INT NOT NULL DEFAULT 0,
 	"ServiceDirectionId"	INT,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes",
-	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE,
+	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "ServiceInstances" (
@@ -95,7 +96,7 @@ CREATE TABLE IF NOT EXISTS "ServiceInstances" (
 	"StartTime"	INTEGER NOT NULL,
 	"EndTime"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
-	FOREIGN KEY("ServiceId") REFERENCES "Services"
+	FOREIGN KEY("ServiceId") REFERENCES "Services" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "ConnectTtSi" (
@@ -103,8 +104,28 @@ CREATE TABLE IF NOT EXISTS "ConnectTtSi" (
 	"TimetableId"	INTEGER NOT NULL,
 	"ServiceInstanceId"	INTEGER NOT NULL,
 	UNIQUE( "TimetableId","ServiceInstanceId"),
-	FOREIGN KEY("TimetableId") REFERENCES "Timetables",
-	FOREIGN KEY("ServiceInstanceId") REFERENCES "ServiceInstances"
+	FOREIGN KEY("TimetableId") REFERENCES "Timetables" ON DELETE CASCADE,
+	FOREIGN KEY("ServiceInstanceId") REFERENCES "ServiceInstances" ON DELETE CASCADE
 );
 
+DROP VIEW IF EXISTS FullTimeEvents;
+
+CREATE VIEW IF NOT EXISTS FullTimeEvents 
+AS SELECT
+	TimeEvents.Id AS Id
+	,Locations.LocationAbbreviation AS LocationAbbreviation
+	,Locations.LocationName AS LocationName
+	,Locations.NumberOfTracks AS NumberOfTracks
+	,Locations.[Order] AS LocationOrder
+	,TimeEvents.EventType AS EventType
+	,TimeEvents.ArrivalTime AS ArrivalTime
+	,TimeEvents.WaitTime AS WaitTime
+	,TimeEvents.[Order] AS [Order]
+	,Services.ServiceAbbreviation AS ServiceAbbreviation
+	,Services.ServiceName AS ServiceName
+	,TimeEvents.LocationId AS LocationId
+	,TimeEvents.ServiceId AS ServiceId
+FROM TimeEvents, Services, Locations
+WHERE Services.Id= TimeEvents.ServiceId AND Locations.Id= TimeEvents.LocationId
+ORDER BY Services.Id ASC, TimeEvents.[Order] ASC;
 COMMIT;

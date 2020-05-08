@@ -56,7 +56,7 @@ namespace TimetableTool.Desktop.ViewModels
       set
         {
         _selectedLocation = value;
-        NotifyOfPropertyChange(()=>SelectedLocation);
+        NotifyOfPropertyChange(()=> SelectedLocation);
         NotifyOfPropertyChange(()=> CanEditLocation);
         NotifyOfPropertyChange(()=> CanDeleteLocation);
         }
@@ -126,14 +126,15 @@ namespace TimetableTool.Desktop.ViewModels
       {
       get
         {
-        return false;
-
+        return SelectedLocation!=null  && Settings.DatabaseVersion>=2;
         }
       }
 
     public void DeleteLocation()
       {
-      // TODO implement this
+      LocationDataAccess.DeleteLocation(SelectedLocation.Id);
+      LocationsUI.LocationList.Remove(SelectedLocation);
+      LocationId = 0;
       }
 
     public bool CanSaveLocation

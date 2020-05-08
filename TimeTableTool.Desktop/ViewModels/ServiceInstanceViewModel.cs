@@ -66,6 +66,7 @@ namespace TimetableTool.Desktop.ViewModels
         {
         _selectedServiceInstance = value;
         NotifyOfPropertyChange(() => CanEditServiceInstance);
+        NotifyOfPropertyChange(() => CanDeleteServiceInstance);
         }
       }
 
@@ -140,6 +141,18 @@ namespace TimetableTool.Desktop.ViewModels
     public bool CanEditServiceInstance
       {
       get { return SelectedServiceInstance != null && ServiceInstanceId <= 0; }
+      }
+
+    public bool CanDeleteServiceInstance
+      {
+      get { return SelectedServiceInstance != null  && Settings.DatabaseVersion>=2; }
+      }
+
+    public void DeleteServiceInstance()
+      {
+      ServiceInstanceDataAccess.DeleteServiceInstance(SelectedServiceInstance.Id);
+      ServiceInstanceList.Remove(SelectedServiceInstance);
+      ServiceInstanceId = 0;
       }
 
     public void SelectService()
