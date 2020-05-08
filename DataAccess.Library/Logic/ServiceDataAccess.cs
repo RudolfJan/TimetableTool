@@ -1,5 +1,6 @@
 ﻿using DataAccess.Library.Models;
 using SQLiteDataAccess.Library;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,5 +64,10 @@ namespace DataAccess.Library.Logic
         new {calculatedDuration, serviceId}, SQLiteData.GetConnectionString());
       }
 
-    }
+		public static void DeleteService(int serviceId)
+			{
+      string sql = "PRAGMA foreign_keys = ON;DELETE FROM Services WHERE Services.Id=@ServiceId;";
+      SQLiteData.SaveData<dynamic>(sql, new { serviceId }, SQLiteData.GetConnectionString());
+			}
+		}
   }

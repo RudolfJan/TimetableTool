@@ -1,8 +1,11 @@
 ﻿using Caliburn.Micro;
+using DataAccess.Library.Logic;
 using Logging.Library;
+using SQLiteDataAccess.Library;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Security.Cryptography.X509Certificates;
 using System.Text;
 using TimetableTool.Desktop.Helpers;
 
@@ -103,6 +106,14 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		public bool CanCreateDatabase
+			{
+			get
+				{
+				return !File.Exists(Settings.DatabasePath);
+				}
+			}
+
 		public void CreateBackup()
 			{
 			string source = Settings.DatabasePath;
@@ -171,10 +182,22 @@ namespace TimetableTool.Desktop.ViewModels
 			string target = $"{Settings.BackupPath}Delete backup {guid}.db";
 			if (CopyDatabase(source, target))
 				{
-				FileInfo targetFile= new FileInfo(target);
+				FileInfo targetFile = new FileInfo(target);
 				BackupList.Add(targetFile);
 				FileIOHelper.DeleteSingleFile(source);
-				NotifyOfPropertyChange(()=>CanDeleteActiveDatabase);
+				NotifyOfPropertyChange(() => CanDeleteActiveDatabase);
+				NotifyOfPropertyChange(() => CanCreateDatabase);
+				}
+			}
+		public void CreateDatabase()
+			{
+			// TODO apply DRY to this code!
+			var databaseExists=SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
+			Settings.DatabaseVersion = VersionDataAccess.GetCurrentDatabaseVersion();
+			if (Settings.UseDemoData && databaseExists==0)
+				{
+				var importHH= new ImportRouteDataAccess("SQL\\HH-testset.ttt");
+				var importWSR= new ImportRouteDataAccess("SQL\\WSR-testset.ttt");
 				}
 			}
 		}

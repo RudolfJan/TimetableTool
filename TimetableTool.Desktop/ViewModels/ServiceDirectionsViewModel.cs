@@ -48,6 +48,7 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				_selectedServiceDirection = value;
 				NotifyOfPropertyChange(() => CanEditServiceDirection);
+				NotifyOfPropertyChange(() => CanDeleteServiceDirection);
 				}
 			}
 
@@ -113,13 +114,15 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			get
 				{
-				return false;
+				return SelectedServiceDirection!=null && Settings.DatabaseVersion>=2;
 				}
 			}
 
 		public void DeleteServiceDirection()
 			{
-			// TODO implement this method
+			ServiceDirectionDataAccess.DeleteServiceDirection(SelectedServiceDirection.Id);
+			ServiceDirectionsList.Remove(SelectedServiceDirection);
+			ServiceDirectionId = 0;
 			}
 
 		public bool CanSaveServicesDirection

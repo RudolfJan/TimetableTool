@@ -3,6 +3,7 @@ using DataAccess.Library.Models;
 using System.ComponentModel;
 using TimetableTool.Desktop.Models;
 using Caliburn.Micro;
+using System.Configuration;
 using TimetableTool.Desktop.EventModels;
 
 namespace TimetableTool.Desktop.ViewModels
@@ -297,7 +298,14 @@ namespace TimetableTool.Desktop.ViewModels
 
 		public bool CanDeleteTimetable
 			{
-			get { return false; }
+			get { return SelectedTimetable != null && Settings.DatabaseVersion>=2; }
+			}
+
+		public void DeleteTimetable()
+			{
+			TimetableDataAccess.DeleteTimetable(SelectedTimetable.Id);
+			TimetablesUI.TimetableList.Remove(SelectedTimetable);
+			TimetableId = 0;
 			}
 
 		public bool CanSaveTimetable

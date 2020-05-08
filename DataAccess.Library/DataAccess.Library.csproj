@@ -5,6 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="SQL\CreateVersion.sql" />
+    <None Remove="SQL\HH-testset.ttt" />
+    <None Remove="SQL\WSR-testset.ttt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="SQL\CreateVersion.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQL\HH-testset.ttt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQL\WSR-testset.ttt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
   </ItemGroup>
@@ -14,12 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SQL\CreateFullTimeEvents.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="SQL\TimetableData.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
     <None Update="SQL\TimetableDb.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

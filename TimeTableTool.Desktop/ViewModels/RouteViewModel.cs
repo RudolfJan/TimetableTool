@@ -104,8 +104,7 @@ namespace TimetableTool.Desktop.ViewModels
 
     public bool CanDeleteRoute
       {
-      // TODO implement Delete functions
-      get { return false; }
+      get { return SelectedRoute!=null  && Settings.DatabaseVersion>=2; }
       }
 
     public bool CanExportRoute
@@ -135,7 +134,14 @@ namespace TimetableTool.Desktop.ViewModels
       //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
-      
+      }
+
+    public void DeleteRoute()
+      {
+      RouteDataAccess.DeleteRoute(SelectedRoute.Id);
+      RoutesUI.RouteList.Remove(SelectedRoute);
+      RouteId = 0;
+      NotifyOfPropertyChange(() => RoutesUI.RouteList);
       }
 
     public void SaveRoute()

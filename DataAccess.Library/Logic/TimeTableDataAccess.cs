@@ -55,5 +55,12 @@ namespace DataAccess.Library.Logic
                                             timetable.IsMultiDirection, timetable.RouteId, timetable.Id}, 
                                             SQLiteData.GetConnectionString());
       }
-    }
+
+		public static void DeleteTimetable(int timetableId)
+			{
+      string sql = "PRAGMA foreign_keys = ON;DELETE FROM Timetables WHERE Timetables.Id=@TimetableId;";
+      SQLiteData.SaveData<dynamic>(sql, new { timetableId }, SQLiteData.GetConnectionString());
+
+			}
+		}
   }

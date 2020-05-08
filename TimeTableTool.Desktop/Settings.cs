@@ -1,4 +1,5 @@
-﻿using Logging.Library;
+﻿using DataAccess.Library.Logic;
+using Logging.Library;
 using Microsoft.Extensions.Configuration;
 using Syroot.Windows.IO;
 using System;
@@ -20,9 +21,11 @@ namespace TimetableTool.Desktop
 				.SetBasePath(Directory.GetCurrentDirectory())
 				.AddJsonFile("appsettings.json");
 			IConfiguration config = builder.Build();
+			
 			return config;
 			}
 
+		public static int DatabaseVersion { get; set; }
 		public static string MyDocumentsFolder
 			{
 			get

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Screen = Caliburn.Micro.Screen;
+﻿using System.Threading.Tasks;
+using Caliburn.Micro;
 
 namespace TimetableTool.Desktop.ViewModels
   {

@@ -13,6 +13,8 @@ namespace TimetableTool.Desktop.ViewModels
 	public class ServiceViewModel : Screen
 		{
 		private readonly IEventAggregator _events;
+
+		#region properties
 		public ServiceUIModel ServicesUI { get; set; } = new ServiceUIModel();
 		public int RouteId { get; set; } = -1;
 		public int ServiceId { get; set; } = -1;
@@ -187,6 +189,8 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		#endregion
+
 		public ServiceViewModel(IEventAggregator events)
 			{
 			_events = events;
@@ -230,7 +234,7 @@ namespace TimetableTool.Desktop.ViewModels
 
 		public bool CanDeleteService
 			{
-			get { return false; }
+			get { return SelectedService != null && Settings.DatabaseVersion >= 2; }
 			}
 		public bool CanSaveService
 			{
@@ -281,7 +285,6 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			ClearService();
 			ServicesUI.ServiceList = new BindableCollection<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
-
 			}
 
 		public void ClearService()
@@ -346,6 +349,13 @@ namespace TimetableTool.Desktop.ViewModels
 			ServicesUI.ServiceList.Refresh();
 			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
 			Log.Trace($"Time events for service {SelectedService.ServiceAbbreviation} saved", LogEventType.Event);
+			}
+
+		public void DeleteService()
+			{
+			ServiceDataAccess.DeleteService(SelectedService.Id);
+			ServicesUI.ServiceList.Remove(SelectedService);
+			ServiceId = 0;
 			}
 		}
 	}

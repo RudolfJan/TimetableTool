@@ -49,5 +49,11 @@ namespace DataAccess.Library.Logic
       SQLiteData.SaveData<dynamic>(sql,new {timeEvent.EventType, timeEvent.ArrivalTime,
         timeEvent.WaitTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order, timeEvent.Id}, SQLiteData.GetConnectionString());
       }
-    }
+
+		public static void DeleteTimeEvent(int timeEventId)
+			{
+      string sql = "PRAGMA foreign_keys = ON;DELETE FROM TimeEvents WHERE TimeEvents.Id=@TimeEventId;";
+      SQLiteData.SaveData<dynamic>(sql, new { timeEventId }, SQLiteData.GetConnectionString());
+			}
+		}
   }

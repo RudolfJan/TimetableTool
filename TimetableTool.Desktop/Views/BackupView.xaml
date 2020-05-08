@@ -38,11 +38,13 @@
         <Button x:Name="RestoreBackup" Style="{StaticResource WideButton}">Restore backup</Button>
         <Button x:Name="DeleteBackup" Style="{StaticResource WideButton}">Delete backup</Button>
         <Button x:Name="DeleteActiveDatabase" Style="{StaticResource WideButton}">
+          
           <WrapPanel>
             <Image Source="../Images/exclamation.png"></Image>
             <TextBlock Padding="3">Delete database</TextBlock>
           </WrapPanel>
         </Button>
+        <Button x:Name="CreateDatabase" Style="{StaticResource WideButton}">Create database</Button>
       </StackPanel>
     </Grid>
   </Border>

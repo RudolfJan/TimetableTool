@@ -1,4 +1,5 @@
 BEGIN TRANSACTION;
+
 CREATE TABLE IF NOT EXISTS "Routes" (
 	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
 	"RouteName"	TEXT NOT NULL,
@@ -22,7 +23,7 @@ CREATE TABLE IF NOT EXISTS "Locations" (
 	"NumberOfTracks"	INTEGER NOT NULL,
 	"Order"	INTEGER NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes"
+	FOREIGN KEY("RouteId") REFERENCES "Routes" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "Sections" (
@@ -37,9 +38,9 @@ CREATE TABLE IF NOT EXISTS "Sections" (
 	"ALocationId"	INTEGER NOT NULL,
 	"BLocationId"	INTEGER NOT NULL,
 	"BranchId"	INTEGER NOT NULL,
-	FOREIGN KEY("ALocationId") REFERENCES "Locations",
-	FOREIGN KEY("BLocationId") REFERENCES "Locations",
-	FOREIGN KEY("BranchId") REFERENCES "Branches"	
+	FOREIGN KEY("ALocationId") REFERENCES "Locations" ON DELETE CASCADE,
+	FOREIGN KEY("BLocationId") REFERENCES "Locations" ON DELETE CASCADE,
+	FOREIGN KEY("BranchId") REFERENCES "Branches" ON DELETE CASCADE	
 );
 
 CREATE TABLE IF NOT EXISTS "ServiceDirections" (
@@ -107,4 +108,24 @@ CREATE TABLE IF NOT EXISTS "ConnectTtSi" (
 	FOREIGN KEY("ServiceInstanceId") REFERENCES "ServiceInstances" ON DELETE CASCADE
 );
 
+DROP VIEW IF EXISTS FullTimeEvents;
+
+CREATE VIEW IF NOT EXISTS FullTimeEvents 
+AS SELECT
+	TimeEvents.Id AS Id
+	,Locations.LocationAbbreviation AS LocationAbbreviation
+	,Locations.LocationName AS LocationName
+	,Locations.NumberOfTracks AS NumberOfTracks
+	,Locations.[Order] AS LocationOrder
+	,TimeEvents.EventType AS EventType
+	,TimeEvents.ArrivalTime AS ArrivalTime
+	,TimeEvents.WaitTime AS WaitTime
+	,TimeEvents.[Order] AS [Order]
+	,Services.ServiceAbbreviation AS ServiceAbbreviation
+	,Services.ServiceName AS ServiceName
+	,TimeEvents.LocationId AS LocationId
+	,TimeEvents.ServiceId AS ServiceId
+FROM TimeEvents, Services, Locations
+WHERE Services.Id= TimeEvents.ServiceId AND Locations.Id= TimeEvents.LocationId
+ORDER BY Services.Id ASC, TimeEvents.[Order] ASC;
 COMMIT;

@@ -40,5 +40,11 @@ namespace DataAccess.Library.Logic
       string sql = "UPDATE OR IGNORE ServiceDirections SET ServiceDirectionName=@ServiceDirectionName, serviceDirectionAbbreviation=@ServiceDirectionAbbreviation, RouteId=@RouteId, IsDescending=@IsDescending WHERE Id=@Id";
       SQLiteData.SaveData<dynamic>(sql,new {serviceDirection.Id, serviceDirection.ServiceDirectionName, serviceDirection.ServiceDirectionAbbreviation, serviceDirection.RouteId, serviceDirection.IsDescending}, SQLiteData.GetConnectionString());
       }
+
+		public static void DeleteServiceDirection(int serviceDirectionId)
+			{
+			string sql= "PRAGMA foreign_keys = ON;DELETE FROM ServiceDirections WHERE ServiceDirections.Id=@ServiceDirectionId;";
+			SQLiteData.SaveData<dynamic>(sql,new {serviceDirectionId}, SQLiteData.GetConnectionString());
+			}
 		}
 	}
