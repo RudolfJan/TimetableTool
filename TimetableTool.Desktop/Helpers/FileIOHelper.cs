@@ -1,10 +1,8 @@
 ﻿using Logging.Library;
 using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Text;
 using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.Helpers
@@ -64,7 +62,7 @@ namespace TimetableTool.Desktop.Helpers
 
 
 		// Safe way to delete a single file
-		public static void DeleteSingleFile(String FilePath)
+		public static void DeleteSingleFile(string FilePath)
 			{
 			if (File.Exists(FilePath))
 				{
@@ -82,7 +80,7 @@ namespace TimetableTool.Desktop.Helpers
 				}
 			}
 
-		public static void CreateEmptyFile(String Filename)
+		public static void CreateEmptyFile(string Filename)
 			{
 			File.Create(Filename).Dispose();
 			}

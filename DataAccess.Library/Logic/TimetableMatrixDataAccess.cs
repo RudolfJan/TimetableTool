@@ -26,10 +26,10 @@ namespace DataAccess.Library.Logic
 			var direction = ServiceDirectionDataAccess.GetServiceDirectionById(timetable.ServiceDirectionId);
 			matrixModel.IsDescending = direction.IsDescending;
 
-			// Now get a view, representing ServiceInstances
+			// Now get a view, representing Services
 
-			List<ServiceInstanceModel> serviceInstanceList = ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(timetable.Id);
-			serviceInstanceList = serviceInstanceList.OrderBy(x => x.StartTime).ToList();
+			List<ServiceModel> serviceList = ServicesDataAccess.GetServicesPerTimetable(timetable.Id);
+			serviceList = serviceList.OrderBy(x => x.StartTime).ToList();
 
 			var locationsList = LocationDataAccess.GetAllLocationsPerRoute(matrixModel.RouteId);
 			if (matrixModel.IsDescending)
@@ -44,12 +44,12 @@ namespace DataAccess.Library.Logic
 			var locationsCount = locationsList.Count;
 
 			matrixModel.Matrix = new string[locationsList.Count + 1][];
-			var columncount = serviceInstanceList.Count + 1;
+			var columncount = serviceList.Count + 1;
 			string[] columnheaders = new string[columncount];
 			columnheaders[0] = "---";
 			for (int i = 0; i < columncount - 1; i++)
 				{
-				columnheaders[i + 1] = serviceInstanceList[i].ServiceInstanceAbbreviation;
+				columnheaders[i + 1] = serviceList[i].ServiceAbbreviation;
 				}
 			matrixModel.Matrix[0] = columnheaders;
 			for (int i = 0; i < locationsCount; i++)
@@ -59,17 +59,17 @@ namespace DataAccess.Library.Logic
 				matrixModel.Matrix[i + 1] = row;
 				}
 
-			for (int index = 0; index < serviceInstanceList.Count; index++)
+			for (int index = 0; index < serviceList.Count; index++)
 				{
-				int actualTime = serviceInstanceList[index].StartTime;
-				List<ServiceInstanceTimingModel> Timing;
+				int actualTime = serviceList[index].StartTime;
+				List<ServiceTimingModel> Timing;
 				if (matrixModel.IsDescending)
 					{
-					Timing = GetServiceInstanceTiming(serviceInstanceList[index].Id, locationsList).OrderByDescending(x => x.LocationsOrder).ToList();
+					Timing = GetServiceTiming(serviceList[index].Id, locationsList).OrderByDescending(x => x.LocationsOrder).ToList();
 					}
 				else
 					{
-					Timing = GetServiceInstanceTiming(serviceInstanceList[index].Id, locationsList);
+					Timing = GetServiceTiming(serviceList[index].Id, locationsList);
 					}
 				int j = 0;
 				for (int i = 0; i < locationsCount;)
@@ -81,7 +81,7 @@ namespace DataAccess.Library.Logic
 						}
 					else
 						{
-						var Insert = new ServiceInstanceTimingModel();
+						var Insert = new ServiceTimingModel();
 						Insert.LocationId = locationsList[i].Id;
 						Insert.LocationName = locationsList[i].LocationName;
 						Insert.LocationAbbrev = locationsList[i].LocationAbbreviation;
@@ -99,9 +99,9 @@ namespace DataAccess.Library.Logic
 				matrixModel.TimingList.Add(Timing);
 				}
 
-			for (int i = 0; i < columncount - 1; i++) // for each serviceInstance
+			for (int i = 0; i < columncount - 1; i++) // for each service
 				{
-				int actualTime = serviceInstanceList[i].StartTime;
+				int actualTime = serviceList[i].StartTime;
 				var timing = matrixModel.TimingList[i];
 				for (int j = 0; j < locationsCount; j++) // for each location
 					{
@@ -119,10 +119,10 @@ namespace DataAccess.Library.Logic
 
 
 
-		// Query to get toe serviceInstanceDetails
+		// Query to get all serviceDetails
 
 
-		public static List<ServiceInstanceTimingModel> GetServiceInstanceTiming(int serviceInstanceId, List<LocationModel> locations)
+		public static List<ServiceTimingModel> GetServiceTiming(int serviceId, List<LocationModel> locations)
 			{
 			var sql = @"
 						select Locations.Id as LocationId, 
@@ -134,22 +134,22 @@ namespace DataAccess.Library.Logic
 						TimeEvents.ArrivalTime as ArrivalTime,
 						TimeEvents.WaitTime as WaitTime,
 						'--' as TimeString
-								from Locations, timeevents
+								from Locations, TimeEvents
 								where TimeEvents.LocationId=Locations.Id and
-										timeevents.ServiceId=(
-										select Services.Id 
-												from Services, ServiceInstances 
-												where Services.Id= ServiceInstances.ServiceId 
-														and serviceinstances.id=@serviceInstanceId)
+										TimeEvents.ServiceTemplateId=(
+										select ServiceTemplates.Id 
+												from ServiceTemplates, Services 
+												where ServiceTemplates.Id= Services.ServiceTemplateId 
+														and Services.id=@serviceId)
 						order by Locations.[order] asc
 						";
 
-			var serviceInstanceTiming =
-				SQLiteData.LoadData<ServiceInstanceTimingModel, dynamic>(sql, new { serviceInstanceId }, SQLiteData.GetConnectionString()).ToList();
+			var serviceTiming =
+				SQLiteData.LoadData<ServiceTimingModel, dynamic>(sql, new { serviceId }, SQLiteData.GetConnectionString()).ToList();
 
-			// Now we neet to complete the list, using 
+			// Now we need to complete the list, using 
 
-			return serviceInstanceTiming;
+			return serviceTiming;
 			}
 
 		// Convert matrix to data

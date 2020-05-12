@@ -1,13 +1,7 @@
-﻿using DataAccess.Library.Logic;
-using Logging.Library;
+﻿using Logging.Library;
 using Microsoft.Extensions.Configuration;
-using Syroot.Windows.IO;
 using System;
 using System.IO;
-using System.Runtime.InteropServices.ComTypes;
-using System.ServiceModel.Syndication;
-using System.Windows.Documents;
-using TimetableTool.Desktop.Helpers;
 
 namespace TimetableTool.Desktop
 	{

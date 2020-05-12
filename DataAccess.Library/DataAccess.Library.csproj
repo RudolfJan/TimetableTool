@@ -7,6 +7,8 @@
   <ItemGroup>
     <None Remove="SQL\CreateVersion.sql" />
     <None Remove="SQL\HH-testset.ttt" />
+    <None Remove="SQL\ServiceTemplatesChange.sql" />
+    <None Remove="SQL\TimeTableDb.sql" />
     <None Remove="SQL\WSR-testset.ttt" />
   </ItemGroup>
 
@@ -17,24 +19,24 @@
     <Content Include="SQL\HH-testset.ttt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SQL\ServiceTemplatesChange.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQL\TimeTableDb.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SQL\WSR-testset.ttt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Dapper" Version="2.0.30" />
-    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112" />
+    <PackageReference Include="Dapper" Version="2.0.35" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.112.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SQLiteDataAcces.Library\SQLiteDataAcces.Library.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Update="SQL\TimetableDb.sql">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
   </ItemGroup>
 
 </Project>

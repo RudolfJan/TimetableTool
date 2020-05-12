@@ -9,7 +9,7 @@ namespace TimetableTool.Desktop.Models
     public BindableCollection<FullTimeEventModel> FullTimeEventList { get; set; } = new BindableCollection<FullTimeEventModel>();
     public BindableCollection<FullTimeEventModel> FilteredFullTimeEventList { get; set; } = new BindableCollection<FullTimeEventModel>();
     public FullTimeEventFilterModel Filter { get; set; } = new FullTimeEventFilterModel();
-    public ServiceModel SelectedService { get; set; }
+    public ServiceTemplateModel SelectedService { get; set; }
     public RouteModel SelectedRoute { get; set; }
     }
   }

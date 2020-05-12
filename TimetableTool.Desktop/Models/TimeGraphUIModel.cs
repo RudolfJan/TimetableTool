@@ -11,8 +11,8 @@ namespace TimetableTool.Desktop.Models
 	public class TimeGraphUIModel
 		{
 		public BindableCollection<FullTimeEventModel> TimeEventList { get; set; }= new BindableCollection<FullTimeEventModel>();
-		public string ServiceInstanceAbbreviation { get; set; } = "";
-		public string ServiceInstanceName { get; set; } = "";
+		public string ServiceAbbreviation { get; set; } = "";
+		public string ServiceName { get; set; } = "";
 		public BindableCollection<DataPoint> DataLine { get; set; } = new BindableCollection<DataPoint>();
 		}
 	}

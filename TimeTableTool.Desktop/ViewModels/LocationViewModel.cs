@@ -9,10 +9,10 @@ namespace TimetableTool.Desktop.ViewModels
   public class LocationViewModel : Screen
     {
     #region Properties
-    private System.String _locationName;
-    private System.String _locationAbbreviation;
-    private System.Int32 _order;
-    private System.Int32 _numberOfTracks;
+    private string _locationName;
+    private string _locationAbbreviation;
+    private int _order;
+    private int _numberOfTracks;
     private LocationModel _selectedLocation;
 
     public LocationUIModel LocationsUI { get; set; } = new LocationUIModel();

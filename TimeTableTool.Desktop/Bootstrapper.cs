@@ -9,6 +9,7 @@ using System.Windows;
 using TimetableTool.Desktop.ViewModels;
 using TimetableTool.Desktop.Views;
 using System.Threading.Tasks;
+using TimetableTool.Desktop.Helpers;
 
 namespace TimetableTool.Desktop
   {
@@ -38,22 +39,11 @@ namespace TimetableTool.Desktop
     protected override void OnStartup(object sender, StartupEventArgs e)
       {
       LogEventHandler.LogEvent += OnLogEvent;
-     int databaseExists=SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
-      Settings.DatabaseVersion = VersionDataAccess.GetCurrentDatabaseVersion();
-      if (Settings.DatabaseVersion < 2)
-        {
-        Log.Trace("Deprecated database version. Check user manual ch3.2 for a solution.",
-          LogEventType.Event);
-        }
-      if (Settings.UseDemoData && databaseExists==0)
-        {
-        var importHH= new ImportRouteDataAccess("SQL\\HH-testset.ttt");
-        var importWSR= new ImportRouteDataAccess("SQL\\WSR-testset.ttt");
-        }
+      DatabaseSupport.DatabaseUserInitialization();
       DisplayRootViewFor<ShellViewModel>();
       }
 
-    private void OnLogEvent(Object Sender, LogEventArgs args)
+    private void OnLogEvent(object Sender, LogEventArgs args)
       {
       if (args.EntryClass.EventType == LogEventType.Error || args.EntryClass.EventType == LogEventType.Event)
         {

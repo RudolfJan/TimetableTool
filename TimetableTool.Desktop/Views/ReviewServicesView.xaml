@@ -1,0 +1,29 @@
+﻿<Window x:Class="TimetableTool.Desktop.Views.ReviewServicesView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Style="{StaticResource AllWindows}" WindowStartupLocation="CenterOwner"
+        Title="Review Services">
+    <StackPanel>
+        <TextBlock Style="{StaticResource HeaderTextBlock}">Review the services created with Repeat</TextBlock>
+        <DataGrid x:Name="ReviewDataGrid"
+                  Style="{StaticResource DefaultDataGrid}"
+                  ItemsSource="{Binding CreatedServices}"
+                  AutoGenerateColumns="False"
+                  Height="400" Width="300">
+			<DataGrid.Columns>
+				<DataGridTextColumn Header="Start" Binding="{Binding StartTimeText}"/>
+				<DataGridTextColumn Header="End" Binding="{Binding EndTimeText}"/>
+				<DataGridTextColumn Header="Abbrev" Binding="{Binding ServiceAbbreviation}"/>
+				<DataGridTextColumn Header="Name" Binding="{Binding ServiceName}"/>
+			</DataGrid.Columns>
+        </DataGrid>
+      <WrapPanel HorizontalAlignment="Right">
+      <Button x:Name="Cancel" Style="{StaticResource CancelButton}">Cancel</Button>
+	    <Button x:Name="OK" Style="{StaticResource OKButton}">Save services</Button>
+      </WrapPanel>
+    </StackPanel>
+</Window>
+ 

@@ -9,19 +9,21 @@ namespace DataAccess.Library.Logic
   {
   public class FullTimeEventDataAccess
     {
-    public static List<FullTimeEventModel> GetAllFullTimeEventsPerService(int serviceId)
+    public static List<FullTimeEventModel> GetAllFullTimeEventsPerServiceTemplate(int serviceTemplateId)
       {
-      string sql = "SELECT * FROM FullTimeEvents WHERE ServiceId=@ServiceId";
+      string sql = "SELECT * FROM FullTimeEvents " +
+                   "WHERE ServiceTemplateId=@ServiceTemplateId";
 
       var timeEventList =
-        SQLiteData.LoadData<FullTimeEventModel, dynamic>(sql, new { serviceId}, SQLiteData.GetConnectionString()).ToList();
+        SQLiteData.LoadData<FullTimeEventModel, dynamic>(sql, new { serviceTemplateId}, SQLiteData.GetConnectionString()).ToList();
       return timeEventList;
       }
 
-    public static List<FullTimeEventModel> CreateTimeEventsPerService(int serviceId)
+    public static List<FullTimeEventModel> CreateTimeEventsPerServiceTemplate(int serviceTemplateId)
       {
-      string sql="SELECT ServiceDirections.IsDescending FROM ServiceDirections, Services WHERE Services.Id=@ServiceId AND ServiceDirections.Id=Services.ServiceDirectionId;";
-      var isDescending= SQLiteData.LoadData<int,dynamic>(sql, new{serviceId},SQLiteData.GetConnectionString()).FirstOrDefault();
+      string sql ="SELECT ServiceDirections.IsDescending FROM ServiceDirections, ServiceTemplates " +
+                  "WHERE ServiceTemplates.Id=@ServiceTemplateId AND ServiceDirections.Id=ServiceTemplates.ServiceDirectionId;";
+      var isDescending= SQLiteData.LoadData<int, dynamic>(sql, new{serviceTemplateId},SQLiteData.GetConnectionString()).FirstOrDefault();
       string direction;
 
       if(isDescending==1)
@@ -33,13 +35,14 @@ namespace DataAccess.Library.Logic
         direction="ASC";
         }
 
-      sql = $"SELECT Locations.Id, Locations.LocationName, Locations.LocationAbbreviation, Locations.NumberOfTracks, Locations.[Order], Locations.Routeid FROM Locations, Services WHERE Services.Id=@ServiceId AND Locations.RouteId= Services.RouteId ORDER BY Locations.[Order] {direction};";
+      sql = $"SELECT Locations.Id, Locations.LocationName, Locations.LocationAbbreviation, Locations.NumberOfTracks, Locations.[Order], Locations.RouteId FROM Locations, ServiceTemplates " +
+            $"WHERE ServiceTemplates.Id=@ServiceTemplateId AND Locations.RouteId= ServiceTemplates.RouteId ORDER BY Locations.[Order] {direction};";
 
       var locations =
-        SQLiteData.LoadData<LocationModel, dynamic>(sql, new { serviceId}, SQLiteData.GetConnectionString()).ToList();
+        SQLiteData.LoadData<LocationModel, dynamic>(sql, new { serviceTemplateId}, SQLiteData.GetConnectionString()).ToList();
 
       var timeEventList= new List<FullTimeEventModel>();
-      int order=10;
+      int order =10;
       // Warnig: No all columns are filled!
       // TODO refactor this, using extraneous fields.
       foreach(var location in locations)
@@ -48,13 +51,12 @@ namespace DataAccess.Library.Logic
         timeEvent.Order=order;
         order+=10;
         timeEvent.LocationId= location.Id;
-        timeEvent.ServiceId= serviceId;
+        timeEvent.ServiceTemplateId= serviceTemplateId;
         timeEvent.LocationName= location.LocationName;
         timeEventList.Add(timeEvent);
         }
       return timeEventList;
       }
-
 
     public static FullTimeEventModel GetFullTimeEventById(int timeEventId)
       {
@@ -63,14 +65,6 @@ namespace DataAccess.Library.Logic
       var timeEvent =
         SQLiteData.LoadData<FullTimeEventModel, dynamic>(sql, new {timeEventId}, SQLiteData.GetConnectionString()).FirstOrDefault();
       return timeEvent;
-      }
-
-    public static int InsertFullTimeEventForService(FullTimeEventModel timeEvent)
-      {
-      // TODO consider re-use of the timeEven 
-      string sql = @"INSERT OR IGNORE INTO TimeEvents (EventType, ArrivalTime, WaitTime, ServiceId, LocationId, Order)
-                      VALUES(@EventType, @RelativeTime, @ServiceId, @LocationId, @Order)";
-      return SQLiteData.SaveData<dynamic>(sql, new { timeEvent.EventType, timeEvent.ArrivalTime, timeEvent.WaitTime, timeEvent.ServiceId, timeEvent.LocationId, timeEvent.Order }, SQLiteData.GetConnectionString());
       }
     }
   }

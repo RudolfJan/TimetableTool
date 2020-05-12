@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using TimetableTool.DataAccessLibrary.Logic;
 
 namespace DataAccess.Library.Models
 	{
@@ -9,10 +7,23 @@ namespace DataAccess.Library.Models
 		public int Id { get; set; }
 		public string ServiceName { get; set; }
 		public string ServiceAbbreviation { get; set; }
-		public string ServiceDescription { get; set; }
-		public string ServiceType { get; set; }
-		public int ServiceDirectionId { get; set; }
-		public int CalculatedDuration { get; set; }
-		public int RouteId { get; set; }
+		public int StartTime { get; set; }
+		public int EndTime { get; set; }
+		public int ServiceTemplateId { get; set; }
+		public string StartTimeText
+			{
+			get
+				{
+				return TimeConverters.MinutesToString(StartTime);
+				}
+			}
+		public string EndTimeText
+			{
+			get
+				{
+				return TimeConverters.MinutesToString(EndTime);
+				}
+			}
+
 		}
 	}

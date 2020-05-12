@@ -16,7 +16,7 @@
                     <MenuItem x:Name="ViewTimetable" Header="_View timetable"  IsEnabled="{Binding IsTimetableSelected}"/>
                     <MenuItem x:Name="ViewGraph" Header="View _graph"  IsEnabled="{Binding IsTimetableSelectedMultiDirection}"/>
                     <MenuItem x:Name="Backup" Header="_Backup database"/>
-                    <MenuItem x:Name="Print" Header="_Print"/>
+                    <MenuItem x:Name="Print" Header="_Print" IsEnabled="False"/>
                     <MenuItem x:Name="ExitApplication" Header="E_xit"/>
                 </MenuItem>
                 <MenuItem x:Name="RouteMenu" Header="_Routes">
@@ -29,9 +29,9 @@
                 </MenuItem>
                 <MenuItem  x:Name="TimeTablesMenu" Header="Timetables">
                     <MenuItem x:Name="EditTimetables" Header="_Timetables" IsEnabled="{Binding IsEditTimetablesEnabled}"/>
-                    <MenuItem x:Name="EditServices" Header="_Services" IsEnabled="{Binding IsEditServicesEnabled}"/>
-                    <MenuItem x:Name="EditTimeEvents" Header="Time E_vents" IsEnabled="{Binding IsEditTimeEventsEnabled}"/>
-                    <MenuItem x:Name="EditServiceInstances" Header="_Service Instances" IsEnabled="{Binding IsEditServiceInstancesEnabled}"/>
+                    <MenuItem x:Name="EditServiceTemplates" Header="_Service templates" IsEnabled="{Binding IsEditServiceTemplatesEnabled}"/>
+                    <MenuItem x:Name="EditTimeEvents" Header="Time _Events" IsEnabled="{Binding IsEditTimeEventsEnabled}"/>
+                    <MenuItem x:Name="EditServices" Header="Ser_vices" IsEnabled="{Binding IsEditServicesEnabled}"/>
                 </MenuItem>
                 <MenuItem x:Name="HelpMenu"  Header="_Help">
                     <MenuItem x:Name="ShowManual" Header="_Manual"/>
@@ -47,8 +47,8 @@
                 <WrapPanel HorizontalAlignment="Center">
                     <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Timetable:</TextBlock>
                     <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimetable.TimetableName, Mode=TwoWay}" FontSize="16"/>
-                    <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Service:</TextBlock>
-                    <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedService.ServiceName, Mode=TwoWay}" FontSize="16"/>
+                    <TextBlock Style="{StaticResource DefaultTextBlock}" FontSize="16">Service template:</TextBlock>
+                    <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedServiceTemplate.ServiceTemplateName, Mode=TwoWay}" FontSize="16"/>
                 </WrapPanel>
                 <TextBlock Height="20"/>
                 <ContentControl x:Name="ActiveItem" Margin="{StaticResource DefaultMargin}"/>

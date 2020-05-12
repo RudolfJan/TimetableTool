@@ -10,10 +10,10 @@ namespace TimetableTool.Desktop.ViewModels
 	{
 	public class TimetableViewModel : Screen
 		{
-		private System.String _TimetableName;
-		private System.String _TimetableAbbreviation;
+		private string _TimetableName;
+		private string _TimetableAbbreviation;
 		private TimetableModel _selectedTimetable;
-		private System.String _timetableDescription;
+		private string _timetableDescription;
 		private readonly IEventAggregator _events;
 
 		#region Properties
@@ -122,20 +122,20 @@ namespace TimetableTool.Desktop.ViewModels
 					{
 					if(SelectedTimetable.IsMultiDirection)
 						{
-						ServiceInstancesSourceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId));
+						ServiceSourceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerRoute(RouteId));
 						}
 					else
 						{
-						ServiceInstancesSourceList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId,SelectedTimetable.ServiceDirectionId));
+						ServiceSourceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerRoute(RouteId,SelectedTimetable.ServiceDirectionId));
 						}
-					ServiceInstancesDestinationList = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(SelectedTimetable.Id));
+					ServiceDestinationList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(SelectedTimetable.Id));
 					}
 				NotifyOfPropertyChange(() => SelectedTimetable);
 				NotifyOfPropertyChange(() => CanEditTimetable);
 				NotifyOfPropertyChange(() => CanDeleteTimetable);
-				NotifyOfPropertyChange(() => CanAddServiceInstance);
-				NotifyOfPropertyChange(() => CanRemoveServiceInstance);
-				NotifyOfPropertyChange(() => CanCopyAllServiceInstances);
+				NotifyOfPropertyChange(() => CanAddService);
+				NotifyOfPropertyChange(() => CanRemoveService);
+				NotifyOfPropertyChange(() => CanCopyAllServices);
 				}
 			}
 
@@ -167,60 +167,60 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
-		private BindableCollection<ServiceInstanceModel> _serviceInstancesSourceList;
+		private BindableCollection<ServiceModel> _servicesSourceList;
 
-		public BindableCollection<ServiceInstanceModel> ServiceInstancesSourceList
+		public BindableCollection<ServiceModel> ServiceSourceList
 			{
-			get { return _serviceInstancesSourceList; }
+			get { return _servicesSourceList; }
 			set
 				{
-				_serviceInstancesSourceList = value;
-				NotifyOfPropertyChange(() => ServiceInstancesSourceList);
-				NotifyOfPropertyChange(() => CanCopyAllServiceInstances);
+				_servicesSourceList = value;
+				NotifyOfPropertyChange(() => ServiceSourceList);
+				NotifyOfPropertyChange(() => CanCopyAllServices);
 				}
 			}
 
-		private ServiceInstanceModel _selectedServiceInstanceSource;
+		private ServiceModel _selectedServiceSource;
 
-		public ServiceInstanceModel SelectedServiceInstanceSource
+		public ServiceModel SelectedServiceSource
 			{
 			get
 				{
-				return _selectedServiceInstanceSource;
+				return _selectedServiceSource;
 				}
 			set
 				{
-				_selectedServiceInstanceSource = value;
-				NotifyOfPropertyChange(() => SelectedServiceInstanceSource);
-				NotifyOfPropertyChange(() => CanAddServiceInstance);
+				_selectedServiceSource = value;
+				NotifyOfPropertyChange(() => SelectedServiceSource);
+				NotifyOfPropertyChange(() => CanAddService);
 				NotifyOfPropertyChange(() => CopyStatus);
 				}
 			}
 
 
-		private BindableCollection<ServiceInstanceModel> _serviceInstancesDestinationList;
+		private BindableCollection<ServiceModel> _serviceDestinationList;
 
-		public BindableCollection<ServiceInstanceModel> ServiceInstancesDestinationList
+		public BindableCollection<ServiceModel> ServiceDestinationList
 			{
-			get { return _serviceInstancesDestinationList; }
+			get { return _serviceDestinationList; }
 			set
 				{
-				_serviceInstancesDestinationList = value;
-				NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+				_serviceDestinationList = value;
+				NotifyOfPropertyChange(() => ServiceDestinationList);
 				NotifyOfPropertyChange(() => CopyStatus);
 				}
 			}
 
-		private ServiceInstanceModel _selectedServiceInstanceDestination;
+		private ServiceModel _selectedServiceDestination;
 
-		public ServiceInstanceModel SelectedServiceInstanceDestination
+		public ServiceModel SelectedServiceDestination
 			{
-			get { return _selectedServiceInstanceDestination; }
+			get { return _selectedServiceDestination; }
 			set
 				{
-				_selectedServiceInstanceDestination = value;
-				NotifyOfPropertyChange(() => SelectedServiceInstanceDestination);
-				NotifyOfPropertyChange(() => CanRemoveServiceInstance);
+				_selectedServiceDestination = value;
+				NotifyOfPropertyChange(() => SelectedServiceDestination);
+				NotifyOfPropertyChange(() => CanRemoveService);
 				}
 			}
 
@@ -229,17 +229,17 @@ namespace TimetableTool.Desktop.ViewModels
 			get
 				{
 				var output="";
-				if(ServiceInstancesSourceList!=null)
+				if(ServiceSourceList!=null)
 					{
-					output += $"Nr of instances available: {ServiceInstancesSourceList.Count}. ";
+					output += $"Nr of services available: {ServiceSourceList.Count}. ";
 					}
 				else
 					{
-					output +="No instances available to move. ";
+					output +="No services available to move. ";
 					}
-				if(ServiceInstancesDestinationList!=null)
+				if(ServiceDestinationList!=null)
 					{
-					output += $"Nr of services in timetable: {ServiceInstancesDestinationList.Count}.";
+					output += $"Nr of services in timetable: {ServiceDestinationList.Count}.";
 					}
 				else
 					{
@@ -304,6 +304,8 @@ namespace TimetableTool.Desktop.ViewModels
 		public void DeleteTimetable()
 			{
 			TimetableDataAccess.DeleteTimetable(SelectedTimetable.Id);
+			ServiceSourceList.Clear();
+			ServiceDestinationList.Clear();
 			TimetablesUI.TimetableList.Remove(SelectedTimetable);
 			TimetableId = 0;
 			}
@@ -318,7 +320,6 @@ namespace TimetableTool.Desktop.ViewModels
 							 && (IsMultiDirection || ServiceDirectionId > 0);
 				}
 			}
-
 
 		public bool CanSelectServiceDirection
 			{
@@ -377,53 +378,53 @@ namespace TimetableTool.Desktop.ViewModels
 			ServiceDirection = null;
 			}
 
-		public bool CanAddServiceInstance
+		public bool CanAddService
 			{
 			get
 				{
-				return SelectedServiceInstanceSource != null && SelectedTimetable != null;
+				return SelectedServiceSource != null && SelectedTimetable != null;
 				}
 			}
 
-		public void AddServiceInstance()
+		public void AddService()
 			{
-			ServiceInstancesDestinationList.Add(SelectedServiceInstanceSource);
-			ConnectTtSiDataAccess.InsertConnection(SelectedServiceInstanceSource.Id, SelectedTimetable.Id);
-			NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+			ServiceDestinationList.Add(SelectedServiceSource);
+			ConnectTtSiDataAccess.InsertConnection(SelectedServiceSource.Id, SelectedTimetable.Id);
+			NotifyOfPropertyChange(() => ServiceDestinationList);
 			NotifyOfPropertyChange(()=>CopyStatus);
 			}
 
-		public bool CanRemoveServiceInstance
+		public bool CanRemoveService
 			{
 			get
 				{
-				return SelectedServiceInstanceDestination != null && SelectedTimetable != null;
+				return SelectedServiceDestination != null && SelectedTimetable != null;
 				}
 			}
 
-		public void RemoveServiceInstance()
+		public void RemoveService()
 			{
-			ConnectTtSiDataAccess.DeleteConnection(SelectedServiceInstanceDestination.Id, SelectedTimetable.Id);
-			ServiceInstancesDestinationList.Remove(SelectedServiceInstanceDestination);
-			NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+			ConnectTtSiDataAccess.DeleteConnection(SelectedServiceDestination.Id, SelectedTimetable.Id);
+			ServiceDestinationList.Remove(SelectedServiceDestination);
+			NotifyOfPropertyChange(() => ServiceDestinationList);
 			NotifyOfPropertyChange(()=>CopyStatus);
 			}
 
 
-		public bool CanCopyAllServiceInstances 
+		public bool CanCopyAllServices 
 			{ 
 			get
 				{
-				return ServiceInstancesSourceList!=null && SelectedTimetable!=null;
+				return ServiceSourceList!=null && SelectedTimetable!=null;
 				}
 			}
-		public void CopyAllServiceInstances()
+		public void CopyAllServices()
 			{
-			foreach(var item in ServiceInstancesSourceList)
+			foreach(var item in ServiceSourceList)
 				{
-				ServiceInstancesDestinationList.Add(item);
+				ServiceDestinationList.Add(item);
 				ConnectTtSiDataAccess.InsertConnection(item.Id, SelectedTimetable.Id);
-				NotifyOfPropertyChange(() => ServiceInstancesDestinationList);
+				NotifyOfPropertyChange(() => ServiceDestinationList);
 				NotifyOfPropertyChange(()=>CopyStatus);
 				}
 			}

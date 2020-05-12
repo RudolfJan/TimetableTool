@@ -1,13 +1,8 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
-using System.Collections.Specialized;
 using System.Linq;
 using TimetableTool.Desktop.Models;
-using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using TimetableTool.Desktop.Views;
 
 namespace TimetableTool.Desktop.ViewModels
@@ -94,29 +89,28 @@ namespace TimetableTool.Desktop.ViewModels
 			PrepareDataSet();
 			TimeGraphUIChanged++;
 			TimeGraphUI.Refresh();
-			// NotifyOfPropertyChange(()=>LocationList);
 			}
 
 		private void SetPeriod()
 			{			
-			var ServiceInstances = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(TimetableId));
-			GraphCanvasSettings.StartTime = (ServiceInstances.Min(x => x.StartTime)/60)*60;
-			GraphCanvasSettings.EndTime=(ServiceInstances.Max(x => x.EndTime)/60+1)*60;
+			var Services = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(TimetableId));
+			GraphCanvasSettings.StartTime = (Services.Min(x => x.StartTime)/60)*60;
+			GraphCanvasSettings.EndTime=(Services.Max(x => x.EndTime)/60+1)*60;
 			}
 
 
 		private void PrepareDataSet()
 			{
 			TimeGraphUI= new BindableCollection<TimeGraphUIModel>();
-			var serviceInstances = new BindableCollection<ServiceInstanceModel>(ServiceInstanceDataAccess.GetServiceInstancesPerTimetable(TimetableId));
-			foreach (var instance in serviceInstances)
+			var serviceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(TimetableId));
+			foreach (var service in serviceList)
 				{
 				var item= new TimeGraphUIModel();
-				var serviceId = instance.ServiceId;
-				item.TimeEventList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(serviceId));
-				item.ServiceInstanceName = instance.ServiceInstanceName;
-				item.ServiceInstanceAbbreviation = instance.ServiceInstanceAbbreviation;
-				int actualTime = instance.StartTime;
+				var serviceTemplateId = service.ServiceTemplateId;
+				item.TimeEventList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerServiceTemplate(serviceTemplateId));
+				item.ServiceName = service.ServiceName;
+				item.ServiceAbbreviation = service.ServiceAbbreviation;
+				int actualTime = service.StartTime;
 				foreach (var fullTimeEvent in item.TimeEventList)
 					{
 					actualTime += fullTimeEvent.ArrivalTime;

@@ -19,8 +19,8 @@ namespace TimetableTool.Desktop.ViewModels
     public RouteUIModel RoutesUI { get; set; }
     private RouteModel _selectedRoute;
     private string _routeDescription;
-    private System.String _routeName;
-    private System.String _routeAbbrev;
+    private string _routeName;
+    private string _routeAbbrev;
 
     public BindableCollection<RouteModel> RouteList { get; set; }
     public string RouteDescription
@@ -187,9 +187,9 @@ namespace TimetableTool.Desktop.ViewModels
       output += exportRoute.ExportRouteTable();
       output += exportRoute.ExportLocationsTable();
       output += exportRoute.ExportServiceDirectionTable();
-      output += exportRoute.ExportServiceTable();
+      output += exportRoute.ExportServiceTemplateTable();
       output += exportRoute.ExportTimeEventsTable();
-      output += exportRoute.ExportServiceInstanceTable();
+      output += exportRoute.ExportServiceTable();
       output += exportRoute.ExportTimetableTable();
       output += exportRoute.ExportConnectTiSi();
       var path= $"{Settings.DataPath}{SelectedRoute.RouteAbbreviation}-{DateTime.UtcNow.ToShortDateString()}.ttt";

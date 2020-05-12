@@ -13,52 +13,52 @@
 "Location","22","Dunster","Dns","2","100","2"
 "Location","23","Minehead","Mnh","4","110","2"
 "ServiceDirections","Id","ServiceDirectionName","ServiceDirectionAbbreviation","RouteId","IsDescending"
-"ServiceDirection","9","Norton-Fitzwarren to Minehead","East","2","False"
-"ServiceDirection","10","Minehead to Norton Fitzwarren","West","2","True"
-"Services","Id","ServiceName","ServiceAbbreviation","ServiceDescription","ServiceType","ServiceDirectionId","CalculatedDuration","RouteId"
-"Service","28","Coach set A, all stops West","WestA","Loco: class 47
+"ServiceDirection","4","Norton-Fitzwarren to Minehead","East","2","False"
+"ServiceDirection","5","Minehead to Norton Fitzwarren","West","2","True"
+"ServiceTemplates","Id","ServiceTemplateName","ServiceTemplateAbbreviation","ServiceTemplateDescription","ServiceType","ServiceDirectionId","CalculatedDuration","RouteId"
+"ServiceTemplate","28","Coach set A, all stops West","WestA","Loco: class 47
 Coachset 5x Crimson and cream
-All stops","passenger","9","70","2"
-"Service","29","Norton-Fizwarren-Minehead Limiited stops","WestCLX","Coack set C: Mixed Cocolate/Crimson
+All stops","passenger","4","70","2"
+"ServiceTemplate","29","Norton-Fizwarren-Minehead Limiited stops","WestCLX","Coack set C: Mixed Cocolate/Crimson
 Class 09
 Limited stops
-Service starts at Norton Fitzwarren Yard","passenger","9","84","2"
-"Service","30","Coach set B, all stops West","WestB","Class 47
+Service starts at Norton Fitzwarren Yard","passenger","4","84","2"
+"ServiceTemplate","30","Coach set B, all stops West","WestB","Class 47
 Chocolate and Cream Mk1s
-All stops","passenger","9","92","2"
-"Service","31","Coach set C, limited stops West","WestCL","Class 09
+All stops","passenger","4","92","2"
+"ServiceTemplate","31","Coach set C, limited stops West","WestCL","Class 09
 Coach set mixed
 Limited stops
-Bishops Lydeart-Minehead","passenger","9","70","2"
-"Service","32","Coach set B, West last train","WestB2","Class 47
+Bishops Lydeart-Minehead","passenger","4","70","2"
+"ServiceTemplate","32","Coach set B, West last train","WestB2","Class 47
 Coaches Crimson and Cream
 West
-All stops","pasenger","9","68","2"
-"Service","33","Coach set B, all stops East","EastB","Class 47 engine
+All stops","pasenger","4","68","2"
+"ServiceTemplate","33","Coach set B, all stops East","EastB","Class 47 engine
 Coach st B, Chocolate and cream
 All stops
-Minehead to Bishops Lydeart","passenger","10","77","2"
-"Service","34","Coach set A, all stops East","EastA","Class 47
+Minehead to Bishops Lydeart","passenger","5","77","2"
+"ServiceTemplate","34","Coach set A, all stops East","EastA","Class 47
 Coach set A, Crimsom and cream
 All stops
-Minehead to Bishops Lydeart","passenger","10","75","2"
-"Service","35","Coach set C, limited stops East","EastCL","Class 9
+Minehead to Bishops Lydeart","passenger","5","75","2"
+"ServiceTemplate","35","Coach set C, limited stops East","EastCL","Class 9
 Coach set mixed
 limited stops
-Minehead to Bishops Lydeart","passenger","10","74","2"
-"Service","36","Coach set B, all stops East 2","EastB2","Class 47
+Minehead to Bishops Lydeart","passenger","5","74","2"
+"ServiceTemplate","36","Coach set B, all stops East 2","EastB2","Class 47
 Coach set chocolate/cream
 All stops
 Minehead to Bishops Lydeart
-Fast drive, 5 minutes shorter than EastB","passenger","10","74","2"
-"Service","37","Coach set A, all stops, East 2","EastA2","Class 47
+Fast drive, 5 minutes shorter than EastB","passenger","5","74","2"
+"ServiceTemplate","37","Coach set A, all stops, East 2","EastA2","Class 47
 Coach set Crimson and cream
 All stops
-Minehead to Bishops Lydeart","passenger","10","72","2"
-"Service","38","Minehead-Norton-Fitzwarren, Limitd stops","EastCLX","Class 09
+Minehead to Bishops Lydeart","passenger","5","72","2"
+"ServiceTemplate","38","Minehead-Norton-Fitzwarren, Limitd stops","EastCLX","Class 09
 Mixed coaches
 Limited stops
-Minehead to Norton Fitzwarren","passenger","10","91","2"
+Minehead to Norton Fitzwarren","passenger","5","91","2"
 "TimeEvents","Id","EventType","ArrivalTime","WaitTime","ServiceId","LocationId","Order"
 "TimeEvent","28","S","0","0","28","14","20"
 "TimeEvent","28","H","12","0","28","15","30"
@@ -156,47 +156,45 @@ Minehead to Norton Fitzwarren","passenger","10","91","2"
 "TimeEvent","38","H","22","0","38","15","90"
 "TimeEvent","38","H","12","0","38","14","100"
 "TimeEvent","38","E","8","0","38","13","110"
-"ServiceInstances","Id","ServiceInstanceName","ServiceInstanceAbbreviation","StartTime","EndTime","ServiceId"
-"ServiceInstance","33","West 1 diesel","W1D","615","699","28"
-"ServiceInstance","34","West 2 shunter","W2S","645","748","29"
-"ServiceInstance","35","West 3 diesel","W3D","735","833","30"
-"ServiceInstance","36","West 5 shunter","W5S","910","984","31"
-"ServiceInstance","37","West 4 diesel","W4D","855","939","28"
-"ServiceInstance","38","West 6 diesel","W6D","975","1065","32"
-"ServiceInstance","39","East 1 diesel","E1D","615","702","33"
-"ServiceInstance","40","East 2 diesel","E2D","750","825","34"
-"ServiceInstance","41","East 3 shunter","E3S","800","879","35"
-"ServiceInstance","42","East 4 diesel","E4D","855","937","36"
-"ServiceInstance","43","East 5 diesel","E5D","984","1056","37"
-"ServiceInstance","44","East 6 shunter","E6S","1035","1128","38"
+"Services","Id","ServiceName","ServiceAbbreviation","StartTime","EndTime","ServiceTemplateId"
+"Service","33","West 1 diesel","W1D","615","699","28"
+"Service","34","West 2 shunter","W2S","645","748","29"
+"Service","35","West 3 diesel","W3D","735","833","30"
+"Service","36","West 5 shunter","W5S","910","984","31"
+"Service","37","West 4 diesel","W4D","855","939","28"
+"Service","38","West 6 diesel","W6D","975","1065","32"
+"Service","39","East 1 diesel","E1D","615","702","33"
+"Service","40","East 2 diesel","E2D","750","825","34"
+"Service","41","East 3 shunter","E3S","800","879","35"
+"Service","42","East 4 diesel","E4D","855","937","36"
+"Service","43","East 5 diesel","E5D","984","1056","37"
+"Service","44","East 6 shunter","E6S","1035","1128","38"
 "Timetables","Id","TimetableName","TimetableAbbreviation","TimetableDescription","IsMultiDirection","ServiceDirectionId","RouteId"
-"Timetable","3","Servicemode Westbound","SM-West","Servicemode westbound trains WSR","False","9","2"
-"Timetable","4","Servicemode Eastbound","SM-East","Servicemode eastbount WSR","False","10","2"
-"Timetable","5","All Services","SM-All","All services","True","-1","2"
-"Timetable","6","Test","test","Test","False","9","2"
-"ConnectTtSis","Id","TimetableId","ServiceInstanceId"
-"ConnectTtSi","41","3","33"
-"ConnectTtSi","42","3","34"
-"ConnectTtSi","43","3","35"
-"ConnectTtSi","44","3","36"
-"ConnectTtSi","45","3","37"
-"ConnectTtSi","46","3","38"
-"ConnectTtSi","47","4","39"
-"ConnectTtSi","48","4","40"
-"ConnectTtSi","49","4","41"
-"ConnectTtSi","50","4","42"
-"ConnectTtSi","51","4","43"
-"ConnectTtSi","52","4","44"
-"ConnectTtSi","53","5","33"
-"ConnectTtSi","54","5","34"
-"ConnectTtSi","55","5","35"
-"ConnectTtSi","56","5","36"
-"ConnectTtSi","57","5","37"
-"ConnectTtSi","58","5","38"
-"ConnectTtSi","59","5","39"
-"ConnectTtSi","60","5","40"
-"ConnectTtSi","61","5","41"
-"ConnectTtSi","62","5","42"
-"ConnectTtSi","63","5","43"
-"ConnectTtSi","64","5","44"
-"ConnectTtSi","65","6","35"
+"Timetable","4","Servicemode Westbound","SM-West","Servicemode westbound trains WSR","False","4","2"
+"Timetable","5","Servicemode Eastbound","SM-East","Servicemode eastbount WSR","False","5","2"
+"Timetable","6","All Services","SM-All","All services","True","0","2"
+"ConnectTtSis","Id","TimetableId","ServiceId"
+"ConnectTtSi","65","4","33"
+"ConnectTtSi","66","4","34"
+"ConnectTtSi","67","4","35"
+"ConnectTtSi","68","4","36"
+"ConnectTtSi","69","4","37"
+"ConnectTtSi","70","4","38"
+"ConnectTtSi","71","5","39"
+"ConnectTtSi","72","5","40"
+"ConnectTtSi","73","5","41"
+"ConnectTtSi","74","5","42"
+"ConnectTtSi","75","5","43"
+"ConnectTtSi","76","5","44"
+"ConnectTtSi","77","6","33"
+"ConnectTtSi","78","6","34"
+"ConnectTtSi","79","6","35"
+"ConnectTtSi","80","6","36"
+"ConnectTtSi","81","6","37"
+"ConnectTtSi","82","6","38"
+"ConnectTtSi","83","6","39"
+"ConnectTtSi","84","6","40"
+"ConnectTtSi","85","6","41"
+"ConnectTtSi","86","6","42"
+"ConnectTtSi","87","6","43"
+"ConnectTtSi","88","6","44"
