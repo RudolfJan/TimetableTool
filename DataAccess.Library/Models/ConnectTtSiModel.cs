@@ -8,6 +8,6 @@ namespace DataAccess.Library.Models
 		{
 		public int Id { get; set; }
 		public int TimetableId { get; set; }
-		public int ServiceInstanceId { get; set; }	
+		public int ServiceId { get; set; }	
 		}
 	}

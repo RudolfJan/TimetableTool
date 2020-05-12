@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace DataAccess.Library.Models
 	{
@@ -11,7 +8,7 @@ namespace DataAccess.Library.Models
 		public int	TimetableId { get;set;}
 		public int RouteId	{get;set; }
 		public bool IsDescending {get;set;} 
-		public List<List<ServiceInstanceTimingModel>> TimingList { get;set; } = new List<List<ServiceInstanceTimingModel>>();
+		public List<List<ServiceTimingModel>> TimingList { get;set; } = new List<List<ServiceTimingModel>>();
 		public string[][] Matrix { get; set; }
 		}
 	}

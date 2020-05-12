@@ -191,14 +191,7 @@ namespace TimetableTool.Desktop.ViewModels
 			}
 		public void CreateDatabase()
 			{
-			// TODO apply DRY to this code!
-			var databaseExists=SQLiteData.InitDatabase(Settings.ConnectionString,Settings.DatabasePath,Settings.UseDemoData);
-			Settings.DatabaseVersion = VersionDataAccess.GetCurrentDatabaseVersion();
-			if (Settings.UseDemoData && databaseExists==0)
-				{
-				var importHH= new ImportRouteDataAccess("SQL\\HH-testset.ttt");
-				var importWSR= new ImportRouteDataAccess("SQL\\WSR-testset.ttt");
-				}
+			DatabaseSupport.DatabaseUserInitialization();
 			}
 		}
 	}

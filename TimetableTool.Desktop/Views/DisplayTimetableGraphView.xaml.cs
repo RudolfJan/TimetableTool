@@ -284,7 +284,7 @@ namespace TimetableTool.Desktop.Views
 			buttonList.Clear();
 
 
-			foreach (var instance in TimeGraphUI)
+			foreach (var service in TimeGraphUI)
 				{
 				var line = new Polyline();
 				line.Margin = new Thickness(margin);
@@ -293,19 +293,19 @@ namespace TimetableTool.Desktop.Views
 				line.StrokeThickness = 0.8;
 				line.Stroke = Brushes.Black;
 
-				var buttonPoint = instance.DataLine[0];
+				var buttonPoint = service.DataLine[0];
 				System.Windows.Point buttonLocation = new System.Windows.Point
 					{
 					X = buttonPoint.X * gridWidth,
 					Y = (buttonPoint.Y-firstHour*60)*height/(hours*60)
 					}; // this is a bit tricky. Point is defined at more places, and we need double precision here to be consistent
 
-				var button = GetButton(instance.ServiceInstanceAbbreviation, buttonLocation.X,
+				var button = GetButton(service.ServiceAbbreviation, buttonLocation.X,
 					buttonLocation.Y);
 				buttonList.Add(button);
 				GraphCanvas.Children.Add(button);
 
-				foreach (var point in instance.DataLine)
+				foreach (var point in service.DataLine)
 					{
 					System.Windows.Point p = new System.Windows.Point
 						{

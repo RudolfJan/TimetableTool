@@ -1,361 +1,367 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
-using Logging.Library;
-using System;
 using System.Linq;
-using System.Windows.Media.Animation;
-using TimetableTool.Desktop.EventModels;
-using TimetableTool.Desktop.Models;
+using System.Threading.Tasks;
+using TimetableTool.DataAccessLibrary.Logic;
 
 namespace TimetableTool.Desktop.ViewModels
-	{
-	public class ServiceViewModel : Screen
-		{
-		private readonly IEventAggregator _events;
+  {
+  public class ServiceViewModel : Screen
+    {
+    private IWindowManager _windowManager;
 
-		#region properties
-		public ServiceUIModel ServicesUI { get; set; } = new ServiceUIModel();
-		public int RouteId { get; set; } = -1;
-		public int ServiceId { get; set; } = -1;
-		public int ServiceDirectionId { get; set; } = -1;
-		private bool _hasTimeEvents;
-		public bool HasTimeEvents
-			{
-			get
-				{
-				return _hasTimeEvents;
-				}
-			set
-				{
-				_hasTimeEvents = value;
-				NotifyOfPropertyChange(() => HasTimeEvents);
-				}
-			}
+    #region Properties
 
-		private BindableCollection<FullTimeEventModel> _fullTimeEventsList;
-		public BindableCollection<FullTimeEventModel> FullTimeEventsList
-			{
-			get
-				{
-				return _fullTimeEventsList;
-				}
-			set
-				{
-				_fullTimeEventsList = value;
-				NotifyOfPropertyChange(() => FullTimeEventsList);
-				NotifyOfPropertyChange(() => HasTimeEvents);
-				}
-			}
+    private string _startTimeText;
 
-		private ServiceModel _selectedService;
-		private ServiceDirectionModel _selectedServiceDirection;
-		private string _serviceName;
-		private string _serviceDescription;
-		private string _serviceAbbreviation;
-		private string _serviceType;
-		private int _calculatedDuration;
+    private string _endTimeText;
+    private ServiceModel _selectedService;
+    private string _serviceName;
+    private string _serviceAbbreviation;
+    private ServiceTemplateModel _serviceTemplate;
+    private ServiceTemplateModel _selectedServiceTemplate;
 
-		public ServiceModel SelectedService
-			{
-			get { return _selectedService; }
-			set
-				{
-				_selectedService = value;
-				ServiceSelectedEvent serviceSelectedEvent = new ServiceSelectedEvent();
-				serviceSelectedEvent.SelectedService = _selectedService;
-				_events.PublishOnUIThreadAsync(serviceSelectedEvent);
-				if (SelectedService != null)
-					{
-					FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
-					}
-				else
-					{
-					FullTimeEventsList = null;
-					}
-				NotifyOfPropertyChange(() => CanLoadTimeEvents);
-				NotifyOfPropertyChange(() => SelectedService);
-				NotifyOfPropertyChange(() => CanEditService);
-				NotifyOfPropertyChange(() => CanDeleteService);
-				NotifyOfPropertyChange(() => CanLoadTimeEvents);
-				}
-			}
+    public int RouteId { get; set; }
+    public int ServiceId { get; set; }
+    public string RouteName { get; set; }
+    public string TimetableName { get; set; }
 
-		public ServiceDirectionModel SelectedServiceDirection
-			{
-			get { return _selectedServiceDirection; }
-			set
-				{
-				_selectedServiceDirection = value;
-				NotifyOfPropertyChange(() => SelectedServiceDirection);
-				NotifyOfPropertyChange(() => CanSelectServiceDirection);
-				}
-			}
+    public string ServiceName
+      {
+      get
+        {
+        return _serviceName;
+        }
+      set
+        {
+        _serviceName = value;
+        NotifyOfPropertyChange(()=> ServiceName);
+        NotifyOfPropertyChange(() => CanSaveService);
+        }
+      }
 
-		private BindableCollection<ServiceDirectionModel> _serviceDirectionList;
-		public BindableCollection<ServiceDirectionModel> ServiceDirectionList
-			{
-			get
-				{
-				return _serviceDirectionList;
-				}
-			set
-				{
-				_serviceDirectionList = value;
-				NotifyOfPropertyChange(() => ServiceDirectionList);
-				NotifyOfPropertyChange(() => CanSelectServiceDirection);
-				}
-			}
+    public string ServiceAbbreviation
+      {
+      get
+        {
+        return _serviceAbbreviation;
+        }
+      set
+        {
+        _serviceAbbreviation = value;
+        NotifyOfPropertyChange(() => ServiceAbbreviation);
+        NotifyOfPropertyChange(() => CanSaveService);
+        }
+      }
 
-		public string ServiceName
-			{
-			get
-				{
-				return _serviceName;
-				}
-			set
-				{
-				_serviceName = value;
-				NotifyOfPropertyChange(() => ServiceName);
-				NotifyOfPropertyChange(() => CanSaveService);
-				}
-			}
+    public BindableCollection<ServiceTemplateModel> ServiceTemplateList { get; set; }
+    public BindableCollection<ServiceModel> ServiceList { get; set; }
 
-		private string _serviceDirectionName;
+    public ServiceModel SelectedService
+      {
+      get
+        {
+        return _selectedService;
+        }
+      set
+        {
+        _selectedService = value;
+        ServiceId = 0;
+        NotifyOfPropertyChange(() => CanEditService);
+        NotifyOfPropertyChange(() => CanDeleteService);
+        NotifyOfPropertyChange(() => CanRepeat);
+        }
+      }
 
-		public string ServiceDirectionName
-			{
-			get { return _serviceDirectionName; }
-			set
-				{
-				_serviceDirectionName = value;
-				NotifyOfPropertyChange(() => ServiceDirectionName);
-				}
-			}
+    public ServiceTemplateModel SelectedServiceTemplate
+      {
+      get
+        {
+        return _selectedServiceTemplate;
+        }
+      set
+        {
+        _selectedServiceTemplate = value;
+        NotifyOfPropertyChange(()=>CanSelectServiceTemplate);
+        }
+      }
 
-		public string ServiceDescription
-			{
-			get
-				{
-				return _serviceDescription;
-				}
-			set
-				{
-				_serviceDescription = value;
-				NotifyOfPropertyChange(() => ServiceDescription);
-				NotifyOfPropertyChange(() => CanSaveService);
-				}
-			}
+    public ServiceTemplateModel ServiceTemplate
+      {
+      get
+        {
+        return _serviceTemplate;
+        }
+      set
+        {
+        _serviceTemplate = value;
+        NotifyOfPropertyChange(() => ServiceTemplate);
+        NotifyOfPropertyChange(() => CanSaveService);
+        NotifyOfPropertyChange(() => CanAutoFill);
+        }
+      }
 
-		public string ServiceAbbreviation
-			{
-			get
-				{
-				return _serviceAbbreviation;
-				}
-			set
-				{
-				_serviceAbbreviation = value;
-				NotifyOfPropertyChange(() => ServiceAbbreviation);
-				NotifyOfPropertyChange(() => CanSaveService);
-				}
-			}
+    public string StartTimeText
+      {
+      get { return _startTimeText; }
+      set
+        {
+        _startTimeText = value;
+        NotifyOfPropertyChange(() => StartTimeText);
+        NotifyOfPropertyChange(() => CanSaveService);
+        NotifyOfPropertyChange(() => CanAutoFill);
+        }
+      }
 
-		public string ServiceType
-			{
-			get
-				{
-				return _serviceType;
-				}
-			set
-				{
-				_serviceType = value;
-				NotifyOfPropertyChange(() => ServiceType);
-				NotifyOfPropertyChange(() => CanSaveService);
-				}
-			}
+    public string EndTimeText
+      {
+      get { return _endTimeText; }
+      set
+        {
+        _endTimeText = value;
+        NotifyOfPropertyChange(() => EndTimeText);
+        NotifyOfPropertyChange(() => CanSaveService);
+        }
+      }
 
-		public int CalculatedDuration
-			{
-			get
-				{
-				return _calculatedDuration;
-				}
-			set
-				{
-				_calculatedDuration = value;
-				NotifyOfPropertyChange(() => CalculatedDuration);
-				NotifyOfPropertyChange(() => CanSaveService);
-				}
-			}
+    public bool CanAutoFill
+      {
+      get
+        {
+        return ServiceTemplate!=null && StartTimeText?.Length==5;
+        }
+      }
 
-		#endregion
+    private int _digits=3;
+    public int Digits
+      {
+      get { return _digits; }
+      set
+        {
+        _digits = value;
+        NotifyOfPropertyChange(()=>Digits);
+        NotifyOfPropertyChange(()=>CanRepeat);
+        }
+      }
+     
+    private string _separator="-";
 
-		public ServiceViewModel(IEventAggregator events)
-			{
-			_events = events;
-			}
+    public string Separator
+      {
+      get { return _separator; }
+      set
+        {
+        _separator = value;
+        NotifyOfPropertyChange(()=> Separator);
+        NotifyOfPropertyChange(()=>CanRepeat);
+        }
+      }
 
-		protected override async void OnViewLoaded(object view)
-			{
-			base.OnViewLoaded(view);
-			RouteModel rm = RouteDataAccess.GetRouteById(RouteId);
-			ServicesUI.RouteName = rm.RouteName;
-			RouteId = rm.Id;
-			ServicesUI.ServiceList = new BindableCollection<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
-			ServiceDirectionList = new BindableCollection<ServiceDirectionModel>(ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId));
-			NotifyOfPropertyChange(() => ServicesUI);
-			NotifyOfPropertyChange(() => ServiceDirectionList);
-			}
+    private int _numberStart=1;
 
-		public bool CanEditService
-			{
-			get { return SelectedService != null && ServiceId <= 0; }
-			}
+    public int NumberStart
+      {
+      get { return _numberStart; }
+      set
+        {
+        _numberStart = value;
+        NotifyOfPropertyChange(()=> NumberStart);
+        NotifyOfPropertyChange(()=>CanRepeat);
+
+        }
+      }
+
+    private int _numberOffset=1;
+    public int NumberOffset
+      {
+      get { return _numberOffset; }
+      set
+        {
+        _numberOffset = value;
+        NotifyOfPropertyChange(()=>NumberOffset);
+        NotifyOfPropertyChange(()=>CanRepeat);
+        }
+      }
+
+    private int _timeOffset;
+
+    public int TimeOffset
+      {
+      get { return _timeOffset; }
+      set
+        {
+        _timeOffset = value; 
+        NotifyOfPropertyChange(()=>TimeOffset);
+        NotifyOfPropertyChange(()=>CanRepeat);
+        }
+      }
+
+    private int _repeatCount=1;
+
+    public int RepeatCount
+      {
+      get { return _repeatCount; }
+      set
+        {
+        _repeatCount = value;
+        NotifyOfPropertyChange(()=>RepeatCount);
+        NotifyOfPropertyChange(()=>CanRepeat);
+        }
+      }
+
+    public bool CanRepeat {
+      get
+        {
+        return TimeOffset>0 && RepeatCount>0 && SelectedService!=null;
+        }
+      }
+
+    #endregion
+    #region Initialize
+
+    public ServiceViewModel(IWindowManager windowManager)
+      {
+      _windowManager = windowManager;
+      }
+    protected override async void OnViewLoaded(object view)
+      {
+      base.OnViewLoaded(view);
+      RouteModel rm = RouteDataAccess.GetRouteById(RouteId);
+      RouteName = rm.RouteName;
+      ServiceTemplateList = new BindableCollection<ServiceTemplateModel>(ServiceTemplateDataAccess.GetServiceTemplatesPerRoute(RouteId));
+      ServiceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerRoute(RouteId).OrderBy(x=>x.StartTime));
+      NotifyOfPropertyChange(() => ServiceTemplateList);
+      NotifyOfPropertyChange(() => ServiceList);
+      NotifyOfPropertyChange(() => RouteName);
+      NotifyOfPropertyChange(() => TimetableName);
+      }
+
+    #endregion
+
+    public bool CanEditService
+      {
+      get { return SelectedService != null && ServiceId <= 0; }
+      }
+
+    public bool CanDeleteService
+      {
+      get { return SelectedService != null  && Settings.DatabaseVersion>=2; }
+      }
+
+    public void DeleteService()
+      {
+      ServicesDataAccess.DeleteService(SelectedService.Id);
+      ServiceList.Remove(SelectedService);
+      ServiceId = 0;
+      }
+
+    public void SelectServiceTemplate()
+      {
+      ServiceTemplate = SelectedServiceTemplate;
+      }
+
+    public void AutoFill()
+      {
+      ServiceName = ServiceTemplate.ServiceTemplateName;
+      ServiceAbbreviation = ServiceTemplate.ServiceTemplateAbbreviation;
+      int StartTime = TimeConverters.TimeToMinutes(StartTimeText);
+      EndTimeText = TimeConverters.MinutesToString(StartTime + ServiceTemplate.CalculatedDuration);
+      NotifyOfPropertyChange(()=> CanSaveService);
+      }
+
+    public async Task Repeat()
+      {
+      ServiceId = SelectedService.Id;
+      ServiceTemplate = ServiceTemplateDataAccess.GetServiceTemplateById(SelectedService.ServiceTemplateId);
+      ReviewServicesViewModel reviewVM = IoC.Get<ReviewServicesViewModel>();
+
+      for (int i = 0; i < RepeatCount; i++)
+        {
+        var newService=new ServiceModel();
+        newService.ServiceTemplateId = ServiceTemplate.Id;
+        newService.ServiceName = SelectedService.ServiceName;
+        newService.StartTime = SelectedService.StartTime + (i+1) * TimeOffset;
+        newService.EndTime=SelectedService.EndTime+  (i+1) * TimeOffset;
+        int serviceNumber = NumberStart+ i * NumberOffset;
+        string offset = serviceNumber.ToString($"D{Digits}");
+        newService.ServiceAbbreviation= $"{ServiceTemplate.ServiceTemplateAbbreviation}{Separator}{offset}";
+        reviewVM.CreatedServices.Add(newService);
+        }
+
+      reviewVM.CreatedServices = new BindableCollection<ServiceModel>(reviewVM.CreatedServices.OrderBy(x => x.StartTime));
+      await _windowManager.ShowDialogAsync(reviewVM);
+      if (reviewVM.IsSaved)
+        {
+        ServiceList = new BindableCollection<ServiceModel>(ServicesDataAccess
+          .GetServicesPerRoute(RouteId).OrderBy(x => x.StartTime));
+        NotifyOfPropertyChange(() => ServiceList);
+        }
+      NotifyOfPropertyChange(() => CanRepeat);
+      }
+
+    public void EditService()
+      {
+      ServiceName = SelectedService.ServiceName;
+      ServiceAbbreviation = SelectedService.ServiceAbbreviation;
+      ServiceTemplate = ServiceTemplateDataAccess.GetServiceTemplateById(SelectedService.ServiceTemplateId);
+      ServiceId = SelectedService.Id;
+      StartTimeText =TimeConverters.MinutesToString(SelectedService.StartTime);
+      EndTimeText = TimeConverters.MinutesToString(SelectedService.EndTime);
+      NotifyOfPropertyChange(() => CanEditService);
+      NotifyOfPropertyChange(() => CanSaveService);
+      NotifyOfPropertyChange(() => CanRepeat);
+      }
+
+    public bool CanSelectServiceTemplate
+      {
+      get { return SelectedServiceTemplate != null; }
+      }
+
+    public bool CanSaveService
+      {
+      get
+        {
+        return ServiceTemplate != null
+               && ServiceName?.Length > 0
+               && ServiceAbbreviation?.Length > 0;
+        }
+      }
 
 
-		public void EditService()
-			{
-			ServiceName = SelectedService.ServiceName;
-			ServiceAbbreviation = SelectedService.ServiceAbbreviation;
-			ServiceType = SelectedService.ServiceType;
-			ServiceDescription = SelectedService.ServiceDescription;
-			CalculatedDuration = SelectedService.CalculatedDuration;
-			ServiceDirectionId = SelectedService.ServiceDirectionId;
-			SelectedServiceDirection = ServiceDirectionDataAccess.GetServiceDirectionById(ServiceDirectionId);
-			ServiceDirectionName = SelectedServiceDirection.ServiceDirectionName;
-			ServiceId = SelectedService.Id;
-			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
-			NotifyOfPropertyChange(() => CanLoadTimeEvents);
-			NotifyOfPropertyChange(() => CanEditService);
-			NotifyOfPropertyChange(() => CanDeleteService);
 
-			}
+    public void SaveService()
+      {
+      ServiceModel newService = new ServiceModel();
+      newService.ServiceName = ServiceName;
+      newService.ServiceAbbreviation = ServiceAbbreviation;
+      newService.ServiceTemplateId = ServiceTemplate.Id;
+      newService.StartTime = TimeConverters.TimeToMinutes(StartTimeText);
+      newService.EndTime = TimeConverters.TimeToMinutes(EndTimeText);
+      if (ServiceId <= 0)
+        {
+        ServicesDataAccess.InsertService(newService);
+        }
+      else
+        {
+        newService.Id = ServiceId;
+        ServicesDataAccess.UpdateService(newService);
+        }
+      ServiceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerRoute(RouteId).OrderBy(x=>x.StartTime));
+      ClearService();
+      NotifyOfPropertyChange(() => ServiceList);
+      }
 
-		public bool CanDeleteService
-			{
-			get { return SelectedService != null && Settings.DatabaseVersion >= 2; }
-			}
-		public bool CanSaveService
-			{
-			get
-				{
-				return ServiceAbbreviation?.Length > 0
-							 && ServiceName?.Length > 0
-							 && ServiceDescription?.Length > 0
-							 && ServiceType?.Length > 0
-							 && ServiceDirectionId > 0;
-				}
-			}
 
-		public bool CanSelectServiceDirection
-			{
-			get
-				{
-				return SelectedServiceDirection != null;
-				}
-			}
-
-		public void SelectServiceDirection()
-			{
-			ServiceDirectionId = SelectedServiceDirection.Id;
-			ServiceDirectionName = SelectedServiceDirection.ServiceDirectionName;
-			NotifyOfPropertyChange(() => CanSaveService);
-			NotifyOfPropertyChange(() => ServiceDirectionName);
-			}
-
-		public void SaveService()
-			{
-			var newService = new ServiceModel();
-			newService.CalculatedDuration = CalculatedDuration;
-			newService.ServiceAbbreviation = ServiceAbbreviation;
-			newService.ServiceDescription = ServiceDescription;
-			newService.ServiceName = ServiceName;
-			newService.ServiceType = ServiceType;
-			newService.ServiceDirectionId = ServiceDirectionId;
-			newService.RouteId = RouteId;
-			if (ServiceId <= 0)
-				{
-				ServiceDataAccess.InsertServiceForRoute(newService);
-				}
-			else
-				{
-				newService.Id = ServiceId;
-				ServiceDataAccess.UpdateService(newService);
-				}
-			ClearService();
-			ServicesUI.ServiceList = new BindableCollection<ServiceModel>(ServiceDataAccess.GetServicesPerRoute(RouteId));
-			}
-
-		public void ClearService()
-			{
-			ServiceName = "";
-			ServiceAbbreviation = "";
-			ServiceType = "";
-			ServiceDescription = "";
-			CalculatedDuration = 0;
-			ServiceDirectionId = 0;
-			ServiceDirectionName = "";
-			ServiceId = 0;
-			NotifyOfPropertyChange(() => ServicesUI);
-			NotifyOfPropertyChange(() => CanLoadTimeEvents);
-			NotifyOfPropertyChange(() => CanEditService);
-			}
-
-		public bool CanLoadTimeEvents
-			{
-			get
-				{
-				return SelectedService != null && (FullTimeEventsList == null ||
-						FullTimeEventsList.Count == 0);
-				}
-			}
-
-		public void LoadTimeEvents()
-			{
-			HasTimeEvents = false;
-			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.CreateTimeEventsPerService(SelectedService.Id));
-			NotifyOfPropertyChange(() => FullTimeEventsList);
-			}
-
-		public void SaveTimeEvents()
-			{
-			foreach (var item in FullTimeEventsList)
-				{
-				if (item.EventType?.Length > 0)
-					{
-					var timeEvent = new TimeEventModel();
-					timeEvent.Id = item.Id;
-					timeEvent.EventType = item.EventType;
-					timeEvent.ArrivalTime = item.ArrivalTime;
-					timeEvent.WaitTime = item.WaitTime;
-					timeEvent.LocationId = item.LocationId;
-					timeEvent.ServiceId = item.ServiceId;
-					timeEvent.Order = item.Order;
-					if (item.Id > 0)
-						{
-						timeEvent.Id = item.Id;
-						TimeEventDataAccess.UpdateTimeEvent(timeEvent);
-						}
-					else
-						{
-						TimeEventDataAccess.InsertTimeEventForService(timeEvent);
-						}
-					}
-				}
-			int duration = FullTimeEventsList.Sum(x => x.ArrivalTime + x.WaitTime);
-			SelectedService.CalculatedDuration = duration;
-			ServiceDataAccess.UpdateServiceCalculatedDuration(duration, SelectedService.Id);
-			ServicesUI.ServiceList.Refresh();
-			FullTimeEventsList = new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerService(SelectedService.Id));
-			Log.Trace($"Time events for service {SelectedService.ServiceAbbreviation} saved", LogEventType.Event);
-			}
-
-		public void DeleteService()
-			{
-			ServiceDataAccess.DeleteService(SelectedService.Id);
-			ServicesUI.ServiceList.Remove(SelectedService);
-			ServiceId = 0;
-			}
-		}
-	}
+    public void ClearService()
+      {
+      ServiceTemplate = null;
+      StartTimeText = "";
+      EndTimeText = "";
+      ServiceName = "";
+      ServiceAbbreviation = "";
+      ServiceId = 0;
+      NotifyOfPropertyChange(() => CanRepeat);
+      }
+    }
+  }

@@ -4,5 +4,5 @@ CREATE TABLE IF NOT EXISTS "Version" (
 	"VersionNr"	INTEGER NOT NULL
 );
 
-INSERT OR IGNORE INTO "Version" ("VersionNr") VALUES (2);
+INSERT OR IGNORE INTO "Version" ("VersionNr") VALUES (3);
 COMMIT;

@@ -77,25 +77,25 @@ namespace DataAccess.Library.Logic
 			return output;
 			}
 
-		public string ExportServiceTable()
+		public string ExportServiceTemplateTable()
 			{
-			List<ServiceModel> serviceList = ServiceDataAccess.GetServicesPerRoute(RouteId);
-			return WriteServiceHeader()+WriteServiceData(serviceList);
+			List<ServiceTemplateModel> serviceTemplateList = ServiceTemplateDataAccess.GetServiceTemplatesPerRoute(RouteId);
+			return WriteServiceTemplateHeader()+WriteServiceTemplateData(serviceTemplateList);
 			}
 
-		public string WriteServiceHeader()
+		public string WriteServiceTemplateHeader()
 			{
-			return $"\"Services\"{sep}\"Id\"{sep}\"ServiceName\"{sep}\"ServiceAbbreviation\"{sep}\"ServiceDescription\"{sep}" +
+			return $"\"ServiceTemplates\"{sep}\"Id\"{sep}\"ServiceTemplateName\"{sep}\"ServiceTemplateAbbreviation\"{sep}\"ServiceTemplateDescription\"{sep}" +
 								$"\"ServiceType\"{sep}\"ServiceDirectionId\"{sep}\"CalculatedDuration\"{sep}\"RouteId\"\r\n";
 			}
 
-		public string WriteServiceData(List<ServiceModel> serviceList)
+		public string WriteServiceTemplateData(List<ServiceTemplateModel> serviceList)
 			{
 			var output = "";
 			foreach (var item in serviceList)
 				{
-				output+=  $"\"Service\"{sep}\"{item.Id}\"{sep}\"{item.ServiceName}\"{sep}\"{item.ServiceAbbreviation}\"{sep}\"" +
-				          $"{item.ServiceDescription}\"{sep}\"{item.ServiceType}\"{sep}\"{item.ServiceDirectionId}\"{sep}" +
+				output+=  $"\"ServiceTemplate\"{sep}\"{item.Id}\"{sep}\"{item.ServiceTemplateName}\"{sep}\"{item.ServiceTemplateAbbreviation}\"{sep}\"" +
+				          $"{item.ServiceTemplateDescription}\"{sep}\"{item.ServiceType}\"{sep}\"{item.ServiceDirectionId}\"{sep}" +
 				          $"\"{item.CalculatedDuration}\"{sep}\"{item.RouteId}\"\r\n";
 				}
 			return output;
@@ -117,32 +117,32 @@ namespace DataAccess.Library.Logic
 			string output = "";
 			foreach (var item in timeEventList)
 				{
-				output += $"\"TimeEvent\"{sep}\"{item.Id}\"{sep}\"{item.EventType}\"{sep}\"{item.ArrivalTime}\"{sep}\"{item.WaitTime}\"{sep}\"{item.ServiceId}\"{sep}\"{item.LocationId}\"{sep}\"{item.Order}\"\r\n";
+				output += $"\"TimeEvent\"{sep}\"{item.Id}\"{sep}\"{item.EventType}\"{sep}\"{item.ArrivalTime}\"{sep}\"{item.WaitTime}\"{sep}\"{item.ServiceTemplateId}\"{sep}\"{item.LocationId}\"{sep}\"{item.Order}\"\r\n";
 				}
 			return output;
 			}
 
-		public string ExportServiceInstanceTable()
+		public string ExportServiceTable()
 			{
-			List<ServiceInstanceModel> serviceInstanceList =
-				ServiceInstanceDataAccess.GetServiceInstancesPerRoute(RouteId);
-			return WriteServiceInstanceHeader()+ WriteServiceInstanceData(serviceInstanceList);
+			List<ServiceModel> serviceList =
+				ServicesDataAccess.GetServicesPerRoute(RouteId);
+			return WriteServiceHeader()+ WriteServiceData(serviceList);
 			}
 
-		public string WriteServiceInstanceHeader()
+		public string WriteServiceHeader()
 			{
-			return $"\"ServiceInstances\"{sep}\"Id\"{sep}\"ServiceInstanceName\"{sep}\"ServiceInstanceAbbreviation\"{sep}" +
-			       $"\"StartTime\"{sep}\"EndTime\"{sep}\"ServiceId\"\r\n";
+			return $"\"Services\"{sep}\"Id\"{sep}\"ServiceName\"{sep}\"ServiceAbbreviation\"{sep}" +
+			       $"\"StartTime\"{sep}\"EndTime\"{sep}\"ServiceTemplateId\"\r\n";
 			}
 
-		public string WriteServiceInstanceData(List<ServiceInstanceModel> serviceInstanceList)
+		public string WriteServiceData(List<ServiceModel> serviceList)
 			{
 			var output = "";
-			foreach (var item in serviceInstanceList)
+			foreach (var item in serviceList)
 				{
-				output += $"\"ServiceInstance\"{sep}\"{item.Id}\"{sep}\"{item.ServiceInstanceName}\"{sep}" +
-				          $"\"{item.ServiceInstanceAbbreviation}\"{sep}\"{item.StartTime}\"{sep}" +
-				          $"\"{item.EndTime}\"{sep}\"{item.ServiceId}\"\r\n";
+				output += $"\"Service\"{sep}\"{item.Id}\"{sep}\"{item.ServiceName}\"{sep}" +
+				          $"\"{item.ServiceAbbreviation}\"{sep}\"{item.StartTime}\"{sep}" +
+				          $"\"{item.EndTime}\"{sep}\"{item.ServiceTemplateId}\"\r\n";
 				}
 			return output;
 			}
@@ -179,7 +179,7 @@ namespace DataAccess.Library.Logic
 
 		public string WriteConnectHeader()
 			{
-			return $"\"ConnectTtSis\"{sep}\"Id\"{sep}\"TimetableId\"{sep}\"ServiceInstanceId\"\r\n";
+			return $"\"ConnectTtSis\"{sep}\"Id\"{sep}\"TimetableId\"{sep}\"ServiceId\"\r\n";
 			}
 
 		public string WriteConnectData(List<ConnectTtSiModel> connectList)
@@ -187,7 +187,7 @@ namespace DataAccess.Library.Logic
 			var output = "";
 			foreach (var item in connectList)
 				{
-				output += $"\"ConnectTtSi\"{sep}\"{item.Id}\"{sep}\"{item.TimetableId}\"{sep}\"{item.ServiceInstanceId}\"\r\n";
+				output += $"\"ConnectTtSi\"{sep}\"{item.Id}\"{sep}\"{item.TimetableId}\"{sep}\"{item.ServiceId}\"\r\n";
 				}
 			return output;
 			}

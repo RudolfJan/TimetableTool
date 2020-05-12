@@ -12,26 +12,26 @@ namespace DataAccess.Library.Logic
 
 		public static List<ConnectTtSiModel> GetAllConnectTtSiPerRoute(int routeId)
 			{
-			string sql = "SELECT ConnectTtSi.Id, ConnectTtSi.TimetableId, ConnectTtSi.ServiceInstanceId FROM ConnectTtSi, Timetables WHERE ConnectTtSi.TimetableId= Timetables.Id AND Timetables.RouteId=@RouteId";
+			string sql = "SELECT ConnectTtSi.Id, ConnectTtSi.TimetableId, ConnectTtSi.ServiceId FROM ConnectTtSi, Timetables WHERE ConnectTtSi.TimetableId= Timetables.Id AND Timetables.RouteId=@RouteId";
 
 			var connectList =
 				SQLiteData.LoadData<ConnectTtSiModel, dynamic>(sql, new {routeId }, SQLiteData.GetConnectionString()).ToList();
 			return connectList;
 			}
 
-		  public static void InsertConnection(int serviceInstanceId, int timetableId)
+		  public static void InsertConnection(int serviceId, int timetableId)
       {
-      string sql = @"INSERT OR IGNORE INTO ConnectTtSi (ServiceInstanceId, TimetableId) 
-                                    VALUES(@ServiceInstanceId, @TimetableId);";
+			string sql = @"INSERT OR IGNORE INTO ConnectTtSi (ServiceId, TimetableId) 
+                                    VALUES(@ServiceId, @TimetableId);";
       SQLiteData.SaveData<dynamic>(sql,
-        new {serviceInstanceId, timetableId}, SQLiteData.GetConnectionString());
+        new {serviceId, timetableId}, SQLiteData.GetConnectionString());
       }
 
-    public static void DeleteConnection(int serviceInstanceId, int timetableId)
+    public static void DeleteConnection(int serviceId, int timetableId)
       {
-      string sql = "DELETE FROM ConnectTtSi WHERE ServiceInstanceId=@ServiceInstanceId AND TimetableId=@TimetableId";
+			string sql = "DELETE FROM ConnectTtSi WHERE ServiceId=@ServiceId AND TimetableId=@TimetableId";
       SQLiteData.SaveData<dynamic>(sql,
-        new {serviceInstanceId, timetableId}, 
+        new {serviceId, timetableId}, 
         SQLiteData.GetConnectionString());
       }
 

@@ -147,8 +147,8 @@
 					</WrapPanel>
 				</StackPanel>
 
-				<!-- Attach service instances to timetable--> 
-				<TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Connect ServiceInstances</TextBlock>
+				<!-- Attach services to timetable--> 
+				<TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource HeaderTextBlock}">Connect Services to Timetable</TextBlock>
 				<Grid Grid.Row="4" Grid.Column="1">
 					<Grid.ColumnDefinitions>
 						<ColumnDefinition Width="auto"/>
@@ -164,11 +164,11 @@
 					</Grid.RowDefinitions>
 
 					<!-- Source table -->
-					<DataGrid x:Name="ServiceInstanceSource" 
+					<DataGrid x:Name="ServiceSource" 
                 Grid.Row="0" Grid.Column="0" 
                 Style="{StaticResource DefaultDataGrid}"
-                ItemsSource="{Binding Path=ServiceInstancesSourceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
-                SelectedItem="{Binding SelectedServiceInstanceSource}"
+                ItemsSource="{Binding Path=ServiceSourceList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedServiceSource}"
                 Height="300" 
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
@@ -182,7 +182,7 @@
                   Text="Id"
                   HorizontalAlignment="Center"/>
 											<Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
-                        Command="{Binding ElementName=ServiceInstanceSource, Path= DataContext.SetFilterCommand}">
+                        Command="{Binding ElementName=ServiceSource, Path= DataContext.SetFilterCommand}">
 												<Image Source="../Images/filter.png" />
 											</Button>
 										</StackPanel>
@@ -197,14 +197,14 @@
                   Text="Time" 
                   HorizontalAlignment="Center"/>
 											<TextBox x:Name="ServiceNameFilterTextBox" Width="40" 
-                         Text="{Binding ElementName=ServiceInstanceSource, 
+                         Text="{Binding ElementName=ServiceSource, 
                          Path= DataContext.Filter.ServiceName, Mode=TwoWay, 
                          UpdateSourceTrigger=PropertyChanged}"/>
 										</StackPanel>
 									</DataTemplate>
 								</DataGridTextColumn.HeaderTemplate>
 							</DataGridTextColumn>
-							<DataGridTextColumn Binding="{Binding ServiceInstanceAbbreviation, NotifyOnSourceUpdated=True}">
+							<DataGridTextColumn Binding="{Binding ServiceAbbreviation, NotifyOnSourceUpdated=True}">
 								<DataGridTextColumn.HeaderTemplate>
 									<DataTemplate>
 										<StackPanel>
@@ -212,7 +212,7 @@
                   Text="Abbrev" 
                   HorizontalAlignment="Center" />
 											<TextBox x:Name="ServiceAbbreviationFilterTextBox" Width="80" 
-                          Text="{Binding ElementName=ServiceInstanceSource, 
+                          Text="{Binding ElementName=ServiceSource, 
                           Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
                           UpdateSourceTrigger=PropertyChanged}"/>
 										</StackPanel>
@@ -227,42 +227,42 @@
 										<WrapPanel>
 											<TextBlock Text="{Binding StartTimeText}"/>
 											<TextBlock Text="{Binding EndTimeText}"/>
-											<TextBlock Text="{Binding ServiceInstanceAbbreviation}"/>
+											<TextBlock Text="{Binding ServiceAbbreviation}"/>
 										</WrapPanel>
-										<TextBlock Text="{Binding ServiceInstanceName}"/>
+										<TextBlock Text="{Binding ServiceName}"/>
 									</StackPanel>
 								</Border>
 							</DataTemplate>
 						</DataGrid.RowDetailsTemplate>
 					</DataGrid>
 
-					<!-- Buttons to set/reset ServiceInstances -->
+					<!-- Buttons to set/reset Services -->
 					
 					<StackPanel Grid.Row="0" Grid.Column="1" VerticalAlignment="Center">
-						<Button x:Name="AddServiceInstance" 
+						<Button x:Name="AddService" 
 										Style="{StaticResource ButtonTransparentImage}"
-										ToolTip="Copy selected service instance to timetable">
+										ToolTip="Copy selected service to timetable">
 							<Image Source="../Images/arrow_right.png"/>
 						</Button>
-						<Button x:Name = "RemoveServiceInstance" 
+						<Button x:Name = "RemoveService" 
 										Style="{StaticResource ButtonTransparentImage}"
-										ToolTip="Remove selected service instance from timetable">
+										ToolTip="Remove selected service from timetable">
 							<Image Source="../Images/arrow_left.png"/>
 						</Button>
-							<Button x:Name = "CopyAllServiceInstances" 
+							<Button x:Name = "CopyAllServices" 
 											Style="{StaticResource ButtonTransparentImage}"
-											ToolTip="Copy all service instances to timetable">
+											ToolTip="Copy all services to timetable">
 							<Image Source="../Images/arrow_join.png"/>
 						</Button>		
 					</StackPanel>
 					
 					<!-- Destination table, -->
 					
-						<DataGrid x:Name="ServiceInstanceDestination" 
+						<DataGrid x:Name="ServiceDestination" 
                 Grid.Row="0" Grid.Column="2" 
                 Style="{StaticResource DefaultDataGrid}"
-                ItemsSource="{Binding Path=ServiceInstancesDestinationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
-                SelectedItem="{Binding SelectedServiceInstanceDestination}"
+                ItemsSource="{Binding Path=ServiceDestinationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedServiceDestination}"
                 Height="300" 
                 CanUserAddRows="False"
                 CanUserDeleteRows="False"
@@ -277,7 +277,7 @@
                   Text="Id"
                   HorizontalAlignment="Center"/>
 											<Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
-                        Command="{Binding ElementName=ServiceInstanceDestination, Path= DataContext.SetFilterCommand}">
+                        Command="{Binding ElementName=ServiceDestination, Path= DataContext.SetFilterCommand}">
 												<Image Source="../Images/filter.png" />
 											</Button>
 										</StackPanel>
@@ -293,14 +293,14 @@
                   Text="Time" 
                   HorizontalAlignment="Center"/>
 											<TextBox Width="40" 
-                         Text="{Binding ElementName=ServiceInstanceDestination, 
+                         Text="{Binding ElementName=ServiceDestination, 
                          Path= DataContext.Filter.ServiceName, Mode=TwoWay, 
                          UpdateSourceTrigger=PropertyChanged}"/>
 										</StackPanel>
 									</DataTemplate>
 								</DataGridTextColumn.HeaderTemplate>
 							</DataGridTextColumn>
-							<DataGridTextColumn Binding="{Binding ServiceInstanceAbbreviation, NotifyOnSourceUpdated=True}">
+							<DataGridTextColumn Binding="{Binding ServiceAbbreviation, NotifyOnSourceUpdated=True}">
 								<DataGridTextColumn.HeaderTemplate>
 									<DataTemplate>
 										<StackPanel>
@@ -308,7 +308,7 @@
                   Text="Abbrev" 
                   HorizontalAlignment="Center" />
 											<TextBox Width="80" 
-                          Text="{Binding ElementName=ServiceInstanceDestination, 
+                          Text="{Binding ElementName=ServiceDestination, 
                           Path= DataContext.Filter.ServiceAbbreviation, Mode=TwoWay, 
                           UpdateSourceTrigger=PropertyChanged}"/>
 										</StackPanel>

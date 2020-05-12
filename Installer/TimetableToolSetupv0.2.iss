@@ -45,20 +45,19 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.exe"; DestDir: "{app}"; DestName: "{#MyAppExeName}"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\appsettings.json"; DestDir: "{app}"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.runtimeconfig.json"; DestDir: "{app}"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.runtimeconfig.dev.json"; DestDir: "{app}"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.deps.json"; DestDir: "{app}"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\*.dll"; DestDir: "{app}"
-Source: "..\Manual\TimetableTool Manual.pdf"; DestDir: "{userdocs}\TimetableTool"
-Source: "..\TimetableTool.Desktop\appsettings.json"; DestDir: "{app}"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\SQL\*.sql"; DestDir: "{app}\SQL"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\SQL\*.ttt"; DestDir: "{app}\SQL"
-Source: "*.txt"; DestDir: "{userdocs}\TimetableTool"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\runtimes\win-x86\native\netstandard2.0\SQLite.Interop.dll"; DestDir: "{app}\runtimes\win-x86\native\netstandard2.0"
-Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\runtimes\win-x86\native\sni.dll"; DestDir: "{app}\runtimes\win-x86\native"
-  
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.exe"; DestDir: "{app}"; DestName: "{#MyAppExeName}"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\appsettings.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.runtimeconfig.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.runtimeconfig.dev.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\TimetableTool.deps.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\*.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\Manual\TimetableTool Manual.pdf"; DestDir: "{userdocs}\TimetableTool"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\appsettings.json"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\SQL\*.sql"; DestDir: "{app}\SQL"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\SQL\*.ttt"; DestDir: "{app}\SQL"; Flags: ignoreversion
+Source: "*.txt"; DestDir: "{userdocs}\TimetableTool"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\runtimes\win-x86\native\netstandard2.0\SQLite.Interop.dll"; DestDir: "{app}\runtimes\win-x86\native\netstandard2.0"; Flags: ignoreversion
+Source: "..\TimetableTool.Desktop\bin\Release\netcoreapp3.1\runtimes\win-x86\native\sni.dll"; DestDir: "{app}\runtimes\win-x86\native"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

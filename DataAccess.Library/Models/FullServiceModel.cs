@@ -8,10 +8,10 @@ namespace DataAccess.Library.Models
 		{
 		public int Id { get; set; }
 		public int ServiceId { get; set; }
-		public int ServiceInstanceId { get; set; }
+		public int ServiceTemplateId { get; set; }
 		public int TimetableId { get; set; }
-		public string ServiceInstanceName { get; set; }
-		public string ServiceInstanceAbbreviation { get; set; }
+		public string ServiceName { get; set; }
+		public string ServiceAbbreviation { get; set; }
 		public int StartTime { get; set; }
 		public int EndTime { get; set; }
 

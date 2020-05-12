@@ -77,7 +77,7 @@ namespace TimetableTool.Desktop.ViewModels
 			LogEventHandler.LogEvent += LogEventHandlerOnLogEvent;
 			}
 
-		private void LogEventHandlerOnLogEvent(Object sender, LogEventArgs e)
+		private void LogEventHandlerOnLogEvent(object sender, LogEventArgs e)
 			{
 			ChangeFilter();
 			}

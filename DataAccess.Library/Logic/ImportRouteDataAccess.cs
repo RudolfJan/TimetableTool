@@ -14,8 +14,8 @@ namespace DataAccess.Library.Logic
 		private int newRouteId = -1;
 		private Dictionary<int, int> LocationKeys = new Dictionary<int, int>();
 		private Dictionary<int,int> ServiceDirectionKeys = new Dictionary<int,int>(); 
-		private Dictionary<int,int> ServiceKeys = new Dictionary<int,int>(); 
-		private Dictionary<int,int> ServiceInstanceKeys = new Dictionary<int,int>();
+		private Dictionary<int,int> ServiceTemplateKeys = new Dictionary<int,int>(); 
+		private Dictionary<int,int> ServiceKeys = new Dictionary<int,int>();
 		private Dictionary<int,int> TimetableKeys = new Dictionary<int,int>();
 		public ImportRouteDataAccess(string path)
 			{
@@ -87,13 +87,13 @@ namespace DataAccess.Library.Logic
 						ImportServiceDirection(fields);
 						break;
 						}
-					case "Services":
+					case "ServiceTemplates":
 						{
 						break;
 						}
-					case "Service":
+					case "ServiceTemplate":
 						{
-						ImportServices(fields);
+						ImportServiceTemplates(fields);
 						break;
 						}
 					case "TimeEvents":
@@ -105,13 +105,13 @@ namespace DataAccess.Library.Logic
 						ImportTimeEvents(fields);
 						break;
 						}
-					case "ServiceInstances":
+					case "Services":
 						{
 						break;
 						}
-					case "ServiceInstance":
+					case "Service":
 						{
-						ImportServiceInstances(fields);
+						ImportServices(fields);
 						break;
 						}
 					case "Timetables":
@@ -141,9 +141,9 @@ namespace DataAccess.Library.Logic
 			connect.Id= int.Parse(fields[1]);
 			var oldTimetableId= int.Parse(fields[2]);
 			connect.TimetableId = TimetableKeys.GetValueOrDefault(oldTimetableId, 0);
-			var oldServiceInstanceId = int.Parse(fields[3]);
-			connect.ServiceInstanceId = ServiceInstanceKeys.GetValueOrDefault(oldServiceInstanceId, 0);
-			ConnectTtSiDataAccess.InsertConnection(connect.ServiceInstanceId,connect.TimetableId);
+			var oldServiceId = int.Parse(fields[3]);
+			connect.ServiceId = ServiceKeys.GetValueOrDefault(oldServiceId, 0);
+			ConnectTtSiDataAccess.InsertConnection(connect.ServiceId,connect.TimetableId);
 			}
 
 		private void ImportTimetable(string[] fields)
@@ -164,18 +164,18 @@ namespace DataAccess.Library.Logic
 			TimetableKeys.Add(timetable.Id,newTimetableId);
 			}
 
-		private void ImportServiceInstances(string[] fields)
+		private void ImportServices(string[] fields)
 			{
-			var serviceInstance= new ServiceInstanceModel();
-			serviceInstance.Id= int.Parse(fields[1]);
-			serviceInstance.ServiceInstanceName = fields[2];
-			serviceInstance.ServiceInstanceAbbreviation = fields[3];
-			serviceInstance.StartTime= int.Parse(fields[4]);
-			serviceInstance.EndTime = int.Parse(fields[5]);
+			var service= new ServiceModel();
+			service.Id= int.Parse(fields[1]);
+			service.ServiceName = fields[2];
+			service.ServiceAbbreviation = fields[3];
+			service.StartTime= int.Parse(fields[4]);
+			service.EndTime = int.Parse(fields[5]);
 			var oldServiceId=int.Parse(fields[6]);
-			serviceInstance.ServiceId = ServiceKeys.GetValueOrDefault(oldServiceId, 0);
-			var newServiceInstanceId = ServiceInstanceDataAccess.InsertServiceInstance(serviceInstance);
-			ServiceInstanceKeys.Add(serviceInstance.Id,newServiceInstanceId);
+			service.ServiceTemplateId = ServiceTemplateKeys.GetValueOrDefault(oldServiceId, 0);
+			var newServiceId = ServicesDataAccess.InsertService(service);
+			ServiceKeys.Add(service.Id,newServiceId);
 			}
 
 		private void ImportTimeEvents(string[] fields)
@@ -186,27 +186,27 @@ namespace DataAccess.Library.Logic
 			timeEvent.ArrivalTime=int.Parse(fields[3]);
 			timeEvent.WaitTime=int.Parse(fields[4]);
 			var oldServiceId= int.Parse(fields[5]);
-			timeEvent.ServiceId = ServiceKeys.GetValueOrDefault(oldServiceId, 0);
+			timeEvent.ServiceTemplateId = ServiceTemplateKeys.GetValueOrDefault(oldServiceId, 0);
 			var oldLocationid= int.Parse(fields[6]);
 			timeEvent.LocationId = LocationKeys.GetValueOrDefault(oldLocationid, 0);
 			timeEvent.Order= int.Parse(fields[7]);
-			TimeEventDataAccess.InsertTimeEventForService(timeEvent);
+			TimeEventDataAccess.InsertTimeEventForServiceTemplate(timeEvent);
 			}
 
-		private void ImportServices(string[] fields)
+		private void ImportServiceTemplates(string[] fields)
 			{
-			var service = new ServiceModel();
-			service.Id = int.Parse(fields[1]);
-			service.ServiceName = fields[2];
-			service.ServiceAbbreviation = fields[3];
-			service.ServiceDescription = fields[4];
-			service.ServiceType = fields[5];
+			var serviceTemplate = new ServiceTemplateModel();
+			serviceTemplate.Id = int.Parse(fields[1]);
+			serviceTemplate.ServiceTemplateName = fields[2];
+			serviceTemplate.ServiceTemplateAbbreviation = fields[3];
+			serviceTemplate.ServiceTemplateDescription = fields[4];
+			serviceTemplate.ServiceType = fields[5];
 			int oldServiceDirectionId = int.Parse(fields[6]);
-			service.ServiceDirectionId = ServiceDirectionKeys.GetValueOrDefault(oldServiceDirectionId, 0);
-			service.CalculatedDuration= int.Parse(fields[7]);
-			service.RouteId = newRouteId;
-			var newServiceId = ServiceDataAccess.InsertServiceForRoute(service);
-			ServiceKeys.Add(service.Id,newServiceId);
+			serviceTemplate.ServiceDirectionId = ServiceDirectionKeys.GetValueOrDefault(oldServiceDirectionId, 0);
+			serviceTemplate.CalculatedDuration= int.Parse(fields[7]);
+			serviceTemplate.RouteId = newRouteId;
+			var newServiceTemplateId = ServiceTemplateDataAccess.InsertServiceTemplate(serviceTemplate);
+			ServiceTemplateKeys.Add(serviceTemplate.Id,newServiceTemplateId);
 			}
 
 		private void ImportServiceDirection(string[] fields)

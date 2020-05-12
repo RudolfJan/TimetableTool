@@ -5,8 +5,8 @@ using System.Text;
 
 namespace TimetableTool.Desktop.EventModels
   {
-  public class ServiceSelectedEvent
+  public class ServiceTemplateSelectedEvent
     {
-    public ServiceModel SelectedService { get; set; }
+    public ServiceTemplateModel SelectedServiceTemplate { get; set; }
     }
   }

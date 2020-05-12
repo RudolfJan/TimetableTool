@@ -125,9 +125,9 @@ namespace TimetableTool.Desktop.ViewModels
       {
       base.OnViewLoaded(view);
       TimeEvents.SelectedRoute = RouteDataAccess.GetRouteById(RouteId);
-      TimeEvents.SelectedService = ServiceDataAccess.GetServiceById(ServiceId);
+      TimeEvents.SelectedService = ServiceTemplateDataAccess.GetServiceTemplateById(ServiceId);
       TimeEvents.LocationList = new BindableCollection<LocationModel>(LocationDataAccess.GetAllLocationsPerRoute(RouteId));
-      var temp = FullTimeEventDataAccess.GetAllFullTimeEventsPerService(ServiceId)
+      var temp = FullTimeEventDataAccess.GetAllFullTimeEventsPerServiceTemplate(ServiceId)
         .OrderBy(p => p.Order)
         .ToList();
       TimeEvents.FilteredFullTimeEventList = new BindableCollection<FullTimeEventModel>(temp);
@@ -177,10 +177,10 @@ namespace TimetableTool.Desktop.ViewModels
       newTimeEvent.WaitTime = WaitTime;
       newTimeEvent.LocationId = Location.Id;
       newTimeEvent.Order = Order;
-      newTimeEvent.ServiceId = ServiceId;
+      newTimeEvent.ServiceTemplateId = ServiceId;
       if (TimeEventId <= 0)
         {
-        TimeEventDataAccess.InsertTimeEventForService(newTimeEvent);
+        TimeEventDataAccess.InsertTimeEventForServiceTemplate(newTimeEvent);
         }
       else
         {
@@ -188,7 +188,7 @@ namespace TimetableTool.Desktop.ViewModels
         TimeEventDataAccess.UpdateTimeEvent(newTimeEvent);
         }
 
-      var temp = FullTimeEventDataAccess.GetAllFullTimeEventsPerService(ServiceId)
+      var temp = FullTimeEventDataAccess.GetAllFullTimeEventsPerServiceTemplate(ServiceId)
         .OrderBy(p => p.Order)
         .ToList();
       TimeEvents.FilteredFullTimeEventList = new BindableCollection<FullTimeEventModel>(temp);
@@ -220,7 +220,7 @@ namespace TimetableTool.Desktop.ViewModels
       {
       // TODO do this on the non-filtered list as soon as filtering is implemented
       int duration = TimeEvents.FilteredFullTimeEventList.Sum(x => x.ArrivalTime+x.WaitTime);
-      ServiceDataAccess.UpdateServiceCalculatedDuration(duration,ServiceId);
+      ServiceTemplateDataAccess.UpdateServiceCalculatedDuration(duration,ServiceId);
       }
 
     public bool CanDeleteTimeEvent
