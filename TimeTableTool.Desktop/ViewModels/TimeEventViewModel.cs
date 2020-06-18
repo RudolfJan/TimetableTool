@@ -1,7 +1,9 @@
 ﻿using Caliburn.Micro;
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
+using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Documents;
 using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
@@ -118,10 +120,19 @@ namespace TimetableTool.Desktop.ViewModels
         NotifyOfPropertyChange(() => CanSaveTimeEvent);
         }
       }
-    #endregion
 
-    #region Initialization
-    protected override async void OnViewLoaded(object view)
+		private List<string> _timeEventTypeList;
+
+		public List<string> TimeEventTypeList  
+			{
+			get { return _timeEventTypeList; }
+			set { _timeEventTypeList = value; }
+			}
+
+		#endregion
+
+		#region Initialization
+		protected override async void OnViewLoaded(object view)
       {
       base.OnViewLoaded(view);
       TimeEvents.SelectedRoute = RouteDataAccess.GetRouteById(RouteId);
@@ -131,7 +142,8 @@ namespace TimetableTool.Desktop.ViewModels
         .OrderBy(p => p.Order)
         .ToList();
       TimeEvents.FilteredFullTimeEventList = new BindableCollection<FullTimeEventModel>(temp);
-
+      TimeEventTypeList = TimeEventTypeDataAccess.GetAllTimeEventTypeStrings();
+      NotifyOfPropertyChange(()=>TimeEventTypeList);
       NotifyOfPropertyChange(() => TimeEvents);
       }
 
@@ -152,6 +164,7 @@ namespace TimetableTool.Desktop.ViewModels
       TimeEventId = SelectedTimeEvent.Id;
       NotifyOfPropertyChange(() => CanEditTimeEvent);
       NotifyOfPropertyChange(()=>CanSaveTimeEvent);
+      NotifyOfPropertyChange(()=> TimeEventTypeList);
       }
 
     bool CanSelectLocation
@@ -164,7 +177,7 @@ namespace TimetableTool.Desktop.ViewModels
       get
         {
         return Location != null
-               && TimeType?.Length > 0
+               && TimeType!=null
                && Order > 0;
         }
       }
@@ -206,6 +219,7 @@ namespace TimetableTool.Desktop.ViewModels
     public void ClearTimeEvent()
       {
       TimeType = "";
+      SelectedTimeEvent = null;
       Order = 0;
       ArrivalTime = 0;
       WaitTime=0;
@@ -214,6 +228,7 @@ namespace TimetableTool.Desktop.ViewModels
       NotifyOfPropertyChange(()=>CanEditTimeEvent);
       NotifyOfPropertyChange(()=>CanSaveTimeEvent);
       NotifyOfPropertyChange(()=>CanSelectLocation);
+      NotifyOfPropertyChange(()=> TimeEventTypeList);
       }
 
     private void UpdateCalculatedDuration()
@@ -228,7 +243,7 @@ namespace TimetableTool.Desktop.ViewModels
       get { return SelectedTimeEvent != null  && Settings.DatabaseVersion>=2; }
       }
 
-    public void DeleteTimeEvent()
+		public void DeleteTimeEvent()
       {
       TimeEventDataAccess.DeleteTimeEvent(SelectedTimeEvent.Id);
       TimeEvents.FilteredFullTimeEventList.Remove(SelectedTimeEvent);

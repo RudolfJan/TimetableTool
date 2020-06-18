@@ -80,7 +80,7 @@ namespace SQLiteDataAccess.Library
 		/// Creates the table.
 		/// </summary>
 		/// <param name="command">The command.</param>
-		protected static void CreateTable(string command)
+		public static void CreateTable(string command)
 			{
 			try
 				{

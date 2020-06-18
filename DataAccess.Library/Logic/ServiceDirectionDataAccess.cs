@@ -18,7 +18,16 @@ namespace DataAccess.Library.Logic
       return serviceDirectionList;
       }
 
-    public static ServiceDirectionModel GetServiceDirectionById(int serviceDirectionId)
+		internal static ServiceDirectionModel GetServiceDirectionByServiceTemplateId(int serviceTemplateId)
+			{
+			string sql = "SELECT ServiceDirections.Id, ServiceDirections.ServiceDirectionName, ServiceDirections.ServiceDirectionAbbreviation, ServiceDirections.RouteId, ServiceDirections.IsDescending " +
+			             "FROM ServiceDirections, ServiceTemplates WHERE ServiceTemplates.id=@ServiceTemplateId AND ServiceDirections.Id= ServiceTemplates.ServiceDirectionId";
+			var serviceDirection =
+				SQLiteData.LoadData<ServiceDirectionModel, dynamic>(sql, new { serviceTemplateId}, SQLiteData.GetConnectionString()).FirstOrDefault();
+			return serviceDirection;
+			}
+
+		public static ServiceDirectionModel GetServiceDirectionById(int serviceDirectionId)
       {
       string sql = "SELECT * FROM ServiceDirections WHERE Id= @ServiceDirectionId";
 

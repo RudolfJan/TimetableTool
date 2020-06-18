@@ -2,6 +2,7 @@
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
 using Logging.Library;
+using System.Collections.Generic;
 using System.Linq;
 using TimetableTool.Desktop.EventModels;
 using TimetableTool.Desktop.Models;
@@ -46,6 +47,31 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		private List<ServiceClassModel> _serviceClassList;
+
+		public List<ServiceClassModel> ServiceClassList
+			{
+			get { return _serviceClassList; }
+			set
+				{
+				_serviceClassList = value; 
+				NotifyOfPropertyChange(()=>ServiceClassList);
+				}
+			}
+
+		private ServiceClassModel _selectedServiceClass;
+
+		public ServiceClassModel SelectedServiceClass
+			{
+			get { return _selectedServiceClass; }
+			set
+				{
+				_selectedServiceClass = value; 
+				NotifyOfPropertyChange(() => CanSaveServiceTemplate);
+				}
+			}
+			
+
 		private ServiceTemplateModel _selectedServiceTemplate;
 		private ServiceDirectionModel _selectedServiceDirection;
 		private string _serviceTemplateName;
@@ -76,6 +102,8 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(() => CanEditServiceTemplate);
 				NotifyOfPropertyChange(() => CanDeleteServiceTemplate);
 				NotifyOfPropertyChange(() => CanLoadTimeEvents);
+				NotifyOfPropertyChange(() => TimeEventTypeList);
+				NotifyOfPropertyChange(() => SelectedServiceTemplate);
 				}
 			}
 
@@ -187,6 +215,23 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		private List<TimeEventTypeModel> _timeEventTypeList;
+
+		public List<TimeEventTypeModel> TimeEventTypeList  
+			{
+			get { return _timeEventTypeList; }
+			set { _timeEventTypeList = value; }
+			}
+
+		private TimeEventTypeModel _selectedTimeEventType;
+
+		public TimeEventTypeModel SelectedTimeEventType
+			{
+			get { return _selectedTimeEventType; }
+			set { _selectedTimeEventType = value; }
+			}
+
+
 		#endregion
 
 		public ServiceTemplateViewModel(IEventAggregator events)
@@ -202,6 +247,10 @@ namespace TimetableTool.Desktop.ViewModels
 			RouteId = rm.Id;
 			ServiceTemplateUI.ServiceTemplateList = new BindableCollection<ServiceTemplateModel>(ServiceTemplateDataAccess.GetServiceTemplatesPerRoute(RouteId));
 			ServiceDirectionList = new BindableCollection<ServiceDirectionModel>(ServiceDirectionDataAccess.GetAllServiceDirectionsPerRoute(RouteId));
+			ServiceClassList= ServiceClassDataAccess.GetAllServiceClasses();
+			TimeEventTypeList = TimeEventTypeDataAccess.GetAllTimeEventTypes();
+			NotifyOfPropertyChange(()=>TimeEventTypeList);
+			NotifyOfPropertyChange(()=>ServiceClassList);
 			NotifyOfPropertyChange(() => ServiceTemplateUI);
 			NotifyOfPropertyChange(() => ServiceDirectionList);
 			}
@@ -215,7 +264,7 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			ServiceTemplateName = SelectedServiceTemplate.ServiceTemplateName;
 			ServiceTemplateAbbreviation = SelectedServiceTemplate.ServiceTemplateAbbreviation;
-			ServiceType = SelectedServiceTemplate.ServiceType;
+			SelectedServiceClass = ServiceClassDataAccess.GetServiceClassModelFromString(SelectedServiceTemplate.ServiceType, ServiceClassList);
 			ServiceTemplateDescription = SelectedServiceTemplate.ServiceTemplateDescription;
 			CalculatedDuration = SelectedServiceTemplate.CalculatedDuration;
 			ServiceDirectionId = SelectedServiceTemplate.ServiceDirectionId;
@@ -226,7 +275,7 @@ namespace TimetableTool.Desktop.ViewModels
 			NotifyOfPropertyChange(() => CanLoadTimeEvents);
 			NotifyOfPropertyChange(() => CanEditServiceTemplate);
 			NotifyOfPropertyChange(() => CanDeleteServiceTemplate);
-
+			NotifyOfPropertyChange(()=>SelectedServiceClass);
 			}
 
 		public bool CanDeleteServiceTemplate
@@ -240,7 +289,7 @@ namespace TimetableTool.Desktop.ViewModels
 				return ServiceTemplateAbbreviation?.Length > 0
 							 && ServiceTemplateName?.Length > 0
 							 && ServiceTemplateDescription?.Length > 0
-							 && ServiceType?.Length > 0
+							 && ServiceClassList!=null
 							 && ServiceDirectionId > 0;
 				}
 			}
@@ -268,7 +317,7 @@ namespace TimetableTool.Desktop.ViewModels
 			newService.ServiceTemplateAbbreviation = ServiceTemplateAbbreviation;
 			newService.ServiceTemplateDescription = ServiceTemplateDescription;
 			newService.ServiceTemplateName = ServiceTemplateName;
-			newService.ServiceType = ServiceType;
+			newService.ServiceType = SelectedServiceClass.ServiceClassName;
 			newService.ServiceDirectionId = ServiceDirectionId;
 			newService.RouteId = RouteId;
 			if (ServiceTemplateId <= 0)
@@ -288,6 +337,7 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			ServiceTemplateName = "";
 			ServiceTemplateAbbreviation = "";
+			SelectedServiceClass = null;
 			ServiceType = "";
 			ServiceTemplateDescription = "";
 			CalculatedDuration = 0;
@@ -297,6 +347,7 @@ namespace TimetableTool.Desktop.ViewModels
 			NotifyOfPropertyChange(() => ServiceTemplateUI);
 			NotifyOfPropertyChange(() => CanLoadTimeEvents);
 			NotifyOfPropertyChange(() => CanEditServiceTemplate);
+			NotifyOfPropertyChange(() => SelectedServiceClass);
 			}
 
 		public bool CanLoadTimeEvents

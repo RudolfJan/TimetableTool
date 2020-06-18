@@ -1,10 +1,6 @@
-﻿using DataAccess.Library.Models;
-using SQLiteDataAccess.Library;
-using System;
-using System.Collections.Generic;
+﻿using SQLiteDataAccess.Library;
 using System.Data.SQLite;
 using System.Linq;
-using System.Text;
 
 namespace DataAccess.Library.Logic
 	{
@@ -31,8 +27,7 @@ namespace DataAccess.Library.Logic
 				}
 			}
 
-
-		public static void UpdataDatabaseVersion(int version)
+		public static void UpdateDatabaseVersion(int version)
 			{
 			string sql = "UPDATE Version SET VersionNr=@version";
 			SQLiteData.SaveData<dynamic>(sql, new {version}, SQLiteData.GetConnectionString());

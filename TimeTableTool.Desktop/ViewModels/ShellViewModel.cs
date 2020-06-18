@@ -12,7 +12,7 @@ using TimetableTool.Desktop.Models;
 
 namespace TimetableTool.Desktop.ViewModels
 	{
-	public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceTemplateSelectedEvent>, IHandle<TimetableSelectedEvent>
+	public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceTemplateSelectedEvent>, IHandle<TimetableSelectedEvent>, IHandle<ReportSelectedEvent>
 		{
 		private readonly IEventAggregator _events;
 		private readonly IWindowManager _windowManager;
@@ -139,6 +139,11 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		public async Task Reports()
+			{
+			var reportsVM = IoC.Get<ReportsViewModel>();
+			await ActivateItemAsync(reportsVM, new CancellationToken());
+			}
 		public async Task ViewTimetable()
 			{
 			var displayTimetableVM = IoC.Get<DisplayTimetableViewModel>();
@@ -151,6 +156,15 @@ namespace TimetableTool.Desktop.ViewModels
 			var displayTimetableGraphVM = IoC.Get<DisplayTimetableGraphViewModel>();
 			displayTimetableGraphVM.TimetableId = SelectedTimetable.Id;
 			await ActivateItemAsync(displayTimetableGraphVM, new CancellationToken());
+			}
+
+
+		public async Task ViewArrivalDeparture()
+			{
+			var departureArrivalVM = IoC.Get<DepartureArrivalTimetableViewModel>();
+			departureArrivalVM.RouteId = SelectedRoute.Id;
+			departureArrivalVM.TimetableId = SelectedTimetable.Id;
+			await ActivateItemAsync(departureArrivalVM, new CancellationToken());
 			}
 
 		public async Task Backup()
@@ -270,6 +284,44 @@ namespace TimetableTool.Desktop.ViewModels
 			SelectedTimetable = message.SelectedTimetable;
 			return Task.CompletedTask;
 			}
+
+		async Task IHandle<ReportSelectedEvent>.HandleAsync(ReportSelectedEvent message, CancellationToken cancellationToken)
+			{
+			switch (message.Report)
+				{
+					case ReportType.Classic:
+						{
+						var displayTimetableVM = IoC.Get<DisplayTimetableViewModel>();
+						displayTimetableVM.TimetableId = message.SelectedTimetable.TimetableId;
+						await ActivateItemAsync(displayTimetableVM, new CancellationToken());
+						break;
+						}
+					case ReportType.Graph:
+						{
+						var displayTimetableGraphVM = IoC.Get<DisplayTimetableGraphViewModel>();
+						displayTimetableGraphVM.TimetableId = message.SelectedTimetable.TimetableId;
+						await ActivateItemAsync(displayTimetableGraphVM, new CancellationToken());
+						break;
+						}
+
+					case ReportType.ArrivalDeparture:
+						{
+						var departureArrivalVM = IoC.Get<DepartureArrivalTimetableViewModel>();
+						departureArrivalVM.RouteId = message.SelectedTimetable.RouteId;
+						departureArrivalVM.TimetableId = message.SelectedTimetable.TimetableId;
+						await ActivateItemAsync(departureArrivalVM, new CancellationToken());
+
+						break;
+						}
+
+					default:
+						{
+						throw new NotImplementedException("Report type not implemented in ShellView");
+						}
+				}
+			}
+
+
 		#endregion
 		}
 	}

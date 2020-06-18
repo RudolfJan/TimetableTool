@@ -192,6 +192,8 @@ namespace TimetableTool.Desktop.ViewModels
 		public void CreateDatabase()
 			{
 			DatabaseSupport.DatabaseUserInitialization();
+			NotifyOfPropertyChange(() => CanDeleteActiveDatabase);
+			NotifyOfPropertyChange(() => CanCreateDatabase);
 			}
 		}
 	}
