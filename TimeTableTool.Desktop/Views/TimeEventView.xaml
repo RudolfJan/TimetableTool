@@ -77,7 +77,7 @@
           <Button x:Name="SelectLocation" Style="{StaticResource WideButton}">Set Selected Location</Button>
           <TextBox x:Name="SelectedLocationTextBox" Style="{StaticResource StaticTextBox}" 
                    Text="{Binding Location.LocationName}" 
-                   MinWidth="150"/>
+                   Width="160"/>
         </WrapPanel>
         <WrapPanel>
 
@@ -91,13 +91,15 @@
                                      TextBoxText="{Binding WaitTime, Mode=TwoWay}"/>
         </WrapPanel>
         <WrapPanel>
-          <userControls:LabelTextBox x:Name="TimeTypeTextBox" 
-                                     Style="{StaticResource DefaultLabelTextBox}" 
-                                     LabelText="Type" 
-                                     TextBoxText="{Binding TimeType, Mode=TwoWay}"/>
+          <TextBlock Style="{StaticResource DefaultTextBlock}" Width="65">Type</TextBlock>
+          <ComboBox SelectedItem="{Binding SelectedTimeEventType}"
+                    Width="65" Margin="{StaticResource DefaultMargin}"
+                    ItemsSource="{Binding TimeEventTypeList}" 
+                    DisplayMemberPath="EventType"></ComboBox>
+          
           <userControls:LabelTextBox x:Name="OrderTextBox" 
                                      Style="{StaticResource DefaultLabelTextBox}" 
-                                     LabelText="Order"
+                                     LabelText=" Order" LabelWidth="70"
                                      TextBoxText="{Binding Order, Mode=TwoWay}"/>
         </WrapPanel>
         <WrapPanel>

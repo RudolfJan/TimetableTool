@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="TimetableTool.Desktop.Views.ReportsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimetableTool.Desktop.Views"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Border Style="{StaticResource DefaultBorder}">
+       <StackPanel>
+         <Grid>
+           <Grid.ColumnDefinitions>
+             <ColumnDefinition Width="Auto"/>
+             <ColumnDefinition Width="Auto"/>
+             <ColumnDefinition Width="*"/>
+           </Grid.ColumnDefinitions>
+           <Grid.RowDefinitions>
+             <RowDefinition Height="Auto"/>
+             <RowDefinition Height="Auto"/>
+             <RowDefinition Height="*"/>
+           </Grid.RowDefinitions>
+
+           <!-- #region Timetables  -->
+            <TextBlock Grid.Row="0" Grid.Column="0" 
+                       Style="{StaticResource HeaderTextBlock}">Timetables</TextBlock>
+            <DataGrid x:Name="TimetableList" Grid.Row="1" Grid.Column="0"
+                      Style="{StaticResource DefaultDataGrid}" Height="300"
+                      ItemsSource="{Binding TimetableList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                      SelectedItem="{Binding SelectedTimetable}"
+                      CanUserDeleteRows="False" CanUserAddRows="False" AutoGenerateColumns="False">
+              <DataGrid.Columns>
+                <DataGridTextColumn Header="Route" Width="50" Binding="{Binding RouteAbbreviation}"/>
+                <DataGridTextColumn Header="Route" Width="130" Binding="{Binding RouteName}"/>
+                <DataGridTextColumn Header="Tt Abbr" Width="50" Binding="{Binding TimetableAbbreviation}"/>
+                <DataGridTextColumn Header="Timetable" Width="130" Binding="{Binding TimetableName}"/>
+                <DataGridCheckBoxColumn Header="Multi?" Width="40" Binding="{Binding IsMultiDirection}"/>
+              </DataGrid.Columns>
+              <DataGrid.RowDetailsTemplate>
+                <DataTemplate>
+                  <WrapPanel>
+                    <TextBlock Text="{Binding TimetableDescription}"/>
+                  </WrapPanel>
+
+                </DataTemplate>
+              </DataGrid.RowDetailsTemplate>
+            </DataGrid>
+           <!-- #endregion -->
+
+           <!-- #region Selector -->
+           <TextBlock Grid.Row="0" Grid.Column="1" 
+                      Style="{StaticResource HeaderTextBlock}">Reports</TextBlock>
+           <StackPanel Grid.Row="1" Grid.Column="1" >
+             <Button x:Name="ViewTimetable" Style="{StaticResource WideButton}">Classic</Button>
+             <Button x:Name="ViewGraph" Style="{StaticResource WideButton}">Graph</Button>
+             <Button x:Name="ViewArrivalDeparture" Style="{StaticResource WideButton}">Arrivals and departures</Button>
+           </StackPanel>
+
+
+
+
+           <!-- endregion -->
+         </Grid>
+       </StackPanel>     
+    </Border>
+</UserControl>

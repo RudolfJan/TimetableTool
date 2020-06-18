@@ -17,6 +17,18 @@ namespace DataAccess.Library.Logic
         SQLiteData.LoadData<TimetableModel, dynamic>(sql, new { routeId}, SQLiteData.GetConnectionString()).ToList();
       return timetableList;
       }
+    public static List<TimetableRouteModel> GetAllTimetables()
+      {
+      string sql = "SELECT Timetables.Id AS TimetableId, Routes.Id AS RouteId, Timetables.TimetableAbbreviation, Timetables.TimetableName, " +
+                   "Timetables.TimetableDescription, Timetables.IsMultiDirection, Timetables.ServiceDirectionId, " +
+                   "Routes.RouteName, Routes.RouteAbbreviation " +
+                   "FROM Timetables, Routes WHERE Timetables.RouteId=Routes.Id ORDER BY Routes.RouteAbbreviation";
+
+      var timetableList =
+        SQLiteData.LoadData<TimetableRouteModel, dynamic>(sql, new {}, SQLiteData.GetConnectionString()).ToList();
+      return timetableList;
+      }
+
 
     public static TimetableModel GetTimetableById(int timeTableId)
       {

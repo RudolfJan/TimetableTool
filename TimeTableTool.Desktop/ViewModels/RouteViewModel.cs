@@ -16,7 +16,6 @@ namespace TimetableTool.Desktop.ViewModels
     {
     private readonly IEventAggregator _events;
 
-    public RouteUIModel RoutesUI { get; set; }
     private RouteModel _selectedRoute;
     private string _routeDescription;
     private string _routeName;
@@ -91,9 +90,8 @@ namespace TimetableTool.Desktop.ViewModels
     protected override void OnViewLoaded(object view)
       {
       base.OnViewLoaded(view);
-      RoutesUI = new RouteUIModel();
       RouteList = new BindableCollection<RouteModel>(RouteDataAccess.GetAllRoutes());
-      NotifyOfPropertyChange(() => RoutesUI.RouteList);
+      NotifyOfPropertyChange(() => RouteList);
       }
 
     public bool CanEditRoute
@@ -129,19 +127,17 @@ namespace TimetableTool.Desktop.ViewModels
       RouteAbbrev = SelectedRoute.RouteAbbreviation;
       RouteDescription = SelectedRoute.RouteDescription;
       RouteId = SelectedRoute.Id;
-      //NotifyOfPropertyChange(() => RouteName);
-      //NotifyOfPropertyChange(() => RouteAbbrev);
-      //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
       }
 
     public void DeleteRoute()
       {
+
       RouteDataAccess.DeleteRoute(SelectedRoute.Id);
-      RoutesUI.RouteList.Remove(SelectedRoute);
+      RouteList.Remove(SelectedRoute);
       RouteId = 0;
-      NotifyOfPropertyChange(() => RoutesUI.RouteList);
+      NotifyOfPropertyChange(() => RouteList);
       }
 
     public void SaveRoute()
@@ -162,7 +158,7 @@ namespace TimetableTool.Desktop.ViewModels
 
       ClearRoute();
       RouteList = new BindableCollection<RouteModel>(RouteDataAccess.GetAllRoutes());
-      NotifyOfPropertyChange(() => RoutesUI.RouteList);
+      NotifyOfPropertyChange(() => RouteList);
       }
 
     public void ClearRoute()
@@ -171,9 +167,6 @@ namespace TimetableTool.Desktop.ViewModels
       RouteAbbrev = "";
       RouteDescription = "";
       RouteId = 0;
-      //NotifyOfPropertyChange(() => RouteName);
-      //NotifyOfPropertyChange(() => RouteAbbrev);
-      //NotifyOfPropertyChange(() => RouteDescription);
       NotifyOfPropertyChange(() => CanEditRoute);
       NotifyOfPropertyChange(() => CanDeleteRoute);
       NotifyOfPropertyChange(() => CanExportRoute);
@@ -211,7 +204,7 @@ namespace TimetableTool.Desktop.ViewModels
         {
         var importRoute = new ImportRouteDataAccess(path);
         RouteList = new BindableCollection<RouteModel>(RouteDataAccess.GetAllRoutes());
-        NotifyOfPropertyChange(() => RoutesUI.RouteList);
+        NotifyOfPropertyChange(() => RouteList);
         }
       }
     }

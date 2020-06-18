@@ -203,7 +203,8 @@
         </WrapPanel>
         <WrapPanel>
           <TextBlock Style="{StaticResource DefaultTextBlock}">Start time</TextBlock>
-          <xctk:TimePicker Width="80" TimeInterval="00:30:00" Text="{Binding StartTimeText}" Margin="5 3 5 3"/>
+          <xctk:TimePicker Width="80" TimeInterval="00:30:00" Text="{Binding StartTimeText}" Margin="5 3 5 3"
+                           Format="Custom" FormatString="HH:mm"/>
           <Button x:Name="AutoFill" Style="{StaticResource DefaultButton}">Fill from template</Button>
         </WrapPanel>
 
@@ -213,7 +214,8 @@
           <!-- TODO replace this later by a .Net Core 5 version, one used here is for .Net Framework only, though it seems to work -->
 
           <TextBlock Style="{StaticResource DefaultTextBlock}">End time</TextBlock>
-          <xctk:TimePicker Width="80" TimeInterval="00:30:00" Text="{Binding EndTimeText}" Margin="5 3 5 3"/>
+          <xctk:TimePicker Width="80" TimeInterval="00:30:00" Text="{Binding EndTimeText}" Margin="5 3 5 3"
+                           Format="Custom" FormatString="HH:mm"/>
           <userControls:LabelTextBox x:Name="ServiceAbbrevTextBox" LabelText="Abbrev" 
                                TextBoxText="{Binding ServiceAbbreviation, Mode=TwoWay}"/>
         </WrapPanel>

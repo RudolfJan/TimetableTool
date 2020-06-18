@@ -24,6 +24,13 @@ namespace TimetableTool.Desktop.Helpers
 				ServiceTemplateMigration();
 				}
 
+			if (Settings.DatabaseVersion == 3)
+				{
+				// You need ServiceClasses table end the Time Eventstable pus their data initialization.
+				SQLiteData.CreateTable("SQL\\UpdateToVersion4.sql");
+				Settings.DatabaseVersion = VersionDataAccess.GetCurrentDatabaseVersion();
+				}
+
 			if (Settings.UseDemoData && databaseExists == 0)
 				{
 				DemoDataSetup();
@@ -58,7 +65,7 @@ namespace TimetableTool.Desktop.Helpers
 
 				if (Settings.DatabaseVersion == 2)
 					{
-					VersionDataAccess.UpdataDatabaseVersion(3);
+					VersionDataAccess.UpdateDatabaseVersion(3);
 					}
 				}
 			}

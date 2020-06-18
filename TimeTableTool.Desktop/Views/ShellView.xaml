@@ -13,8 +13,7 @@
             <Menu x:Name="Menu" DockPanel.Dock="Top" FontSize="12">
                 <MenuItem  x:Name="FileMenu"  Header="_File">
                     <MenuItem x:Name="ExportTimetable" Header="E_xport ..."  IsEnabled="{Binding IsTimetableSelected}"/>
-                    <MenuItem x:Name="ViewTimetable" Header="_View timetable"  IsEnabled="{Binding IsTimetableSelected}"/>
-                    <MenuItem x:Name="ViewGraph" Header="View _graph"  IsEnabled="{Binding IsTimetableSelectedMultiDirection}"/>
+                    <MenuItem x:Name="Reports" Header="_Reports ..." />
                     <MenuItem x:Name="Backup" Header="_Backup database"/>
                     <MenuItem x:Name="Print" Header="_Print" IsEnabled="False"/>
                     <MenuItem x:Name="ExitApplication" Header="E_xit"/>

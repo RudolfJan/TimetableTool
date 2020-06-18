@@ -141,13 +141,32 @@
           <DataGrid.Columns>
             <DataGridTextColumn Header="Location" Width="150"
                                 Binding="{Binding LocationName}" IsReadOnly="True" />
+						<!--
+							<DataGridComboBoxColumn Header="Type" Width="40" 
+																		ItemsSource="{Binding TimeEventTypeList, 
+																		Mode=TwoWay,
+																		NotifyOnSourceUpdated=True, 
+																		UpdateSourceTrigger=PropertyChanged}" 
+																		SelectedValueBinding="{Binding TimeType, 
+																		Mode=TwoWay,
+																		NotifyOnSourceUpdated=True, 
+																		UpdateSourceTrigger=PropertyChanged}"/>
+						<DataGridTemplateColumn Header="Type" Width="40">
+							<DataGridTemplateColumn.CellTemplate>
+								<DataTemplate>
+									<ComboBox SelectedItem="{Binding TimeType, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+									          ItemsSource="{Binding Path=TimeEventTypeList}" />
+							</DataTemplate>
+								</DataGridTemplateColumn.CellTemplate>
+						</DataGridTemplateColumn>
+						-->
             <DataGridTextColumn Header="Type" Width="40"
                                 Binding="{Binding EventType}" />
-            <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
-                                Binding="{Binding ArrivalTime}" />
+	           <DataGridTextColumn Header="Time" Width="40" ElementStyle="{StaticResource RightCell}"
+	                              Binding="{Binding ArrivalTime}" />
 						 <DataGridTextColumn Header="Wait" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding WaitTime}" />
-            <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
+             <DataGridTextColumn Header="Order" Width="40" ElementStyle="{StaticResource RightCell}"
                                 Binding="{Binding Order}"/>
 
           </DataGrid.Columns>
@@ -187,10 +206,14 @@
 						<userControls:LabelTextBox x:Name="ServiceTemplateAbbreviationTextBox" 
 															LabelText="Abbrev" 
 															TextBoxText="{Binding ServiceTemplateAbbreviation, Mode=TwoWay}"/>
-						<userControls:LabelTextBox x:Name="ServiceTypeTextBox" LabelText="Type" 
-															Width="140" LabelWidth="40"
-                              TextBoxText="{Binding ServiceType, Mode=TwoWay}"/>
-					</WrapPanel>
+						<WrapPanel>
+							<TextBlock Style="{StaticResource DefaultTextBlock}">Service class</TextBlock>
+							<ComboBox SelectedItem="{Binding SelectedServiceClass, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
+							          Width="125" Margin="{StaticResource DefaultMargin}"
+							          ItemsSource="{Binding ServiceClassList}" 
+							          DisplayMemberPath="ServiceClassName"/>
+						</WrapPanel>
+	        </WrapPanel>
 	
 					<userControls:LabelTextBox x:Name="ServiceTemplateNameTextBox" 
 															LabelText="Service Template" LabelWidth="90"

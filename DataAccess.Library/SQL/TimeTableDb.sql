@@ -1,14 +1,31 @@
 BEGIN TRANSACTION;
 
+CREATE TABLE IF NOT EXISTS "ServiceClasses" (
+	"Id"	INTEGER NOT NULL,
+	"ServiceClassName"	TEXT NOT NULL,
+	"ServiceClassDescription"	TEXT NOT NULL,
+	Category TEXT NOT NULL,
+	UNIQUE("ServiceClassName"),
+	PRIMARY KEY("Id")
+	);
+
+CREATE TABLE IF NOT EXISTS "TimeEventTypes" (
+	"Id"	INTEGER NOT NULL,
+	"EventType"	TEXT NOT NULL,
+	"EventTypeDescription"	TEXT NOT NULL DEFAULT '',
+	UNIQUE("EventType")
+	PRIMARY KEY("Id")
+);
+
 CREATE TABLE IF NOT EXISTS "Routes" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"RouteName"	TEXT NOT NULL,
 	"RouteAbbreviation"	TEXT NOT NULL,
 	"RouteDescription"	TEXT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS "Branches" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"BranchName"	TEXT NOT NULL,
 	"BranchAbbreviation"	TEXT NOT NULL,
 	"BranchDescription"	TEXT NOT NULL,
@@ -17,7 +34,7 @@ CREATE TABLE IF NOT EXISTS "Branches" (
 );
 
 CREATE TABLE IF NOT EXISTS "Locations" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"LocationName"	TEXT NOT NULL,
 	"LocationAbbreviation" TEXT NOT NULL,
 	"NumberOfTracks"	INTEGER NOT NULL,
@@ -27,7 +44,7 @@ CREATE TABLE IF NOT EXISTS "Locations" (
 );
 
 CREATE TABLE IF NOT EXISTS "Sections" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"SectionName"	TEXT NOT NULL,
 	"NumberOfTracks"	INTEGER NOT NULL,
 	"SpeedLimit"	INTEGER NOT NULL,
@@ -44,7 +61,7 @@ CREATE TABLE IF NOT EXISTS "Sections" (
 );
 
 CREATE TABLE IF NOT EXISTS "ServiceDirections" (
-	"Id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id" INTEGER NOT NULL PRIMARY KEY,
 	"ServiceDirectionName"	TEXT NOT NULL,
 	"ServiceDirectionAbbreviation" TEXT NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
@@ -53,7 +70,7 @@ CREATE TABLE IF NOT EXISTS "ServiceDirections" (
 );
 
 CREATE TABLE IF NOT EXISTS "ServiceTemplates" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"ServiceTemplateName"	TEXT NOT NULL,
 	"ServiceTemplateAbbreviation"	TEXT NOT NULL,
 	"ServiceType"	TEXT NOT NULL,
@@ -61,12 +78,12 @@ CREATE TABLE IF NOT EXISTS "ServiceTemplates" (
 	"ServiceDirectionId" INT NOT NULL,
 	"CalculatedDuration"	INTEGER NOT NULL,
 	"RouteId"	INTEGER NOT NULL,
-	FOREIGN KEY("RouteId") REFERENCES "Routes",
+	FOREIGN KEY("RouteId") REFERENCES "Routes"  ON DELETE CASCADE,
 	FOREIGN KEY("ServiceDirectionId") REFERENCES "ServiceDirections" ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS "TimeEvents" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"EventType"	TEXT NOT NULL,
 	"ArrivalTime"	INTEGER NOT NULL,
 	"WaitTime"	INTEGER NOT NULL DEFAULT 0,
@@ -78,7 +95,7 @@ CREATE TABLE IF NOT EXISTS "TimeEvents" (
 );
 
 CREATE TABLE IF NOT EXISTS "Timetables" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"TimetableName"	TEXT NOT NULL,
 	"TimetableAbbreviation"	TEXT NOT NULL,
 	"TimetableDescription"	TEXT NOT NULL,
@@ -90,7 +107,7 @@ CREATE TABLE IF NOT EXISTS "Timetables" (
 );
 
 CREATE TABLE IF NOT EXISTS "Services" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"ServiceName"	TEXT NOT NULL,
 	"ServiceAbbreviation"	TEXT NOT NULL,
 	"StartTime"	INTEGER NOT NULL,
@@ -100,7 +117,7 @@ CREATE TABLE IF NOT EXISTS "Services" (
 );
 
 CREATE TABLE IF NOT EXISTS "ConnectTtSi" (
-	"Id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+	"Id"	INTEGER NOT NULL PRIMARY KEY,
 	"TimetableId"	INTEGER NOT NULL,
 	"ServiceId"	INTEGER NOT NULL,
 	UNIQUE( "TimetableId","ServiceId"),
@@ -128,4 +145,31 @@ AS SELECT
 FROM TimeEvents, ServiceTemplates, Locations
 WHERE ServiceTemplates.Id= TimeEvents.ServiceTemplateId AND Locations.Id= TimeEvents.LocationId
 ORDER BY ServiceTemplates.Id ASC, TimeEvents.[Order] ASC;
+
+-- Insert data into configuration tables
+INSERT OR IGNORE INTO "TimeEventTypes" ("Id","EventType","EventTypeDescription") VALUES 
+ (1,'S','Start service'),
+ (2,'E','End service'),
+ (3,'P','Pass through location'),
+ (4,'H','Halt, pick up passengers'),
+ (5,'W','Wait, Intermediate stop'),
+ (6,'SE','Shunt activities at single location'),
+ (7,'--','No action, just show the location');
+
+ INSERT INTO "ServiceClasses" ("Id","ServiceClassName","ServiceClassDescription","Category") VALUES 
+ (1,'Passenger','Unspecified passenger services','Passenger'),
+ (2,'Freight','Unspecified Freight services','Freight'),
+ (3,'Stopping passenger','Stopping passenger service, stops at most stations','Passenger'),
+ (4,'Regio express passenger','Passenger, limited stops at major stations','Passenger'),
+ (5,'Express passenger','Passenger, stops only at main stations','Passenger'),
+ (6,'International passenger','International passenger trains','Passenger'),
+ (7,'Passenger depot run','Passenger trains for depot','Passenger'),
+ (8,'Light engine','Light engine','Other'),
+ (9,'Freight shunting duty','Freight Shuntiing','Freight'),
+ (10,'Heavy freight','Heavy freight','Freight'),
+ (11,'Express freight','Express freight','Freight'),
+ (12,'Work train','Work train, track maintenance etcetera','Other');
+
+
+
 COMMIT;

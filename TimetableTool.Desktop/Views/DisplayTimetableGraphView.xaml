@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="675" d:DesignWidth="975">
+             d:DesignHeight="1300" d:DesignWidth="975">
 
-	<Border x:Name="GraphBorder" Style="{StaticResource DefaultBorder}" Height="675" Width="975" >
+	<Border x:Name="GraphBorder" Style="{StaticResource DefaultBorder}" Height="1275" Width="975" >
 		<Viewbox Stretch="Fill">
-			<Canvas x:Name="AxisCanvas" Height="450"  Width="650"  Background="LightSkyBlue">
-				<Canvas x:Name="GraphCanvas" Height="330" Width="540" Background="Bisque"
+			<Canvas x:Name="AxisCanvas" Height="650"  Width="650"  Background="LightSkyBlue">
+				<Canvas x:Name="GraphCanvas" Height="530" Width="540" Background="Bisque"
 				        Canvas.Top="90" Canvas.Left="90"  >
 				</Canvas>
 			</Canvas>
