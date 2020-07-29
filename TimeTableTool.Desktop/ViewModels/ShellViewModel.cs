@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
 using TimetableTool.Desktop.Helpers;
 using TimetableTool.Desktop.Models;
+using TimetableTool.Desktop.Views;
 
 namespace TimetableTool.Desktop.ViewModels
 	{
@@ -301,6 +302,14 @@ namespace TimetableTool.Desktop.ViewModels
 						var displayTimetableGraphVM = IoC.Get<DisplayTimetableGraphViewModel>();
 						displayTimetableGraphVM.TimetableId = message.SelectedTimetable.TimetableId;
 						await ActivateItemAsync(displayTimetableGraphVM, new CancellationToken());
+						break;
+						}
+					case ReportType.ScottPlotGraph:
+						{
+						var displayScottPlotGraphVM =
+							new ScottPlotGraph(message.SelectedTimetable.TimetableId);
+						var form= new ScottPlotGraphForm(displayScottPlotGraphVM);
+						form.Show();
 						break;
 						}
 

@@ -4,7 +4,8 @@ CREATE TABLE IF NOT EXISTS "ServiceClasses" (
 	"Id"	INTEGER NOT NULL,
 	"ServiceClassName"	TEXT NOT NULL,
 	"ServiceClassDescription"	TEXT NOT NULL,
-	Category TEXT NOT NULL,
+	"Category" TEXT NOT NULL,
+	"Color" TEXT NOT NULL,
 	UNIQUE("ServiceClassName"),
 	PRIMARY KEY("Id")
 	);

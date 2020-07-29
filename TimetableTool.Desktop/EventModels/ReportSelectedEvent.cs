@@ -7,7 +7,7 @@ namespace TimetableTool.Desktop.EventModels
 	{
 	public enum ReportType
 		{
-		Classic, Graph, ArrivalDeparture
+		Classic, Graph, ScottPlotGraph, ArrivalDeparture
 		}
 	public class ReportSelectedEvent
 		{
