@@ -14,8 +14,10 @@ namespace TimetableTool.Desktop.ViewModels
 	public class ScottPlotGraph: Notifier
 		{
 		public int TimetableId { get; set; }
+		public int ScottPlotWidth { get; set; } = Settings.ScottPlotWidth;
 
-	private TimetableModel _timetable;
+		public int ScottPlotHeight { get; set; } = Settings.ScottPlotHeight;
+		private TimetableModel _timetable;
 		public TimetableModel Timetable
 			{
 			get { return _timetable; }

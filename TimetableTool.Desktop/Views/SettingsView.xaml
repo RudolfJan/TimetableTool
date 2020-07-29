@@ -1,0 +1,25 @@
+﻿<Window x:Class="TimetableTool.Desktop.Views.SettingsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:TimetableTool.Desktop.Views"
+        xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
+        mc:Ignorable="d"
+        Style="{StaticResource AllWindows}"
+        WindowStartupLocation="CenterScreen"
+        Title="Settings">
+    <StackPanel>
+    <StackPanel HorizontalAlignment="Left">
+        <userControls:LabelTextBox LabelText="ScottPlot width" LabelWidth="80" Width="145" 
+                                   TextBoxText="{Binding ScottPlotWidth, Mode=TwoWay}"/>
+        <userControls:LabelTextBox LabelText="ScottPlot height" LabelWidth="80" Width="145" 
+                                   TextBoxText="{Binding ScottPlotHeight, Mode=TwoWay}"/>
+        
+    </StackPanel>
+        <WrapPanel>
+            <Button x:Name="Cancel" Style="{StaticResource CancelButton}">Cancel</Button>
+            <Button x:Name="Save" Style="{StaticResource OKButton}">Save</Button>
+        </WrapPanel>
+    </StackPanel>
+</Window>

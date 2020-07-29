@@ -40,6 +40,7 @@ namespace TimetableTool.Desktop
       {
       LogEventHandler.LogEvent += OnLogEvent;
       DatabaseSupport.DatabaseUserInitialization();
+      Settings.ReadFromRegistry();
       DisplayRootViewFor<ShellViewModel>();
       }
 

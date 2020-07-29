@@ -174,6 +174,11 @@ namespace TimetableTool.Desktop.ViewModels
 			await ActivateItemAsync( backupVM, new CancellationToken());
 			}
 
+		public async Task SettingsMenu()
+			{
+			var SettingsVM = IoC.Get<SettingsViewModel>();
+			await _windowManager.ShowDialogAsync(SettingsVM);
+			}
 
 		public async Task ExitApplication()
 			{

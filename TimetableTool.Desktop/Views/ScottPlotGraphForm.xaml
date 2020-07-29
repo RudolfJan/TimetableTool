@@ -19,10 +19,13 @@
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
 
-	      <WpfPlot Grid.Column="0" x:Name="TimetableGraph" Margin="20 20 20 20" cm:Bind.Model="{Binding}" Height="1200" Width="1200"/>
+          <StackPanel Grid.Column="0">
+	            <WpfPlot  x:Name="TimetableGraph" Margin="20 20 20 20" cm:Bind.Model="{Binding}" 
+                        Width="{Binding ScottPlotWidth, Mode=TwoWay}" 
+                        Height="{Binding ScottPlotHeight, Mode=TwoWay}"/>
+          </StackPanel>
           <StackPanel Grid.Column="1">
               <TextBlock Style="{StaticResource HeaderTextBlock}">Locations Legend</TextBlock>
-            <TextBlock Text="{Binding GraphModel.LocationList[0].LocationName}"/>
 					<DataGrid x:Name="LocationListGrid" Style="{StaticResource DefaultDataGrid}" 
                     ItemsSource="{Binding LocationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="300">
