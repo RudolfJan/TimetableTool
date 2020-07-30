@@ -422,11 +422,11 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			foreach(var item in ServiceSourceList)
 				{
-				ServiceDestinationList.Add(item);
 				ConnectTtSiDataAccess.InsertConnection(item.Id, SelectedTimetable.Id);
-				NotifyOfPropertyChange(() => ServiceDestinationList);
-				NotifyOfPropertyChange(()=>CopyStatus);
 				}
+			ServiceDestinationList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(SelectedTimetable.Id));
+			NotifyOfPropertyChange(() => ServiceDestinationList);
+			NotifyOfPropertyChange(() => CopyStatus);
 			}
 		}
 	}

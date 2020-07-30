@@ -9,7 +9,7 @@
         xmlns:windowSizing="clr-namespace:UISupport.Library.WindowSizing;assembly=Styles.Library"
         mc:Ignorable="d"
         Style="{StaticResource AllWindows}" WindowStartupLocation="CenterScreen"
-        Title="Graph View">
+        Title="Graph View" Loaded="WindowLoaded">
     <ScrollViewer>
       <StackPanel >
         <Grid>
@@ -30,16 +30,16 @@
                     ItemsSource="{Binding LocationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
                     CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="300">
 						<DataGrid.Columns>
-							<DataGridTextColumn Header="Abbrev" Width="40" Binding="{Binding LocationAbbreviation, Mode=TwoWay}" IsReadOnly="True"/>
-							<DataGridTextColumn Header="Name" Width="120" Binding="{Binding LocationName, Mode=TwoWay}" IsReadOnly="True"/>
+							<DataGridTextColumn Header="Abbrev" Width="60" Binding="{Binding LocationAbbreviation, Mode=TwoWay}" IsReadOnly="True"/>
+							<DataGridTextColumn Header="Name" Width="160" Binding="{Binding LocationName, Mode=TwoWay}" IsReadOnly="True"/>
 						</DataGrid.Columns>
 					</DataGrid>
 					<TextBlock Style="{StaticResource HeaderTextBlock}">Services Legend</TextBlock>
             <DataGrid Name="TimeGraphDataGrid" Style="{StaticResource DefaultDataGrid}" ItemsSource="{Binding TimeGraphUI, Mode=TwoWay}"
-                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="700" Width="170" SelectionChanged="DataGrid_SelectionChanged">
+                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="400" Width="170" SelectionChanged="DataGrid_SelectionChanged">
               <DataGrid.Columns>
-                <DataGridTextColumn Header="Abbrev" Width="40" Binding="{Binding ServiceAbbreviation}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Name" Width="120" Binding="{Binding ServiceName}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Abbrev" Width="60" Binding="{Binding ServiceAbbreviation}" IsReadOnly="True"/>
+                <DataGridTextColumn Header="Name" Width="160" Binding="{Binding ServiceName}" IsReadOnly="True"/>
               </DataGrid.Columns>
             </DataGrid>
           </StackPanel>

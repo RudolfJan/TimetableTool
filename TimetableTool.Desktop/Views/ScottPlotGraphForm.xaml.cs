@@ -136,6 +136,13 @@ namespace TimetableTool.Desktop.Views
 				TimetableGraph.Render();
 				}
 			}
+
+		private void WindowLoaded(object sender, RoutedEventArgs e)
+			{
+			MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight*0.9;
+			MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+
+			}
 		}
 	}
 	

@@ -129,10 +129,25 @@ namespace TimetableTool.Desktop.ViewModels
 			set { _timeEventTypeList = value; }
 			}
 
-		#endregion
+    private string _selectedTimeEventType;
 
-		#region Initialization
-		protected override async void OnViewLoaded(object view)
+    public string SelectedTimeEventType
+      {
+      get
+        {
+        return _selectedTimeEventType;
+        }
+      set
+        {
+        _selectedTimeEventType = value;
+        NotifyOfPropertyChange(()=>SelectedTimeEventType);
+        }
+      }
+
+    #endregion
+
+    #region Initialization
+    protected override async void OnViewLoaded(object view)
       {
       base.OnViewLoaded(view);
       TimeEvents.SelectedRoute = RouteDataAccess.GetRouteById(RouteId);
@@ -165,6 +180,7 @@ namespace TimetableTool.Desktop.ViewModels
       NotifyOfPropertyChange(() => CanEditTimeEvent);
       NotifyOfPropertyChange(()=>CanSaveTimeEvent);
       NotifyOfPropertyChange(()=> TimeEventTypeList);
+      NotifyOfPropertyChange(() => TimeType);
       }
 
     bool CanSelectLocation
