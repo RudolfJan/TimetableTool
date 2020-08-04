@@ -1,11 +1,17 @@
 ﻿using Logging.Library;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Windows.Forms;
 
 namespace TimetableTool.Desktop
 	{
-	public static class Settings
+	// https://stackoverflow.com/questions/51351464/user-configuration-settings-in-net-core
+
+	// See http://geekswithblogs.net/BlackRabbitCoder/archive/2010/05/19/c-system.lazylttgt-and-the-singleton-design-pattern.aspx
+
+	public class Settings
 		{
 		private static readonly IConfiguration _config = CreateConfig();
 
@@ -19,6 +25,55 @@ namespace TimetableTool.Desktop
 			return config;
 			}
 
+		// static holder for instance, need to use lambda to construct since constructor private
+		private static readonly Lazy<Settings> MyInstance
+			= new Lazy<Settings>(() => new Settings());
+
+		// private to prevent direct instantiation.
+
+		private Settings()
+			{
+			}
+
+		// accessor for instance
+
+		public static Settings Instance
+			{
+			get
+				{
+				return MyInstance.Value;
+				}
+			}
+
+		public static string RegkeyString
+			{
+			get { return "software\\Holland Hiking\\TimetableTools"; }
+			}
+
+		private static RegistryKey OpenRegistry()
+			{
+			return Registry.CurrentUser.CreateSubKey(RegkeyString, true);
+			}
+
+		#region DataAccess
+
+		// User settings, a user may change go in the user settings.
+		// Other configuration stuff goes in the appsettings.json file
+		public static void ReadFromRegistry()
+			{
+			using var AppKey = OpenRegistry();
+			ScottPlotWidth = int.Parse((string) AppKey.GetValue(nameof(ScottPlotWidth), _config["Interface:ScottPlotWidth"]));
+			ScottPlotHeight = int.Parse((string) AppKey.GetValue(nameof(ScottPlotHeight), _config["Interface:ScottPlotHeight"]));
+			}
+
+		public static void WriteToRegistry()
+			{
+			using var AppKey = OpenRegistry();
+			AppKey.SetValue(nameof(ScottPlotWidth), ScottPlotWidth, RegistryValueKind.String);
+			AppKey.SetValue(nameof(ScottPlotHeight), ScottPlotHeight, RegistryValueKind.String);
+			}
+
+#endregion
 		public static int DatabaseVersion { get; set; }
 		public static string MyDocumentsFolder
 			{
@@ -51,6 +106,11 @@ namespace TimetableTool.Desktop
 			}
 
 
+		#region Values
+
+		public static int ScottPlotWidth { get; set; }
+		public static int ScottPlotHeight { get; set; }
+		
 		public static string DataPath
 			{
 			get
@@ -101,6 +161,6 @@ namespace TimetableTool.Desktop
 				return _config["ConnectionStrings:SqLiteDb"].Replace("path", DatabasePath);
 				}
 			}
-
+		#endregion
 		}
 	}

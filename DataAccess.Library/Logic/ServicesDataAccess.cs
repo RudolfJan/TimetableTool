@@ -24,8 +24,37 @@ namespace DataAccess.Library.Logic
       return serviceList;
       }
 
-   public static List<ServiceModel> GetServicesPerRoute(int routeId, int serviceDirectionId)
+    public static List<ExtendedServiceModel> GetExtendedServicesPerRoute(int routeId)
       {
+      List<ServiceClassModel> serviceClasses = ServiceClassDataAccess.GetAllServiceClasses();
+
+      string sql = @"SELECT
+                        Services.Id AS Id,
+                        Services.ServiceName,
+                        Services.ServiceAbbreviation,
+                        Services.StartTime,
+                        Services.EndTime,
+                        ServiceTemplates.ServiceType,
+                        Services.ServiceTemplateId
+                      FROM Services, ServiceTemplates
+                      WHERE @RouteId=ServiceTemplates.RouteId 
+                            AND Services.ServiceTemplateId== ServiceTemplates.Id
+                          ";
+
+      var serviceList =
+        SQLiteData.LoadData<ExtendedServiceModel, dynamic>(sql, new { routeId }, SQLiteData.GetConnectionString()).ToList();
+      foreach (var item in serviceList)
+        {
+        var classVar =
+          ServiceClassDataAccess.GetServiceClassModelFromString(item.ServiceType, serviceClasses);
+        item.Category = classVar.Category;
+        }
+      return serviceList;
+      }
+
+    public static List<ServiceModel> GetServicesPerRoute(int routeId, int serviceDirectionId)
+      {
+
       string sql = @"SELECT
                         Services.Id AS Id,
                         Services.ServiceName,
@@ -41,8 +70,39 @@ namespace DataAccess.Library.Logic
 
       var serviceList =
         SQLiteData.LoadData<ServiceModel, dynamic>(sql, new { routeId, serviceDirectionId}, SQLiteData.GetConnectionString()).ToList();
+ 
       return serviceList;
       }
+
+
+    public static List<ExtendedServiceModel> GetExtendedServicesPerRoute(int routeId, int serviceDirectionId)
+      {
+      List<ServiceClassModel> serviceClasses = ServiceClassDataAccess.GetAllServiceClasses();
+      string sql = @"SELECT
+                        Services.Id AS Id,
+                        Services.ServiceName,
+                        Services.ServiceAbbreviation,
+                        Services.StartTime,
+                        Services.EndTime,
+                        ServiceTemplates.ServiceType,
+                        Services.ServiceTemplateId
+                      FROM Services, ServiceTemplates
+                      WHERE 
+                              @RouteId=ServiceTemplates.RouteId 
+                              AND Services.ServiceTemplateId== ServiceTemplates.Id 
+                              AND ServiceTemplates.ServiceDirectionId=@ServiceDirectionId;";
+
+      var serviceList =
+        SQLiteData.LoadData<ExtendedServiceModel, dynamic>(sql, new { routeId, serviceDirectionId }, SQLiteData.GetConnectionString()).ToList();
+      foreach (var item in serviceList)
+        {
+        var classVar =
+          ServiceClassDataAccess.GetServiceClassModelFromString(item.ServiceType, serviceClasses);
+        item.Category = classVar.Category;
+        }
+      return serviceList;
+      }
+
 
     public static List<ServiceModel> GetServicesPerTimetable(int timetableId)
       {

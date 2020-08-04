@@ -38,6 +38,7 @@ namespace TimetableTool.Desktop.ViewModels
 				_selectedTimetable = value;
 				NotifyOfPropertyChange(()=>CanViewArrivalDeparture);
 				NotifyOfPropertyChange(()=>CanViewGraph);
+				NotifyOfPropertyChange(()=>CanScottPlotViewGraph);
 				NotifyOfPropertyChange(()=>CanViewTimetable);
 				}
 			}
@@ -95,6 +96,21 @@ namespace TimetableTool.Desktop.ViewModels
 			await _events.PublishOnUIThreadAsync(reportEvent);
 			}
 
+		public bool CanScottPlotViewGraph
+			{
+			get
+				{
+				return SelectedTimetable != null;
+				}
+			}
+
+		public async Task ScottPlotViewGraph()
+			{
+			ReportSelectedEvent reportEvent= new ReportSelectedEvent();
+			reportEvent.SelectedTimetable = SelectedTimetable;
+			reportEvent.Report = ReportType.ScottPlotGraph;
+			await _events.PublishOnUIThreadAsync(reportEvent);
+			}
 
 		public bool CanViewArrivalDeparture
 			{

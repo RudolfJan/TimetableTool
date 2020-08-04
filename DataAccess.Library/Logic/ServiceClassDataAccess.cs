@@ -9,23 +9,29 @@ namespace DataAccess.Library.Logic
 		{
 		public static List<ServiceClassModel> GetAllServiceClasses()
 			{
-			var sql="SELECT Id, ServiceClassname, ServiceClassDescription, Category FROM \"ServiceClasses\";";
+			var sql = "SELECT Id, ServiceClassname, ServiceClassDescription, Category, Color FROM \"ServiceClasses\";";
 			var serviceClassList =
-				SQLiteData.LoadData<ServiceClassModel, dynamic>(sql, new {}, SQLiteData.GetConnectionString()).ToList();
+				SQLiteData.LoadData<ServiceClassModel, dynamic>(sql, new { }, SQLiteData.GetConnectionString()).ToList();
 			return serviceClassList;
 			}
 
 		public static ServiceClassModel GetServiceClassModelFromString(string serviceClass, List<ServiceClassModel> serviceClassList)
 			{
-			ServiceClassModel output = serviceClassList.First(x => x.ServiceClassName == serviceClass);
-			if (output == null)
+			var cl1 = serviceClass.ToLower();
+			foreach (var item in serviceClassList)
 				{
-				ServiceClassModel defaultValue= new ServiceClassModel();
-				defaultValue.ServiceClassName = "Invalid service class";
-				defaultValue.ServiceClassDescription = "Choose from the predefined list";
-				output = defaultValue;
+				var cl2 = item.ServiceClassName.ToLower();
+				if(cl1==cl2)
+					{
+					return item;
+					}
 				}
-			return output;
+
+			ServiceClassModel defaultValue = new ServiceClassModel();
+			defaultValue.ServiceClassName = "Invalid service class";
+			defaultValue.ServiceClassDescription = "Choose from the predefined list";
+			defaultValue.Color = "Magenta";
+			return defaultValue;
 			}
 		}
 	}

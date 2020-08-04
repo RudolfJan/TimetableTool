@@ -122,11 +122,11 @@ namespace TimetableTool.Desktop.ViewModels
 					{
 					if(SelectedTimetable.IsMultiDirection)
 						{
-						ServiceSourceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerRoute(RouteId));
+						ServiceSourceList = new BindableCollection<ExtendedServiceModel>(ServicesDataAccess.GetExtendedServicesPerRoute(RouteId));
 						}
 					else
 						{
-						ServiceSourceList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerRoute(RouteId,SelectedTimetable.ServiceDirectionId));
+						ServiceSourceList = new BindableCollection<ExtendedServiceModel>(ServicesDataAccess.GetExtendedServicesPerRoute(RouteId,SelectedTimetable.ServiceDirectionId));
 						}
 					ServiceDestinationList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(SelectedTimetable.Id));
 					}
@@ -167,9 +167,9 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
-		private BindableCollection<ServiceModel> _servicesSourceList;
+		private BindableCollection<ExtendedServiceModel> _servicesSourceList;
 
-		public BindableCollection<ServiceModel> ServiceSourceList
+		public BindableCollection<ExtendedServiceModel> ServiceSourceList
 			{
 			get { return _servicesSourceList; }
 			set
@@ -180,9 +180,9 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
-		private ServiceModel _selectedServiceSource;
+		private ExtendedServiceModel _selectedServiceSource;
 
-		public ServiceModel SelectedServiceSource
+		public ExtendedServiceModel SelectedServiceSource
 			{
 			get
 				{
@@ -422,11 +422,11 @@ namespace TimetableTool.Desktop.ViewModels
 			{
 			foreach(var item in ServiceSourceList)
 				{
-				ServiceDestinationList.Add(item);
 				ConnectTtSiDataAccess.InsertConnection(item.Id, SelectedTimetable.Id);
-				NotifyOfPropertyChange(() => ServiceDestinationList);
-				NotifyOfPropertyChange(()=>CopyStatus);
 				}
+			ServiceDestinationList = new BindableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(SelectedTimetable.Id));
+			NotifyOfPropertyChange(() => ServiceDestinationList);
+			NotifyOfPropertyChange(() => CopyStatus);
 			}
 		}
 	}

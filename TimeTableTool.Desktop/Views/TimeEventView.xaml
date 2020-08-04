@@ -77,7 +77,7 @@
           <Button x:Name="SelectLocation" Style="{StaticResource WideButton}">Set Selected Location</Button>
           <TextBox x:Name="SelectedLocationTextBox" Style="{StaticResource StaticTextBox}" 
                    Text="{Binding Location.LocationName}" 
-                   Width="160"/>
+                   Width="170"/>
         </WrapPanel>
         <WrapPanel>
 
@@ -92,16 +92,15 @@
         </WrapPanel>
         <WrapPanel>
           <TextBlock Style="{StaticResource DefaultTextBlock}" Width="65">Type</TextBlock>
-          <ComboBox SelectedItem="{Binding SelectedTimeEventType}"
+          <ComboBox SelectedItem="{Binding TimeType, Mode=TwoWay, NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}"
                     Width="65" Margin="{StaticResource DefaultMargin}"
-                    ItemsSource="{Binding TimeEventTypeList}" 
-                    DisplayMemberPath="EventType"></ComboBox>
-          
+                    ItemsSource="{Binding TimeEventTypeList}"/>
+ 
           <userControls:LabelTextBox x:Name="OrderTextBox" 
                                      Style="{StaticResource DefaultLabelTextBox}" 
-                                     LabelText=" Order" LabelWidth="70"
+                                     LabelText=" Order" LabelWidth="75" Width="150"
                                      TextBoxText="{Binding Order, Mode=TwoWay}"/>
-        </WrapPanel>
+				</WrapPanel>
         <WrapPanel>
           <Button x:Name="SaveTimeEvent" Style="{StaticResource DefaultButton}">Save changes</Button>
           <Button x:Name="ClearTimeEvent" Style="{StaticResource DefaultButton}">Clear edit</Button>

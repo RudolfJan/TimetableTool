@@ -16,6 +16,7 @@
                     <MenuItem x:Name="Reports" Header="_Reports ..." />
                     <MenuItem x:Name="Backup" Header="_Backup database"/>
                     <MenuItem x:Name="Print" Header="_Print" IsEnabled="False"/>
+                    <MenuItem x:Name="SettingsMenu" Header="_Settings"/>
                     <MenuItem x:Name="ExitApplication" Header="E_xit"/>
                 </MenuItem>
                 <MenuItem x:Name="RouteMenu" Header="_Routes">

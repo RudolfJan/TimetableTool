@@ -66,5 +66,15 @@ namespace DataAccess.Library.Logic
         SQLiteData.LoadData<FullTimeEventModel, dynamic>(sql, new {timeEventId}, SQLiteData.GetConnectionString()).FirstOrDefault();
       return timeEvent;
       }
-    }
+
+		public static List<ExtendedFullTimeEventModel> GetAllExtendedFullTimeEventsPerServiceTemplate(int serviceTemplateId)
+			{
+      string sql = "SELECT * FROM FullTimeEvents " +
+                   "WHERE ServiceTemplateId=@ServiceTemplateId";
+
+      var timeEventList =
+        SQLiteData.LoadData<ExtendedFullTimeEventModel, dynamic>(sql, new { serviceTemplateId }, SQLiteData.GetConnectionString()).ToList();
+      return timeEventList;
+      }
+		}
   }

@@ -51,13 +51,10 @@
                       Style="{StaticResource HeaderTextBlock}">Reports</TextBlock>
            <StackPanel Grid.Row="1" Grid.Column="1" >
              <Button x:Name="ViewTimetable" Style="{StaticResource WideButton}">Classic</Button>
-             <Button x:Name="ViewGraph" Style="{StaticResource WideButton}">Graph</Button>
+             <!-- <Button x:Name="ViewGraph" Style="{StaticResource WideButton}">Graph</Button> -->
+             <Button x:Name="ScottPlotViewGraph" Style="{StaticResource WideButton}">ScottPlot Graph</Button>
              <Button x:Name="ViewArrivalDeparture" Style="{StaticResource WideButton}">Arrivals and departures</Button>
            </StackPanel>
-
-
-
-
            <!-- endregion -->
          </Grid>
        </StackPanel>     
