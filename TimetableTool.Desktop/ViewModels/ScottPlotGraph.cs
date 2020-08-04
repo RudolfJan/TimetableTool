@@ -2,8 +2,10 @@
 using DataAccess.Library.Logic;
 using DataAccess.Library.Models;
 using Styles.Library.Helpers;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using TimetableTool.DataAccessLibrary.Logic;
 using TimetableTool.Desktop.Models;
 
 
@@ -15,8 +17,52 @@ namespace TimetableTool.Desktop.ViewModels
 		{
 		public int TimetableId { get; set; }
 		public int ScottPlotWidth { get; set; } = Settings.ScottPlotWidth;
-
 		public int ScottPlotHeight { get; set; } = Settings.ScottPlotHeight;
+
+		public string StartTimeText { get; set; } = "00:00";
+
+		public string EndTimeText { get; set; } = "23:59";
+		private double _zoom = 1;
+		public double Zoom {
+			get
+				{
+				return _zoom;
+				}
+			set
+				{
+				_zoom = value;
+				OnPropertyChanged("Zoom");
+				}
+			}
+
+		private double _pan = 0;
+		public double Pan {
+			get
+				{
+				return _pan;
+				}
+			set
+				{
+				_pan = value;
+				OnPropertyChanged("Pan");
+				}
+			}
+
+		public List<ServiceClassModel> ServiceClassList { get; set; }
+
+		private TimeGraphUIModel _selectedTimeGraph;
+		public TimeGraphUIModel SelectedTimeGraph {
+			get
+				{
+				return _selectedTimeGraph;
+				}
+			set
+				{
+				_selectedTimeGraph = value;
+				OnPropertyChanged("SelectedTimeGraph");
+				}
+			}
+
 		private TimetableModel _timetable;
 		public TimetableModel Timetable
 			{
@@ -72,20 +118,24 @@ namespace TimetableTool.Desktop.ViewModels
 	private void PrepareDataSet()
 			{
 			TimeGraphUI= new ObservableCollection<TimeGraphUIModel>();
+			ServiceClassList = ServiceClassDataAccess.GetAllServiceClasses();
 			var serviceList = new ObservableCollection<ServiceModel>(ServicesDataAccess.GetServicesPerTimetable(TimetableId));
 			foreach (var service in serviceList)
 				{
 				var item= new TimeGraphUIModel();
 				var serviceTemplateId = service.ServiceTemplateId;
 				var serviceTemplate = ServiceTemplateDataAccess.GetServiceTemplateById(serviceTemplateId);
-				item.TimeEventList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerServiceTemplate(serviceTemplateId));
+				item.TimeEventList = new BindableCollection<ExtendedFullTimeEventModel>(FullTimeEventDataAccess.GetAllExtendedFullTimeEventsPerServiceTemplate(serviceTemplateId));
 				item.ServiceName = service.ServiceName;
 				item.ServiceAbbreviation = service.ServiceAbbreviation;
 				item.ServiceType = serviceTemplate.ServiceType;
+				item.StartTimeText = service.StartTimeText;
+				item.EndTimeText = service.EndTimeText;
 				int actualTime = service.StartTime;
 				foreach (var fullTimeEvent in item.TimeEventList)
 					{
 					actualTime += fullTimeEvent.ArrivalTime;
+					fullTimeEvent.ArrivalTimeText = TimeConverters.MinutesToString(actualTime);
 					DataPoint point = GetFirstDataPoint(fullTimeEvent, actualTime);
 					item.DataLine.Add(point);
 					if (fullTimeEvent.WaitTime > 0)
@@ -94,6 +144,7 @@ namespace TimetableTool.Desktop.ViewModels
 						DataPoint point2 = GetSecondDataPoint(actualTime, point.X);
 						item.DataLine.Add(point2);
 						}
+					fullTimeEvent.DepartureTimeText = TimeConverters.MinutesToString(actualTime);
 					}
 				TimeGraphUI.Add(item);
 				}

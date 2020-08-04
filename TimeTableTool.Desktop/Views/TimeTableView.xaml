@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:TimetableTool.Desktop.Views" xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
              mc:Ignorable="d" 
-            d:DesignHeight="750" d:DesignWidth="750">
+            d:DesignHeight="750" d:DesignWidth="850">
 
 	<Border Style="{StaticResource DefaultBorder}">
 		<StackPanel>
@@ -219,6 +219,39 @@
 									</DataTemplate>
 								</DataGridTextColumn.HeaderTemplate>
 							</DataGridTextColumn>
+
+							<DataGridTextColumn Binding="{Binding ServiceType, NotifyOnSourceUpdated=True}" Width="80">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+												Text="Type" 
+												HorizontalAlignment="Center"/>
+											<TextBox x:Name="ServiceTypeFilterTextBox" Width="80" 
+											         Text="{Binding ElementName=ServiceSource, 
+                         Path= DataContext.Filter.ServiceType, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+
+							<DataGridTextColumn Binding="{Binding Category, NotifyOnSourceUpdated=True}" Width="50">
+								<DataGridTextColumn.HeaderTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock
+												Text="Cat." 
+												HorizontalAlignment="Center"/>
+											<TextBox x:Name="ServiceCategoryFilterTextBox" Width="50" 
+											         Text="{Binding ElementName=ServiceSource, 
+                         Path= DataContext.Filter.Category, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+										</StackPanel>
+									</DataTemplate>
+								</DataGridTextColumn.HeaderTemplate>
+							</DataGridTextColumn>
+
 						</DataGrid.Columns>
 						<DataGrid.RowDetailsTemplate>
 								<DataTemplate>

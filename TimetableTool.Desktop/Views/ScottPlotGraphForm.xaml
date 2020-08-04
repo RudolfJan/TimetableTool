@@ -7,7 +7,9 @@
         xmlns:local="clr-namespace:TimetableTool.Desktop.Views"
         xmlns:cm="http://caliburnmicro.com"
         xmlns:windowSizing="clr-namespace:UISupport.Library.WindowSizing;assembly=Styles.Library"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
+        x:Name="ScottPlotWindow"
         Style="{StaticResource AllWindows}" WindowStartupLocation="CenterScreen"
         Title="Graph View" Loaded="WindowLoaded">
     <ScrollViewer>
@@ -19,37 +21,106 @@
             <ColumnDefinition Width="*"/>
           </Grid.ColumnDefinitions>
 
-          <StackPanel Grid.Column="0">
-	            <WpfPlot  x:Name="TimetableGraph" Margin="20 20 20 20" cm:Bind.Model="{Binding}" 
-                        Width="{Binding ScottPlotWidth, Mode=TwoWay}" 
-                        Height="{Binding ScottPlotHeight, Mode=TwoWay}"/>
-          </StackPanel>
-          <StackPanel Grid.Column="1">
-              <TextBlock Style="{StaticResource HeaderTextBlock}">Locations Legend</TextBlock>
-					<DataGrid x:Name="LocationListGrid" Style="{StaticResource DefaultDataGrid}" 
+        <StackPanel Grid.Column="0">
+          <Border Style="{StaticResource DefaultBorder}">
+            <StackPanel>
+              <WrapPanel>
+            <TextBlock Style="{StaticResource DefaultTextBlock}">Set interval</TextBlock>
+            <xctk:TimePicker Width="80" TimeInterval="00:30:00" Text="{Binding StartTimeText}" Margin="5 3 5 3"
+                               Format="Custom" FormatString="HH:mm"/>
+            <xctk:TimePicker Width="80" TimeInterval="00:30:00" Text="{Binding EndTimeText}" Margin="5 3 5 3"
+                             Format="Custom" FormatString="HH:mm"/>
+          </WrapPanel>
+          <WrapPanel>
+
+            <TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Zoom</TextBlock>
+            <Slider Name="ZoomSlider" Width="200"
+                      Minimum="0.5" Maximum="10"
+                      IsSelectionRangeEnabled="False"
+                      TickFrequency="0.5" Value="{Binding Zoom, Mode=TwoWay}" ValueChanged="OnZoomChanged" />
+            <TextBox Width="40" Text="{Binding Zoom, StringFormat={}{0:#.#}, Mode=TwoWay}"/>
+          </WrapPanel>
+          <WrapPanel>
+                <TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Scroll</TextBlock>
+            <Slider Name="PanSlider" Width="200"
+                  Minimum="-24" Maximum="24"
+                  IsSelectionRangeEnabled="False"
+                  TickFrequency="4" Value="{Binding Pan, Mode=TwoWay}" ValueChanged="OnZoomChanged" />
+            <TextBox Width="40" Text="{Binding Pan, StringFormat={}{0:0}, Mode=TwoWay}"/>
+          </WrapPanel>
+          <TextBlock Style="{StaticResource HeaderTextBlock}">Locations Legend</TextBlock>
+          <DataGrid x:Name="LocationListGrid" Style="{StaticResource DefaultDataGrid}" 
                     ItemsSource="{Binding LocationList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
-                    CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="300">
-						<DataGrid.Columns>
-							<DataGridTextColumn Header="Abbrev" Width="60" Binding="{Binding LocationAbbreviation, Mode=TwoWay}" IsReadOnly="True"/>
-							<DataGridTextColumn Header="Name" Width="160" Binding="{Binding LocationName, Mode=TwoWay}" IsReadOnly="True"/>
-						</DataGrid.Columns>
-					</DataGrid>
-					<TextBlock Style="{StaticResource HeaderTextBlock}">Services Legend</TextBlock>
-            <DataGrid Name="TimeGraphDataGrid" Style="{StaticResource DefaultDataGrid}" ItemsSource="{Binding TimeGraphUI, Mode=TwoWay}"
-                      CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="400" Width="170" SelectionChanged="DataGrid_SelectionChanged">
-              <DataGrid.Columns>
-                <DataGridTextColumn Header="Abbrev" Width="60" Binding="{Binding ServiceAbbreviation}" IsReadOnly="True"/>
-                <DataGridTextColumn Header="Name" Width="160" Binding="{Binding ServiceName}" IsReadOnly="True"/>
-              </DataGrid.Columns>
-            </DataGrid>
-          </StackPanel>
+                    CanUserAddRows="False" CanUserDeleteRows="False" AutoGenerateColumns="False" Height="200">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Abbrev" Width="60" Binding="{Binding LocationAbbreviation, Mode=TwoWay}" IsReadOnly="True"/>
+              <DataGridTextColumn Header="Name" Width="160" Binding="{Binding LocationName, Mode=TwoWay}" IsReadOnly="True"/>
+            </DataGrid.Columns>
+          </DataGrid>
 
-        </Grid>
-      <WrapPanel HorizontalAlignment="Right">
+          <DataGrid Style="{StaticResource DefaultDataGrid}"
+                    ItemsSource="{Binding ServiceClassList}"
+                    AutoGenerateColumns="False"
+                    CanUserAddRows="False"
+                    CanUserDeleteRows="False"
+                    Height="200">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Name"
+                                  Binding="{Binding ServiceClassName}" IsReadOnly="True"/>
+              <DataGridTemplateColumn Header="Line">
+                <DataGridTemplateColumn.CellTemplate>
+                  <DataTemplate>
+                    <Rectangle Width="50" Height="5" Fill="{Binding Color}"/>
+                  </DataTemplate>
+                </DataGridTemplateColumn.CellTemplate>
+              </DataGridTemplateColumn>
+            </DataGrid.Columns>
 
-        <Button x:Name="Export" Style="{StaticResource DefaultButton}" Click="Export_Click" >Export as png</Button>
-      <Button x:Name="Exit" Style="{StaticResource OKButton}"  Click="Exit_Click">Close</Button>
-      </WrapPanel>
-      </StackPanel>
+          </DataGrid>
+
+          <TextBlock Style="{StaticResource HeaderTextBlock}">Selected service details</TextBlock>
+          <TextBlock Style="{StaticResource DefaultTextBlock}" TextWrapping="Wrap" Width="250">Click with your mouse at marker in the graph to see the details of the selected service</TextBlock>
+          <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimeGraph.ServiceName, Mode=TwoWay}"/>
+          <WrapPanel>
+            <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimeGraph.StartTimeText, Mode=TwoWay}" Width="40"/>
+            <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimeGraph.EndTimeText, Mode=TwoWay}" Width="40"/>
+            <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimeGraph.ServiceAbbreviation, Mode=TwoWay}" Width="120"/>
+          </WrapPanel>
+          <TextBox Style="{StaticResource StaticTextBox}" Text="{Binding SelectedTimeGraph.ServiceType, Mode=TwoWay}"/>
+          <DataGrid x:Name="EventTimeEventDataGrid" Style="{StaticResource DefaultDataGrid}" 
+                  AutoGenerateColumns="False" Height="200"
+                  ItemsSource="{Binding SelectedTimeGraph.TimeEventList}"
+									CanUserAddRows="False" CanUserDeleteRows="False"
+                  CanUserSortColumns="False">
+            <DataGrid.Columns>
+              <DataGridTextColumn Header="Location" Width="150"
+                                Binding="{Binding LocationName}" IsReadOnly="True" />
+              <DataGridTextColumn Header="Type" Width="40"
+                                Binding="{Binding EventType}"  IsReadOnly="True"/>
+              <DataGridTextColumn Header="Arr" Width="40" ElementStyle="{StaticResource RightCell}"
+	                              Binding="{Binding ArrivalTimeText}"  IsReadOnly="True"/>
+              <DataGridTextColumn Header="Dept" Width="40" ElementStyle="{StaticResource RightCell}"
+                                Binding="{Binding DepartureTimeText}"  IsReadOnly="True"/>
+            </DataGrid.Columns>
+          </DataGrid>
+        </StackPanel>
+        </Border>
+        </StackPanel>
+        <StackPanel Grid.Column="1">
+          <WpfPlot  x:Name="TimetableGraph" Margin="20 20 20 20" cm:Bind.Model="{Binding}" 
+                        Width="{Binding ScottPlotWidth, Mode=TwoWay}" 
+                        Height="{Binding ScottPlotHeight, Mode=TwoWay}" MouseLeftButtonUp="OnMouseLeftButtonUp" />
+          <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="Redraw" Style="{StaticResource DefaultButton}" Click="Redraw_OnClick">Refresh</Button>
+            <Button x:Name="Export" Style="{StaticResource DefaultButton}" Click="Export_Click">Export as png</Button>
+
+            <Button x:Name="Exit" Style="{StaticResource OKButton}"  Click="Exit_Click">Close</Button>
+          </WrapPanel>
+        </StackPanel>
+
+ 
+      </Grid>
+
+    </StackPanel>
     </ScrollViewer>
 </windowSizing:SizableWindow>

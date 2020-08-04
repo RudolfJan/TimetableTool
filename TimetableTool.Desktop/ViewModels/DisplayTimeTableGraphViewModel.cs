@@ -107,7 +107,7 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				var item= new TimeGraphUIModel();
 				var serviceTemplateId = service.ServiceTemplateId;
-				item.TimeEventList= new BindableCollection<FullTimeEventModel>(FullTimeEventDataAccess.GetAllFullTimeEventsPerServiceTemplate(serviceTemplateId));
+				item.TimeEventList= new BindableCollection<ExtendedFullTimeEventModel>(FullTimeEventDataAccess.GetAllExtendedFullTimeEventsPerServiceTemplate(serviceTemplateId));
 				item.ServiceName = service.ServiceName;
 				item.ServiceAbbreviation = service.ServiceAbbreviation;
 				int actualTime = service.StartTime;
