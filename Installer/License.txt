@@ -6,3 +6,4 @@ CC Attribution-NonCommercial-ShareAlike (CC BY-NC-SA)
 - The content is provided "as-is" and by using it you agree the author is NOT liable in any form for the use of this software. Usage is completely at your onw risk.
 - You are NOT entitled any form of support, though feedback is welcome.
 - You understand that Dovetail Games Ltd or any related company is NOT involved in this software package by any means and cannot be held responsible for the use of this software.
+- This software is donationware. If you use it regularly, you are requested to donate a small amount of money for the expenses to develop his application
