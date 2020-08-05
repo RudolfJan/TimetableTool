@@ -20,6 +20,12 @@ See the manual for details.
 
 Version history:
 
+Version 0.4.0:
+Timetable graph replaced by Scottplot technology, allowing to zoom and scroll through the timetable
+User settings created, including screen and storage in registry
+Added configuration tables for Service Class and Time Event types
+Some bug fixes
+
 Version 0.3.0:
 Bug fixes
 Added new report for arrival/departure timetable

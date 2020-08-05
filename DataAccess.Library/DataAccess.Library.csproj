@@ -7,7 +7,9 @@
   <ItemGroup>
     <None Remove="SQL\CreateVersion.sql" />
     <None Remove="SQL\HH-testset.ttt" />
+    <None Remove="SQL\InsertServiceClasses.sql" />
     <None Remove="SQL\ServiceTemplatesChange.sql" />
+    <None Remove="SQL\TimeEventTypes.sql" />
     <None Remove="SQL\TimeTableDb.sql" />
     <None Remove="SQL\UpdateToVersion5.sql" />
     <None Remove="SQL\WSR-testset.ttt" />
@@ -20,7 +22,13 @@
     <Content Include="SQL\HH-testset.ttt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="SQL\InsertServiceClasses.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="SQL\ServiceTemplatesChange.sql">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SQL\TimeEventTypes.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="SQL\TimeTableDb.sql">
