@@ -19,7 +19,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Installer", "Installer", "{
 		Installer\License.txt = Installer\License.txt
 		Installer\Readme.txt = Installer\Readme.txt
 		Installer\Setup.bmp = Installer\Setup.bmp
-		Installer\TimetableToolSetupv0.3.0.iss = Installer\TimetableToolSetupv0.3.0.iss
+		Installer\TimetableToolSetupv0.4.0.iss = Installer\TimetableToolSetupv0.4.0.iss
 		Installer\TSW_Cindy_1489778724_00.png = Installer\TSW_Cindy_1489778724_00.png
 	EndProjectSection
 EndProject
