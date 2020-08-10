@@ -27,12 +27,17 @@
 
                     <MenuItem x:Name="EditSections" Header="_Section" Visibility="Hidden"/>
                 </MenuItem>
-                <MenuItem  x:Name="TimeTablesMenu" Header="Timetables">
+                <MenuItem  x:Name="TimeTablesMenu" Header="_Timetables">
                     <MenuItem x:Name="EditTimetables" Header="_Timetables" IsEnabled="{Binding IsEditTimetablesEnabled}"/>
                     <MenuItem x:Name="EditServiceTemplates" Header="_Service templates" IsEnabled="{Binding IsEditServiceTemplatesEnabled}"/>
                     <MenuItem x:Name="EditTimeEvents" Header="Time _Events" IsEnabled="{Binding IsEditTimeEventsEnabled}"/>
                     <MenuItem x:Name="EditServices" Header="Ser_vices" IsEnabled="{Binding IsEditServicesEnabled}"/>
                 </MenuItem>
+                <MenuItem x:Name="TrainPlanning" Header="Train _planning">
+                    <MenuItem x:Name="EditTrains" Header="_Trains" IsEnabled="{Binding IsEditTrainsEnabled}"/>
+                    <MenuItem x:Name="EditTrainServices" Header="Train _Services" IsEnabled="{Binding IsEditTrainServiceEnabled}"/>
+                </MenuItem>
+
                 <MenuItem x:Name="HelpMenu"  Header="_Help">
                     <MenuItem x:Name="ShowManual" Header="_Manual"/>
                     <MenuItem x:Name="ShowAbout" Header="_About"/>

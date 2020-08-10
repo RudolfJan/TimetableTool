@@ -192,5 +192,46 @@ namespace DataAccess.Library.Logic
 			return output;
 			}
 
+		public string ExportTrains()
+			{
+			List<TrainModel> trainList = TrainDataAccess.GetAllTrainsPerRoute(RouteId);
+			return WriteTrainHeader() + WriteTrainData(trainList);
+			}
+
+		public string WriteTrainHeader()
+			{
+			return $"\"Trains\"{sep}\"Id\"{sep}\"TrainName\"{sep}\"TrainAbbreviation\"{sep}\"TrainDescription\"{sep}\"TrainClass\"{sep}\"RouteId\"\r\n";
+			}
+
+		public string WriteTrainData(List<TrainModel> trainList)
+			{
+			var output = "";
+			foreach (var item in trainList)
+				{
+				output += $"\"Train\"{sep}\"{item.Id}\"{sep}\"{item.TrainName}\"{sep}\"{item.TrainAbbreviation}\"{sep}\"{item.TrainDescription}\"{sep}\"{item.TrainClass}\"{sep}\"{item.RouteId}\"\r\n";
+				}
+			return output;
+			}
+
+		public string ExportTrainServices()
+			{
+			List<TrainServiceModel> trainServiceList = TrainServiceDataAccess.GetAllTrainServicesPerRoute(RouteId);
+			return WriteTrainHeader() + WriteTrainServiceData(trainServiceList);
+			}
+
+		public string WriteTrainServiceHeader()
+			{
+			return $"\"TrainServices\"{sep}\"Id\"{sep}\"ServiceId\"{sep}\"TrainId\"\r\n";
+			}
+
+		public string WriteTrainServiceData(List<TrainServiceModel> trainServiceList)
+			{
+			var output = "";
+			foreach (var item in trainServiceList)
+				{
+				output += $"\"TrainService\"{sep}\"{item.Id}\"{sep}\"{item.ServiceId}\"{sep}\"{item.TrainId}\"\r\n";
+				}
+			return output;
+			}
 		}
 	}

@@ -1,0 +1,146 @@
+﻿<UserControl x:Class="TimetableTool.Desktop.Views.TrainView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TimetableTool.Desktop.Views"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:userControls="clr-namespace:Styles.Library.UserControls;assembly=Styles.Library"
+             mc:Ignorable="d" 
+             d:DesignHeight="650" d:DesignWidth="880">
+	<StackPanel>
+		<Grid>
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition Width="*"/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="*"/>
+			</Grid.RowDefinitions>
+
+			<!--  Column 0 Trains -->
+			<TextBlock Grid.Row="0" Grid.Column="0" Style="{StaticResource HeaderTextBlock}">Trains</TextBlock>
+
+			<DataGrid x:Name="TrainListDataGrid" 
+                Grid.Row="1" Grid.Column="0" 
+                Style="{StaticResource DefaultDataGrid}"
+                ItemsSource="{Binding Path=TrainList, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+                SelectedItem="{Binding SelectedTrain}"
+                Height="400" MinWidth="400"
+                CanUserAddRows="False"
+                CanUserDeleteRows="False"
+                AutoGenerateColumns="False" 
+                >
+				<DataGrid.Columns>
+					<DataGridTextColumn Binding="{Binding Id, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn.HeaderTemplate>
+							<DataTemplate>
+								<StackPanel>
+									<TextBlock
+                  Text="Id"
+                  HorizontalAlignment="Center"/>
+									<Button x:Name="SetFilter" Width="22" Height="22" Margin="5 5 5 5 "
+                        Command="{Binding ElementName=TrainListDataGrid, 
+											Path= DataContext.SetFilterCommand}">
+										<Image Source="../Images/filter.png" />
+									</Button>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTextColumn.HeaderTemplate>
+					</DataGridTextColumn>
+
+					<DataGridTextColumn Binding="{Binding TrainAbbreviation, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn.HeaderTemplate>
+							<DataTemplate>
+								<StackPanel>
+									<TextBlock
+                  Text="Abbrev" 
+                  HorizontalAlignment="Center" />
+									<TextBox x:Name="TrainAbbreviationFilterTextBox" Width="80" 
+                          Text="{Binding ElementName=TrainList, 
+                          Path= DataContext.Filter.TrainAbbreviation, Mode=TwoWay, 
+                          UpdateSourceTrigger=PropertyChanged}"/>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTextColumn.HeaderTemplate>
+					</DataGridTextColumn>
+
+					<DataGridTextColumn Binding="{Binding TrainName, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn.HeaderTemplate>
+							<DataTemplate>
+								<StackPanel>
+									<TextBlock
+                  Text="Name" 
+                  HorizontalAlignment="Center"/>
+									<TextBox x:Name="ServiceNameFilterTextBox" Width="120" 
+                         Text="{Binding ElementName=TrainList, 
+                         Path= DataContext.Filter.TrainName, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTextColumn.HeaderTemplate>
+					</DataGridTextColumn>
+
+					<DataGridTextColumn Binding="{Binding TrainClass, NotifyOnSourceUpdated=True}">
+						<DataGridTextColumn.HeaderTemplate>
+							<DataTemplate>
+								<StackPanel>
+									<TextBlock
+										Text="Class" 
+										HorizontalAlignment="Center"/>
+									<TextBox x:Name="ServiceNameFilterTextBox" Width="120" 
+									         Text="{Binding ElementName=TrainList, 
+                         Path= DataContext.Filter.TrainClass, Mode=TwoWay, 
+                         UpdateSourceTrigger=PropertyChanged}"/>
+								</StackPanel>
+							</DataTemplate>
+						</DataGridTextColumn.HeaderTemplate>
+					</DataGridTextColumn>
+
+				</DataGrid.Columns>
+
+			</DataGrid>
+
+			<!-- Row 2 Controls -->
+			<StackPanel Grid.Row="2" Grid.Column="0" >
+				<WrapPanel>
+					<Button x:Name="Edit" Style="{StaticResource DefaultButton}">Edit</Button>
+					<Button x:Name="Delete" Style="{StaticResource DefaultButton}">Delete</Button>
+				</WrapPanel>
+			</StackPanel>
+
+			<!-- Column 1 train Editor -->
+
+			<TextBlock Grid.Row="0" Grid.Column="2" Style="{StaticResource HeaderTextBlock}">Train editor</TextBlock>
+
+			<StackPanel Grid.Row="1" Grid.Column="2" Width="300">
+			<userControls:LabelTextBox x:Name="TrainNameTextBox" LabelText="Train name" LabelWidth="60"
+                             TextBoxText="{Binding TrainName, Mode=TwoWay}"/>
+
+			<WrapPanel>
+			<userControls:LabelTextBox x:Name="TrainAbbrevTextBox" LabelText="Abbrev" LabelWidth="60"
+                               TextBoxText="{Binding TrainAbbreviation, Mode=TwoWay}"/>
+			<userControls:LabelTextBox x:Name="TrainClassTextBox" LabelText="Class" LabelWidth="60" Width="160"
+					                           TextBoxText="{Binding TrainClass, Mode=TwoWay}"/>
+			</WrapPanel>
+				<userControls:LabelTextBox x:Name="TrainDescriptionTextBox" LabelText="Description" LabelWidth="60"
+																	 Style="{StaticResource MultiLineLabelTextBox}"
+				                           TextBoxText="{Binding TrainDescription, Mode=TwoWay}" TextBoxBackGround="{StaticResource ControlBackground}"/>
+
+				<WrapPanel>
+					<Button x:Name="Save" Style="{StaticResource DefaultButton}">Save changes</Button>
+					<Button x:Name="Clear" Style="{StaticResource DefaultButton}">Clear edit</Button>
+				</WrapPanel>
+
+			</StackPanel>
+
+		</Grid>
+
+	</StackPanel>
+</UserControl>

@@ -1,12 +1,10 @@
 ﻿using DataAccess.Library.Logic;
-using DataAccess.Library.Models;
 using ScottPlot;
-using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using TimetableTool.DataAccessLibrary.Logic;
 using TimetableTool.Desktop.Models;
+using TimetableTool.Desktop.ReportsCommon;
 using TimetableTool.Desktop.ViewModels;
 using Application = System.Windows.Application;
 using Color = System.Drawing.Color;
@@ -27,16 +25,46 @@ namespace TimetableTool.Desktop.Views
 		private TimeGraphUIModel[] highlightedTimeGraphUiModels;
 		private int scatterIndex = 0;
 		private PlottableScatter marker;
+		private double xAxisLabelRotation = 20;
 
 		public ScottPlotGraphForm(ScottPlotGraph graphModel)
 			{
 			InitializeComponent();
 			GraphModel = graphModel;
 			DataContext = GraphModel;
-			PlotGraph(GraphModel);
 			}
 
-		public void PlotGraph(ScottPlotGraph graphModel)
+		public void PlotGraph()
+			{
+			scatterIndex = 0;
+			int i = 0;
+			foreach (var graph in GraphModel.TimeGraphUI)
+				{
+				graph.Plot = PlotService(GraphModel, graph, GraphModel.TimeGraphUI[i].ServiceAbbreviation, GraphModel.Zoom);
+				i++;
+				}
+
+			ScottPlotReport.PlotTimeAxis(TimetableGraph.plt, GraphModel.Zoom, GraphModel.Pan);
+			ScottPlotReport.PlotLocationAxis(TimetableGraph.plt, GraphModel.LocationList,
+				xAxisLabelRotation);
+
+			if (marker != null)
+				{
+				marker = ScottPlotReport.DrawMarker(TimetableGraph.plt, marker, marker.xs[0], marker.ys[0]);
+				}
+
+			if (GraphModel.SelectedTimeGraph != null)
+				{
+				GraphModel.SelectedTimeGraph.Plot.lineWidth = 3;
+				}
+
+			scatterHighLight = TimetableGraph.plt.PlotScatterHighlight(scatterDataX, scatterDataY, lineWidth: 0, markerSize: 0.5);
+
+			ScottPlotReport.ConfigurePlot(TimetableGraph);
+
+			}
+
+		private void PrepareSearchablePointsList()
 			{
 			var locationCount = GraphModel.LocationList.Count;
 			var serviceCount = GraphModel.TimeGraphUI.Count;
@@ -44,67 +72,9 @@ namespace TimetableTool.Desktop.Views
 			scatterDataX = new double[pointCount + 1];
 			scatterDataY = new double[pointCount + 1];
 			highlightedTimeGraphUiModels = new TimeGraphUIModel[pointCount + 1];
-			scatterIndex = 0;
-			int i = 0;
-			foreach (var graph in GraphModel.TimeGraphUI)
-				{
-				graph.Plot = PlotService(graphModel, graph, GraphModel.TimeGraphUI[i].ServiceAbbreviation);
-				i++;
-				}
-
-			PlotTimeAxis(graphModel.Zoom, graphModel.Pan);
-			PlotLocationAxis(graphModel);
-
-			if (marker != null)
-				{
-				//redraw marker
-				marker = TimetableGraph.plt.PlotScatter(marker.xs, marker.ys, Color.Red,
-					markerShape: MarkerShape.openCircle, markerSize: 15);
-				}
-
-			if (GraphModel.SelectedTimeGraph != null)
-				{
-				GraphModel.SelectedTimeGraph.Plot.lineWidth = 3;
-				}
-			
-			TimetableGraph.plt.Style(figBg: GetResourceColor("WindowBackground"));
-			TimetableGraph.plt.Style(dataBg: GetResourceColor("ControlBackground"));
-			TimetableGraph.plt.Grid(enable: true, color: GetResourceColor("GridLine"));
-			scatterHighLight = TimetableGraph.plt.PlotScatterHighlight(scatterDataX, scatterDataY, lineWidth: 0, markerSize: 0.5);
-			TimetableGraph.Configure(enablePanning: false, enableScrollWheelZoom: false, enableRightClickZoom: false);
-			TimetableGraph.Render();
 			}
 
-
-		public void PlotTimeAxis(double zoom, double pan)
-			{
-			double[] yPositions = new double[25];
-			string[] yLabels = new string[25];
-			for (int p = 0; p < 25; p++)
-				{
-				yPositions[p] = -60 * p;
-				yLabels[p] = p.ToString("D2") + ":00";
-				}
-			TimetableGraph.plt.Ticks(invertSignY: true);
-			TimetableGraph.plt.YTicks(yPositions, yLabels);
-			TimetableGraph.plt.AxisPan(dy: -pan * 100);
-			TimetableGraph.plt.AxisZoom(yFrac: zoom);
-			}
-
-		public void PlotLocationAxis(ScottPlotGraph graphModel)
-			{
-			string[] labels = new string[graphModel.LocationList.Count];
-			int k = 0;
-			foreach (var label in graphModel.LocationList)
-				{
-				labels[k] = label.LocationAbbreviation;
-				k++;
-				}
-			TimetableGraph.plt.XTicks(labels);
-			}
-
-
-		public PlottableScatter PlotService(ScottPlotGraph model, TimeGraphUIModel graph, string serviceAbbreviation)
+		public PlottableScatter PlotService(ScottPlotGraph model, TimeGraphUIModel graph, string serviceAbbreviation, double zoom)
 			{
 			int startTime = TimeConverters.TimeToMinutes(model.StartTimeText);
 			int endTime = TimeConverters.TimeToMinutes(model.EndTimeText);
@@ -126,8 +96,8 @@ namespace TimetableTool.Desktop.Views
 					}
 
 
-				double xOffset = 0;
-				double yOffset = 5;
+				double xOffset = 0.01/zoom;
+				double yOffset = 9/zoom;
 				TextAlignment alignment;
 				if (dataX[0] < dataX.GetLength(0) / 2)
 					{
@@ -139,7 +109,7 @@ namespace TimetableTool.Desktop.Views
 					}
 				TimetableGraph.plt.PlotText(serviceAbbreviation,
 					dataX[0] + xOffset, dataY[0] + yOffset, fontName: "Arial", fontSize: 10,
-					color: GetResourceColor("GraphText"), bold: true, alignment: alignment);
+					color: ScottPlotReport.GetResourceColor("GraphText"), bold: true, alignment: alignment);
 				return TimetableGraph.plt.PlotScatterHighlight(dataX, dataY, GetLineColor(graph.ServiceType));
 				}
 			else
@@ -153,25 +123,9 @@ namespace TimetableTool.Desktop.Views
 			var serviceClass = ServiceClassDataAccess.GetServiceClassModelFromString(serviceType, GraphModel.ServiceClassList);
 			if (serviceClass == null)
 				{
-				return Color.Magenta;
+				return Color.Magenta;// Ugly default value
 				}
-			return System.Drawing.Color.FromName(serviceClass.Color);
-			}
-
-		public System.Drawing.Color GetResourceColor(string resourceName)
-			{
-			var BackgroundColorBrush =
-				Application.Current.TryFindResource(resourceName) as SolidColorBrush;
-			if (BackgroundColorBrush != null)
-				{
-				return ToDrawingColor(BackgroundColorBrush.Color);
-				}
-			return System.Drawing.Color.Aqua; // Ugly default value
-			}
-
-		public System.Drawing.Color ToDrawingColor(System.Windows.Media.Color mediaColor)
-			{
-			return System.Drawing.Color.FromArgb(mediaColor.A, mediaColor.R, mediaColor.G, mediaColor.B);
+			return Color.FromName(serviceClass.Color);
 			}
 
 		private void Exit_Click(object sender, RoutedEventArgs e)
@@ -189,22 +143,29 @@ namespace TimetableTool.Desktop.Views
 			{
 			MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight * 0.9;
 			MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
+			PrepareSearchablePointsList();
+			RedrawPlot();
 			}
 
 		private void Redraw_OnClick(object sender, RoutedEventArgs e)
 			{
-			TimetableGraph.plt.Clear();
-			PlotGraph(GraphModel);
+			RedrawPlot();
 			}
 
-		private void OnZoomChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+		private void OnZoomOrScrollChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+			{
+			RedrawPlot();
+			}
+
+		private void RedrawPlot()
 			{
 			if (GraphModel != null)
 				{
 				if (TimetableGraph?.plt != null)
 					{
 					TimetableGraph.plt.Clear();
-					PlotGraph(GraphModel);
+					PlotGraph();
+					TimetableGraph.Render();
 					}
 				}
 			}
@@ -234,7 +195,6 @@ namespace TimetableTool.Desktop.Views
 					}
 				graph.Plot.lineWidth = 3;
 				GraphModel.SelectedTimeGraph = graph;
-				TimetableGraph.Render();
 				}
 			TimetableGraph.Render();
 			}

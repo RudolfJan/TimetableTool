@@ -9,8 +9,8 @@
         xmlns:windowSizing="clr-namespace:UISupport.Library.WindowSizing;assembly=Styles.Library"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
-        x:Name="ScottPlotWindow"
         Style="{StaticResource AllWindows}" WindowStartupLocation="CenterScreen"
+
         Title="Graph View" Loaded="WindowLoaded">
     <ScrollViewer>
       <StackPanel >
@@ -35,17 +35,17 @@
 
             <TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Zoom</TextBlock>
             <Slider Name="ZoomSlider" Width="200"
-                      Minimum="0.5" Maximum="10"
+                      Minimum="1" Maximum="10"
                       IsSelectionRangeEnabled="False"
-                      TickFrequency="0.5" Value="{Binding Zoom, Mode=TwoWay}" ValueChanged="OnZoomChanged" />
+                      TickFrequency="1" Value="{Binding Zoom, Mode=TwoWay}" ValueChanged="OnZoomOrScrollChanged" />
             <TextBox Width="40" Text="{Binding Zoom, StringFormat={}{0:#.#}, Mode=TwoWay}"/>
           </WrapPanel>
           <WrapPanel>
                 <TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Scroll</TextBlock>
             <Slider Name="PanSlider" Width="200"
-                  Minimum="-24" Maximum="24"
+                  Minimum="-6.5" Maximum="6.5"
                   IsSelectionRangeEnabled="False"
-                  TickFrequency="4" Value="{Binding Pan, Mode=TwoWay}" ValueChanged="OnZoomChanged" />
+                  TickFrequency="2" Value="{Binding Pan, Mode=TwoWay}" ValueChanged="OnZoomOrScrollChanged" />
             <TextBox Width="40" Text="{Binding Pan, StringFormat={}{0:0}, Mode=TwoWay}"/>
           </WrapPanel>
           <TextBlock Style="{StaticResource HeaderTextBlock}">Locations Legend</TextBlock>
@@ -107,7 +107,7 @@
         </Border>
         </StackPanel>
         <StackPanel Grid.Column="1">
-          <WpfPlot  x:Name="TimetableGraph" Margin="20 20 20 20" cm:Bind.Model="{Binding}" 
+          <WpfPlot  x:Name="TimetableGraph" Margin="20 20 20 40" cm:Bind.Model="{Binding}" 
                         Width="{Binding ScottPlotWidth, Mode=TwoWay}" 
                         Height="{Binding ScottPlotHeight, Mode=TwoWay}" MouseLeftButtonUp="OnMouseLeftButtonUp" />
           <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">

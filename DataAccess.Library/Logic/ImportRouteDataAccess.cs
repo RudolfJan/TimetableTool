@@ -17,6 +17,7 @@ namespace DataAccess.Library.Logic
 		private Dictionary<int,int> ServiceTemplateKeys = new Dictionary<int,int>(); 
 		private Dictionary<int,int> ServiceKeys = new Dictionary<int,int>();
 		private Dictionary<int,int> TimetableKeys = new Dictionary<int,int>();
+		private Dictionary<int, int> TrainKeys = new Dictionary<int, int>();
 		public ImportRouteDataAccess(string path)
 			{
 			importPath = path;
@@ -132,7 +133,51 @@ namespace DataAccess.Library.Logic
 						ImportConnectTiSi(fields);
 						break;
 						}
+					case "Trains":
+						{
+						break;
+						}
+					case "Train":
+						{
+						ImportTrains(fields);
+						break;
+						}
+					case "TrainServices":
+						{
+						break;
+						}
+					case "TrainService":
+						{
+						ImportTrainServices(fields);
+						break;
+						}
+
+
 				}
+			}
+
+		private void ImportTrains(string[] fields)
+			{
+			var train= new TrainModel();
+			train.Id= int.Parse(fields[1]);
+			train.TrainName = fields[2];
+			train.TrainAbbreviation = fields[3];
+			train.TrainDescription = fields[4];
+			train.TrainClass = fields[5];
+			train.RouteId = newRouteId;
+			var newTrainId = TrainDataAccess.InsertTrain(train);
+			TrainKeys.Add(train.Id,newTrainId);
+			}
+
+		private void ImportTrainServices(string[] fields)
+			{
+			var trainService= new TrainServiceModel();
+			trainService.Id = int.Parse(fields[1]);
+			var oldServiceId = int.Parse(fields[2]);
+			trainService.ServiceId = ServiceKeys.GetValueOrDefault(oldServiceId, 0);
+			var oldTrainId = int.Parse(fields[3]);
+			trainService.TrainId = TrainKeys.GetValueOrDefault(oldTrainId, 0);
+			var newTrainServiceId = TrainServiceDataAccess.InsertTrainService(trainService);
 			}
 
 		private void ImportConnectTiSi(string[] fields)

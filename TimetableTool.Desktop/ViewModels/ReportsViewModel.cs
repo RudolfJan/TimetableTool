@@ -40,6 +40,7 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(()=>CanViewGraph);
 				NotifyOfPropertyChange(()=>CanScottPlotViewGraph);
 				NotifyOfPropertyChange(()=>CanViewTimetable);
+				NotifyOfPropertyChange(() => CanTrainPlanning);
 				}
 			}
 
@@ -127,7 +128,23 @@ namespace TimetableTool.Desktop.ViewModels
 			await _events.PublishOnUIThreadAsync(reportEvent);
 			}
 
+		public bool CanTrainPlanning
+			{
+			get
+				{
+				return SelectedTimetable != null;
+				}
+			}
 
+
+		public async Task TrainPlanning()
+			{
+			ReportSelectedEvent reportEvent = new ReportSelectedEvent();
+			reportEvent.SelectedTimetable = SelectedTimetable;
+			reportEvent.Report = ReportType.TrainPlanning;
+			await _events.PublishOnUIThreadAsync(reportEvent);
+
+			}
 		#endregion
 
 		}

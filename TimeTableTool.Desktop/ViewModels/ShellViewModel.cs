@@ -4,6 +4,7 @@ using DataAccess.Library.Models;
 using Logging.Library;
 using System;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using TimetableTool.Desktop.EventModels;
@@ -13,7 +14,7 @@ using TimetableTool.Desktop.Views;
 
 namespace TimetableTool.Desktop.ViewModels
 	{
-	public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceTemplateSelectedEvent>, IHandle<TimetableSelectedEvent>, IHandle<ReportSelectedEvent>
+	public class ShellViewModel : Conductor<object>, IHandle<RouteSelectedEvent>, IHandle<ServiceTemplateSelectedEvent>, IHandle<TimetableSelectedEvent>, IHandle<ReportSelectedEvent>, IHandle<TrainSelectedEvent>
 		{
 		private readonly IEventAggregator _events;
 		private readonly IWindowManager _windowManager;
@@ -56,6 +57,22 @@ namespace TimetableTool.Desktop.ViewModels
 				}
 			}
 
+		public bool IsEditTrainsEnabled
+			{
+			get
+				{
+				return SelectedRoute != null;
+				}
+			}
+
+
+		public bool IsEditTrainServiceEnabled
+			{
+			get
+				{
+				return SelectedTrain != null;
+				}
+			}
 
 		private RouteModel _selectedRoute;
 		public RouteModel SelectedRoute
@@ -74,6 +91,7 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(() => IsEditTimeEventsEnabled);
 				NotifyOfPropertyChange(() => IsEditServicesEnabled);
 				NotifyOfPropertyChange(() => IsEditServiceDirectionsEnabled);
+				NotifyOfPropertyChange(()=> IsEditTrainsEnabled);
 				}
 			}
 
@@ -105,6 +123,23 @@ namespace TimetableTool.Desktop.ViewModels
 				NotifyOfPropertyChange(()=>IsTimetableSelectedMultiDirection);
 				}
 			}
+
+		private TrainModel _selectedTrain;
+
+		public TrainModel SelectedTrain
+			{
+			get
+				{
+				return _selectedTrain;
+				}
+			set
+				{
+				_selectedTrain = value;
+				NotifyOfPropertyChange(()=>IsEditTrainServiceEnabled);
+				}
+			
+			}
+
 
 		public bool IsTimetableSelected { get; set; }
 		public bool IsTimetableSelectedMultiDirection { get; set; }
@@ -235,6 +270,19 @@ namespace TimetableTool.Desktop.ViewModels
 			await ActivateItemAsync(serviceVM, new CancellationToken());
 			}
 
+		public async Task EditTrains()
+			{
+			var trainsVM = IoC.Get<TrainViewModel>();
+			trainsVM.Route = SelectedRoute;
+			await ActivateItemAsync(trainsVM, new CancellationToken());
+			}
+
+		public async Task EditTrainServices()
+			{
+			var trainServiceVM = IoC.Get<TrainServiceViewModel>();
+			trainServiceVM.Train = SelectedTrain;
+			await ActivateItemAsync(trainServiceVM, new CancellationToken());
+			}
 		public async Task ShowAbout()
 			{
 			await _windowManager.ShowDialogAsync(IoC.Get<AboutViewModel>());
@@ -271,6 +319,12 @@ namespace TimetableTool.Desktop.ViewModels
 			return Task.CompletedTask;
 			}
 
+		public Task HandleAsync(TrainSelectedEvent message, CancellationToken cancellationToken)
+			{
+			SelectedTrain = message.SelectedTrain;
+			NotifyOfPropertyChange(()=> IsEditTrainServiceEnabled);
+			return Task.CompletedTask;
+			}
 		public Task HandleAsync(RouteSelectedEvent message, CancellationToken cancellationToken)
 			{
 			// If you change the selected route, you must reselect the service, because it is attached to the route.
@@ -324,7 +378,13 @@ namespace TimetableTool.Desktop.ViewModels
 						departureArrivalVM.RouteId = message.SelectedTimetable.RouteId;
 						departureArrivalVM.TimetableId = message.SelectedTimetable.TimetableId;
 						await ActivateItemAsync(departureArrivalVM, new CancellationToken());
-
+						break;
+						}
+					case ReportType.TrainPlanning:
+						{
+						var displayTrainPlanningVM = new TrainServiceGraph(message.SelectedTimetable.RouteId);
+						var form= new TrainServiceGraphForm(displayTrainPlanningVM);
+						form.Show();
 						break;
 						}
 

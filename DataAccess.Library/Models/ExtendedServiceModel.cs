@@ -10,6 +10,12 @@ namespace DataAccess.Library.Models
 		{
 			public string ServiceType { get; set; }
 			public string Category { get; set; }
+
+		// and the first and last location
+		public int StartLocationId { get; set; }
+		public string StartLocationName { get; set; }
+		public int EndLocationId { get; set; }
+		public string EndLocationName { get; set; }
 			}
 		}
 	

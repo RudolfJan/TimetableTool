@@ -10,6 +10,7 @@ namespace DataAccess.Library.Models
 		public int StartTime { get; set; }
 		public int EndTime { get; set; }
 		public int ServiceTemplateId { get; set; }
+
 		public string StartTimeText
 			{
 			get

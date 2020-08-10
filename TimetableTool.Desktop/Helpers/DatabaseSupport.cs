@@ -24,10 +24,11 @@ namespace TimetableTool.Desktop.Helpers
 				ServiceTemplateMigration();
 				}
 
-			if (Settings.DatabaseVersion >= 3 && Settings.DatabaseVersion < 5)
+			if (Settings.DatabaseVersion >= 3 && Settings.DatabaseVersion < 6)
 				{
-				// You need ServiceClasses table end the Time Eventstable pus their data initialization.
-				SQLiteData.CreateTable("SQL\\UpdateToVersion5.sql");
+				// You need ServiceClasses table end the Time Eventstable plus their data initialization.
+				// reruns table creation, this will add the Trains and TranServices tables
+				SQLiteData.CreateTable("SQL\\TimetableDb.sql");
 				Settings.DatabaseVersion = VersionDataAccess.GetCurrentDatabaseVersion();
 				}
 

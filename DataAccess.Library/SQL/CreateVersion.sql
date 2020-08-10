@@ -5,5 +5,5 @@ CREATE TABLE IF NOT EXISTS "Version" (
 );
 
 DELETE FROM "Version";
-INSERT OR IGNORE INTO "Version" ("VersionNr") VALUES (5);
+INSERT OR IGNORE INTO "Version" ("VersionNr") VALUES (6);
 COMMIT;

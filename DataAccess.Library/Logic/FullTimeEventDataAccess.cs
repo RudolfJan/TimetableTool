@@ -43,7 +43,7 @@ namespace DataAccess.Library.Logic
 
       var timeEventList= new List<FullTimeEventModel>();
       int order =10;
-      // Warnig: No all columns are filled!
+      // Warning: Not all columns are filled!
       // TODO refactor this, using extraneous fields.
       foreach(var location in locations)
         {

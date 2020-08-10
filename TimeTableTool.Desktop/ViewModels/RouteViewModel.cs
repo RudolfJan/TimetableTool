@@ -185,6 +185,9 @@ namespace TimetableTool.Desktop.ViewModels
       output += exportRoute.ExportServiceTable();
       output += exportRoute.ExportTimetableTable();
       output += exportRoute.ExportConnectTiSi();
+      output += exportRoute.ExportTrains();
+      output += exportRoute.ExportTrainServices();
+
       var path= $"{Settings.DataPath}{SelectedRoute.RouteAbbreviation}-{DateTime.UtcNow.ToShortDateString()}.ttt";
 
       File.WriteAllText(path,output);
