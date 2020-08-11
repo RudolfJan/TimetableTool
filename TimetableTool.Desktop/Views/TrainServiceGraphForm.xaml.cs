@@ -1,9 +1,9 @@
 ﻿using ScottPlot;
+using System.Drawing;
 using System.Windows;
 using TimetableTool.Desktop.Models;
 using TimetableTool.Desktop.ReportsCommon;
 using TimetableTool.Desktop.ViewModels;
-using Color = System.Drawing.Color;
 
 namespace TimetableTool.Desktop.Views
 	{
@@ -32,15 +32,16 @@ namespace TimetableTool.Desktop.Views
 
 		public void PlotGraph()
 			{
-
 			scatterIndex = 0;
-
 			foreach (var graph in GraphModel.TrainPlanning)
 				{
 				// If a train does not contain data, do not try to plot
 				if (graph.ServicesInTrain.Count > 0)
 					{
-					graph.Plot = PlotService(graph, GraphModel.Zoom);
+					foreach (var service in graph.ServicesInTrain)
+						{
+						service.Plot = PlotService(service, GraphModel.Zoom);
+						}
 					}
 				}
 
@@ -52,47 +53,58 @@ namespace TimetableTool.Desktop.Views
 				{
 				marker = ScottPlotReport.DrawMarker(TimetableGraph.plt, marker, marker.xs[0], marker.ys[0]);
 				}
-
-			if (GraphModel.SelectedTrain != null)
-				{
-				GraphModel.SelectedTrain.Plot.lineWidth = 3;
-				}
+			ChangeHighlightedService(GraphModel.SelectedTrain);
 
 			scatterHighLight = TimetableGraph.plt.PlotScatterHighlight(scatterDataX, scatterDataY, lineWidth: 0, markerSize: 0.5);
-  		ScottPlotReport.ConfigurePlot(TimetableGraph);
-
+			DrawLabels(GraphModel);
+			ScottPlotReport.ConfigurePlot(TimetableGraph);
 			}
 
 		private void CreateSearchablePointsList()
 			{
-			int pointCount = 0;
-			foreach (var item in GraphModel.TrainPlanning)
-				{
-				pointCount += item.DataLine.Count;
-				}
+			var pointCount = CountPointsForAllServicesTogether();
+			CreateSearchableMapForAllPoints(pointCount);
+			}
 
+		private void CreateSearchableMapForAllPoints(int pointCount)
+			{
 			scatterDataX = new double[pointCount + 1];
 			scatterDataY = new double[pointCount + 1];
 			highlightedTrainPlanning = new TrainPlanningUIModel[pointCount + 1]; // keep reverse index to Train
 
 			int i = 0;
-			foreach (var item in GraphModel.TrainPlanning)
+			foreach (var train in GraphModel.TrainPlanning)
 				{
-				foreach (var dataPoint in item.DataLine)
+				foreach (var service in train.ServicesInTrain)
 					{
-					scatterDataX[i] = dataPoint.X;
-					scatterDataY[i] = -dataPoint.Y;
-					highlightedTrainPlanning[i] = item;
-					i++;
+					foreach (var dataPoint in service.DataLine)
+						{
+						scatterDataX[i] = dataPoint.X;
+						scatterDataY[i] = -dataPoint.Y;
+						highlightedTrainPlanning[i] = train;
+						i++;
+						}
 					}
-
 				}
 			}
 
-		public PlottableScatter PlotService(TrainPlanningUIModel graphModel, double zoom)
+		private int CountPointsForAllServicesTogether()
 			{
-			return TimetableGraph.plt.PlotScatter(graphModel.LocationValue, graphModel.TimeValue, graphModel.LineColor[0]);
-      }
+			int pointCount = 0;
+			foreach (var train in GraphModel.TrainPlanning)
+				{
+				foreach (var service in train.ServicesInTrain)
+					{
+					pointCount += service.DataLine.Count;
+					}
+				}
+			return pointCount;
+			}
+
+		public PlottableScatter PlotService(PlottableServiceModel service, double zoom)
+			{
+			return TimetableGraph.plt.PlotScatter(service.LocationValue, service.TimeValue, service.LineColor);
+			}
 
 
 		private void Redraw_OnClick(object sender, RoutedEventArgs e)
@@ -113,6 +125,30 @@ namespace TimetableTool.Desktop.Views
 				}
 			}
 
+		private void DrawLabels(TrainServiceGraph trainUi)
+			{
+
+			double xOffset = 0.01 / trainUi.Zoom;
+			double yOffset = 9 / trainUi.Zoom;
+			ScottPlot.TextAlignment alignment;
+			foreach (var train in trainUi.TrainPlanning)
+				{
+				if (train.LegendDataPoint.X > 3)
+					{
+					alignment = ScottPlot.TextAlignment.upperLeft;
+					}
+				else
+					{
+					alignment = ScottPlot.TextAlignment.upperRight;
+					}
+
+				TimetableGraph.plt.PlotText(train.Train.TrainAbbreviation,
+					train.LegendDataPoint.X + xOffset, -train.LegendDataPoint.Y + yOffset
+					, fontName: "Arial", fontSize: 10,
+					color: ScottPlotReport.GetResourceColor("GraphText"), bold: true, alignment: alignment);
+				}
+			}
+
 		private void OnMouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
 			{
 			var mousePos = e.MouseDevice.GetPosition(TimetableGraph);
@@ -129,19 +165,29 @@ namespace TimetableTool.Desktop.Views
 			TimetableGraph.Render();
 			}
 
-	
+
 		private void ChangeHighlightedService(TrainPlanningUIModel graph)
 			{
 			if (graph != null)
 				{
-				if (GraphModel.SelectedTrain != null && GraphModel.SelectedTrain.Plot != null)
+				if (GraphModel.SelectedTrain != null)
 					{
-					GraphModel.SelectedTrain.Plot.lineWidth = 1;
+					foreach (var service in GraphModel.SelectedTrain.ServicesInTrain)
+						{
+						if (service.Plot != null)
+							{
+							service.Plot.lineWidth = 1;
+							}
+						}
 					}
-				graph.Plot.lineWidth = 3;
-				GraphModel.SelectedTrain = graph;
+				foreach (var service in graph.ServicesInTrain)
+					{
+					service.Plot.lineWidth = 3;
+					}
 				}
+			GraphModel.SelectedTrain = graph;
 			}
+
 
 		private void OnZoomOrScrollChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
 			{
@@ -153,7 +199,7 @@ namespace TimetableTool.Desktop.Views
 			MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight * 0.9;
 			MaxWidth = SystemParameters.MaximizedPrimaryScreenWidth;
 			CreateSearchablePointsList();
-			PlotGraph();
+			RedrawPlot();
 			}
 
 		private void Exit_Click(object sender, RoutedEventArgs e)

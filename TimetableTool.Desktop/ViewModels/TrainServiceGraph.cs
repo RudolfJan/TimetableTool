@@ -118,63 +118,75 @@ namespace TimetableTool.Desktop.ViewModels
 				{
 				TrainPlanningUIModel trainUi= new TrainPlanningUIModel();
 				trainUi.Train = train;
-				trainUi.ServicesInTrain =
-					ServicesDataAccess.GetServicesPerRoutePerTrainInTrainServices(routeId, train.Id);
-				AddTimeEventsToDataLineForAllServicesInTrain(trainUi);
-				ConvertDataLineToPlotData(trainUi);
+				var ServiceList= ServicesDataAccess.GetServicesPerRoutePerTrainInTrainServices(routeId, train.Id);
+				trainUi.ServicesInTrain = new List<PlottableServiceModel>();
+				DataPoint firstPoint = null;
+				foreach (var item in ServiceList)
+					{
+					var plottableService = new PlottableServiceModel(item);
+					firstPoint=AddTimeEventsToDataLineForService(firstPoint, plottableService);
+					trainUi.ServicesInTrain.Add(plottableService);
+					ConvertDataLineToPlotData(plottableService);
+					if (trainUi.LegendDataPoint == null)
+						{
+						trainUi.LegendDataPoint = plottableService.DataLine.First();
+						}
+					}
 				TrainPlanning.Add(trainUi);
 				}
 			}
 
-		private void ConvertDataLineToPlotData(TrainPlanningUIModel trainUi)
+		private void ConvertDataLineToPlotData(PlottableServiceModel plottableService)
 			{
-			int count = trainUi.DataLine.Count;
-			trainUi.LocationValue= new double[count];
-			trainUi.TimeValue = new double[count];
-			trainUi.LineColor= new Color[count];
+			int count = plottableService.DataLine.Count;
+			plottableService.LocationValue= new double[count];
+			plottableService.TimeValue = new double[count];
 			int i = 0;
-			foreach (var item in trainUi.DataLine)
+			foreach (var item in plottableService.DataLine)
 				{
-				trainUi.LocationValue[i] = item.X;
-				trainUi.TimeValue[i] = - item.Y; // We need to invert the Y-axis in order to get the annotation in the correct order
-				trainUi.LineColor[i] = item.LineColor;
+				plottableService.LocationValue[i] = item.X;
+				plottableService.TimeValue[i] = - item.Y; // We need to invert the Y-axis in order to get the annotation in the correct order
 				i++;
 				} 
 			}
 
-		private void AddTimeEventsToDataLineForAllServicesInTrain(TrainPlanningUIModel trainUi)
+		private DataPoint AddTimeEventsToDataLineForService(DataPoint firstPoint,PlottableServiceModel plottableService)
 			{
-
-			foreach (var trainService in trainUi.ServicesInTrain)
-				{
-				Color lineColor = GetLineColor(trainService.ServiceType, ServiceClassList);
+			plottableService.LineColor = GetLineColor(plottableService.ServiceType, ServiceClassList);
 				List<ExtendedFullTimeEventModel> timeEventList =
-					FullTimeEventDataAccess.GetAllExtendedFullTimeEventsPerServiceTemplate(trainService
+					FullTimeEventDataAccess.GetAllExtendedFullTimeEventsPerServiceTemplate(plottableService
 						.ServiceTemplateId);
-				ExtractDataLineFromTimeEventsPerService(trainUi.DataLine, timeEventList, trainService.StartTime, lineColor);
+				return ExtractDataLineFromTimeEventsPerService(firstPoint, plottableService.DataLine, timeEventList, plottableService.StartTime);
 				}
-			}
 
-
-		public void ExtractDataLineFromTimeEventsPerService(List<DataPoint> dataLine, List<ExtendedFullTimeEventModel> timeEventList, int startTime, Color lineColor)
+		public DataPoint ExtractDataLineFromTimeEventsPerService(DataPoint firstPoint, List<DataPoint> dataLine, List<ExtendedFullTimeEventModel> timeEventList, int startTime)
 			{
 			int actualTime = startTime;
+			DataPoint lastPoint=null;
+			// The firstpoint establishes a connection line from the previous service
+			// For the first service, it should be null.
+			// The startTime should be the starTime of the service processed right now. firstPoint will set the the proper timing automatically :-)
+			if (firstPoint != null)
+				{
+				dataLine.Add(firstPoint);
+				}
 			foreach (var fullTimeEvent in timeEventList)
 				{
 				actualTime += fullTimeEvent.ArrivalTime;
 				fullTimeEvent.ArrivalTimeText = TimeConverters.MinutesToString(actualTime);
 				DataPoint point = GetFirstDataPoint(fullTimeEvent, actualTime);
-				point.LineColor = lineColor;
 				dataLine.Add(point);
+				lastPoint = point;
 				if (fullTimeEvent.WaitTime > 0)
 					{
 					actualTime += fullTimeEvent.WaitTime;
 					DataPoint point2 = GetSecondDataPoint(actualTime, point.X);
-					point2.LineColor = lineColor;
 					dataLine.Add(point2);
+					lastPoint = point2;
 					}
 				fullTimeEvent.DepartureTimeText = TimeConverters.MinutesToString(actualTime);
 				}
+			return lastPoint;
 			}
 		private DataPoint GetFirstDataPoint(FullTimeEventModel fullTimeEvent, int actualTime)
 			{
