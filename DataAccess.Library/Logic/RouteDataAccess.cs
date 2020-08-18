@@ -44,5 +44,57 @@ namespace DataAccess.Library.Logic
 			string sql = "PRAGMA foreign_keys = ON;DELETE FROM Routes WHERE Routes.Id=@RouteId;";
 			SQLiteData.SaveData<dynamic>(sql, new { routeId }, SQLiteData.GetConnectionString());
 			}
+
+
+		public static int GetServiceTemplatesCountById(int routeId)
+			{
+			string sql =
+				"SELECT COUNT(*) AS RouteTemplatesCount FROM ServiceTemplates WHERE ServiceTemplates.RouteId= @RouteId;";
+
+			var routeTemplateCount =
+				SQLiteData.LoadData<int, dynamic>(sql, new { routeId }, SQLiteData.GetConnectionString()).FirstOrDefault();
+			return routeTemplateCount;
+			}
+
+		public static int GetTrainCountById(int routeId)
+			{
+			string sql = "SELECT COUNT(*) AS TrainsCount FROM Trains WHERE Trains.RouteId= @RouteId;";
+
+			var trainCount =
+				SQLiteData.LoadData<int, dynamic>(sql, new { routeId }, SQLiteData.GetConnectionString()).FirstOrDefault();
+			return trainCount;
+			}
+
+		public static int GetLocationCountById(int routeId)
+			{
+			string sql = "SELECT COUNT(*) AS LocationsCount FROM Locations WHERE Locations.RouteId= @RouteId;";
+
+			var locationCount =
+				SQLiteData.LoadData<int, dynamic>(sql, new { routeId }, SQLiteData.GetConnectionString()).FirstOrDefault();
+			return locationCount;
+			}
+
+		public static List<RouteStatisticsModel> GetRouteStatistics()
+			{
+			string sql = @"SELECT Routes.Id, Routes.RouteName, Routes.RouteAbbreviation, COUNT(*) AS ServiceCount
+												FROM Routes, Services, ServiceTemplates 
+												WHERE Services.ServiceTemplateId= ServiceTemplates.Id 
+															AND ServiceTemplates.RouteId= Routes.Id
+												GROUP BY Routes.RouteAbbreviation;";
+
+			var routeStatisticsList =
+				SQLiteData.LoadData<RouteStatisticsModel, dynamic>(sql, new { }, SQLiteData.GetConnectionString()).ToList();
+			foreach (var item in routeStatisticsList)
+				{
+				item.ServiceTemplateCount = GetServiceTemplatesCountById(item.Id);
+				item.TrainCount = GetTrainCountById(item.Id);
+				item.LocationCount = GetLocationCountById(item.Id);
+				}
+			return routeStatisticsList;
+			}
+
+
+
+
 		}
 	}

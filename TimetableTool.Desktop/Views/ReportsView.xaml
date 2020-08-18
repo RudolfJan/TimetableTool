@@ -12,7 +12,8 @@
            <Grid.ColumnDefinitions>
              <ColumnDefinition Width="Auto"/>
              <ColumnDefinition Width="Auto"/>
-             <ColumnDefinition Width="*"/>
+             <ColumnDefinition Width="Auto"/>
+          <ColumnDefinition Width="*"/>
            </Grid.ColumnDefinitions>
            <Grid.RowDefinitions>
              <RowDefinition Height="Auto"/>
@@ -48,7 +49,7 @@
 
            <!-- #region Selector -->
            <TextBlock Grid.Row="0" Grid.Column="1" 
-                      Style="{StaticResource HeaderTextBlock}">Reports</TextBlock>
+                      Style="{StaticResource HeaderTextBlock}">Timetable Reports</TextBlock>
            <StackPanel Grid.Row="1" Grid.Column="1" >
              <Button x:Name="ViewTimetable" Style="{StaticResource WideButton}">Classic</Button>
              <!-- <Button x:Name="ViewGraph" Style="{StaticResource WideButton}">Graph</Button> -->
@@ -57,6 +58,17 @@
             <Button x:Name="TrainPlanning" Style="{StaticResource WideButton}">Train Planning</Button>
         </StackPanel>
            <!-- endregion -->
+
+           <!-- region statics -->
+        <TextBlock Grid.Row="0" Grid.Column="2" 
+                      Style="{StaticResource HeaderTextBlock}">Checking Reports</TextBlock>
+           <StackPanel Grid.Row="1" Grid.Column="2" >
+             <Button x:Name="ViewConsistencyChecks" Style="{StaticResource WideButton}">Consistency checks</Button>
+           </StackPanel>
+
+
+           <!-- endregion -->
+
          </Grid>
        </StackPanel>     
     </Border>

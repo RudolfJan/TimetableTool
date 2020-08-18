@@ -69,5 +69,57 @@ namespace DataAccess.Library.Logic
       string sql = "PRAGMA foreign_keys = ON;DELETE FROM ServiceTemplates WHERE ServiceTemplates.Id=@ServiceTemplateId;";
       SQLiteData.SaveData<dynamic>(sql, new { serviceTemplateId }, SQLiteData.GetConnectionString());
 			}
-		}
+
+
+    public static int GetTimeEventsCountById(int serviceTemplateId)
+      {
+      string sql = "SELECT COUNT(*) FROM ServiceTemplates, TimeEvents WHERE ServiceTemplates.Id= @serviceTemplateId AND TimeEvents.ServiceTemplateId=ServiceTemplates.Id;";
+
+      var timeEventCount =
+        SQLiteData.LoadData<int, dynamic>(sql, new { serviceTemplateId }, SQLiteData.GetConnectionString()).FirstOrDefault();
+      return timeEventCount;
+      }
+
+    public static int GetServicesInTrainCountById(int serviceTemplateId)
+      {
+      string sql = @"SELECT COUNT(*) AS ServicesInTrainCount
+               
+                      FROM Services WHERE Services.ServiceTemplateId== @serviceTemplateId
+                      AND Services.Id IN (SELECT TrainServices.ServiceId FROM TrainServices)";
+
+      var servicesInTrainCount =
+        SQLiteData.LoadData<int, dynamic>(sql, new { serviceTemplateId }, SQLiteData.GetConnectionString()).FirstOrDefault();
+      return servicesInTrainCount;
+      }
+
+
+
+
+    public static List<ServiceTemplateStatisticsModel> GetServiceTemplateStatistics()
+      {
+      string sql = @"SELECT Routes.RouteName, Routes.RouteAbbreviation, Routes.Id
+	                          , ServiceTemplates.ServiceTemplateName
+                            , ServiceTemplates.ServiceTemplateAbbreviation
+                            , ServiceTemplates.Id, COUNT(*) As ServiceCount
+	                    FROM Services, ServiceTemplates, Routes 
+	                    WHERE Services.ServiceTemplateId= ServiceTemplates.Id 
+                            AND ServiceTemplates.RouteId= Routes.Id 
+	                    GROUP BY ServiceTemplates.ServiceTemplateName;";
+
+      var serviceStatsList =
+        SQLiteData.LoadData<ServiceTemplateStatisticsModel, dynamic>(sql, new {}, SQLiteData.GetConnectionString()).ToList();
+
+
+
+
+
+      foreach (var item in serviceStatsList)
+        {
+        item.TimeEventCount = GetTimeEventsCountById(item.Id);
+        item.ServicesInTrainCount = GetServicesInTrainCountById(item.Id);
+        }
+      return serviceStatsList;
+      }
+
+    }
   }

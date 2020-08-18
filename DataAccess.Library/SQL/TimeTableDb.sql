@@ -190,8 +190,9 @@ INSERT INTO "ServiceClasses" ("Id","ServiceClassName","ServiceClassDescription",
  (7,'Passenger depot run','Passenger trains for depot','Passenger','Green'),
  (8,'Light engine','Light engine','Other','Olive'),
  (9,'Freight shunting duty','Freight Shunting','Freight','Orange'),
- (10,'Heavy freight','Heavy freight','Freight','DarkRed'),
- (11,'Express freight','Express freight','Freight','Maroon'),
+ (10,'Heavy freight','Heavy freight','Freight','OrangeRed'),
+ (11,'Express freight','Express freight','Freight','Tomato'),
  (12,'Work train','Work train, track maintenance etcetera','Other','Lime');
-
+ (13,'AI Freight','Freight, AI only','Freight','Pink'),
+ (14,'AI Passenger','Passenger, AI only','Passenger','SkyBlue');
 COMMIT;

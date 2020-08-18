@@ -387,7 +387,13 @@ namespace TimetableTool.Desktop.ViewModels
 						form.Show();
 						break;
 						}
-
+					case ReportType.ConsistencyChecks:
+						{
+						var statisticsVM = new StatisticsGraph();
+						var form = new StatisticsGraphForm(statisticsVM);
+						form.Show();
+						break;
+						}
 					default:
 						{
 						throw new NotImplementedException("Report type not implemented in ShellView");

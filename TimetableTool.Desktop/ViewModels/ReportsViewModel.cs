@@ -143,9 +143,14 @@ namespace TimetableTool.Desktop.ViewModels
 			reportEvent.SelectedTimetable = SelectedTimetable;
 			reportEvent.Report = ReportType.TrainPlanning;
 			await _events.PublishOnUIThreadAsync(reportEvent);
-
 			}
 		#endregion
 
+		public async Task ViewConsistencyChecks()
+			{
+			ReportSelectedEvent reportEvent = new ReportSelectedEvent();
+			reportEvent.Report = ReportType.ConsistencyChecks;
+			await _events.PublishOnUIThreadAsync(reportEvent);
+			}
 		}
 	}

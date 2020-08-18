@@ -7,7 +7,8 @@
                             xmlns:windowSizing="clr-namespace:UISupport.Library.WindowSizing;assembly=Styles.Library"
                             xmlns:cm="http://caliburnmicro.com"
                             mc:Ignorable="d"
-                            Style="{StaticResource AllWindows}" WindowStartupLocation="CenterScreen"
+                            Style="{StaticResource AllWindows}" 
+                            WindowStartupLocation="CenterScreen"
                             Loaded="WindowLoaded"
                             Title="Train Service Graph">
 	<ScrollViewer>
@@ -24,13 +25,13 @@
 						<StackPanel>
 							<WrapPanel>
 
-							<TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Zoom</TextBlock>
-							<Slider Name="ZoomSlider" Width="200"
+								<TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Zoom</TextBlock>
+								<Slider Name="ZoomSlider" Width="200"
 							        Minimum="1" Maximum="10"
 							        IsSelectionRangeEnabled="False"
 							        TickFrequency="1" Value="{Binding Zoom, Mode=TwoWay}" ValueChanged="OnZoomOrScrollChanged" />
-							<TextBox Width="40" Text="{Binding Zoom, StringFormat={}{0:#.#}, Mode=TwoWay}"/>
-						</WrapPanel>
+								<TextBox Width="40" Text="{Binding Zoom, StringFormat={}{0:#.#}, Mode=TwoWay}"/>
+							</WrapPanel>
 							<WrapPanel>
 								<TextBlock Width="40" Style="{StaticResource DefaultTextBlock}">Scroll</TextBlock>
 								<Slider Name="PanSlider" Width="200"
@@ -39,6 +40,37 @@
 							        TickFrequency="2" Value="{Binding Pan, Mode=TwoWay}" ValueChanged="OnZoomOrScrollChanged" />
 								<TextBox Width="40" Text="{Binding Pan, StringFormat={}{0:0}, Mode=TwoWay}"/>
 							</WrapPanel>
+
+							<TextBlock Style="{StaticResource HeaderTextBlock}">Trains</TextBlock>
+
+							<DataGrid x:Name="trainListDataGrid" 
+
+		                      Style="{StaticResource DefaultDataGrid}"
+		                      ItemsSource="{Binding TrainPlanning, Mode=TwoWay, NotifyOnSourceUpdated=True}"
+		                      Height="200"
+		                      CanUserAddRows="False"
+		                      CanUserDeleteRows="False"
+		                      AutoGenerateColumns="False">
+								<DataGrid.Columns>
+									<DataGridTemplateColumn Header="Train" Width="280">
+										<DataGridTemplateColumn.CellTemplate>
+											<DataTemplate>
+												<StackPanel>
+													<WrapPanel>
+														<TextBlock Text="{Binding Train.TrainAbbreviation, NotifyOnSourceUpdated=True}" Style="{StaticResource DefaultTextBlock}" Margin="{StaticResource TableTopMargin}"/>
+														<TextBlock Text="{Binding Train.TrainName, NotifyOnSourceUpdated=True}" Style="{StaticResource DefaultTextBlock}" Margin="{StaticResource TableTopMargin}"/>
+													</WrapPanel>
+													<WrapPanel>
+														<TextBlock Text="{Binding Train.TrainDescription, NotifyOnSourceUpdated=True}" Style="{StaticResource DefaultTextBlock}" Margin="{StaticResource TableTopMargin}"/>
+
+													</WrapPanel>
+												</StackPanel>
+											</DataTemplate>
+										</DataGridTemplateColumn.CellTemplate>
+									</DataGridTemplateColumn>
+								</DataGrid.Columns>
+							</DataGrid>
+
 							<TextBlock Style="{StaticResource HeaderTextBlock}">Train Plan</TextBlock>
 
 							<DataGrid x:Name="trainServiceListDataGrid" 
@@ -50,7 +82,7 @@
 		                      CanUserDeleteRows="False"
 		                      AutoGenerateColumns="False">
 								<DataGrid.Columns>
-									<DataGridTemplateColumn>
+									<DataGridTemplateColumn Header="Services" Width="280">
 										<DataGridTemplateColumn.CellTemplate>
 											<DataTemplate>
 												<Grid>
@@ -86,8 +118,8 @@
 								</DataGrid.Columns>
 							</DataGrid>
 						</StackPanel>
-						</Border>
-					</StackPanel>
+					</Border>
+				</StackPanel>
 				<StackPanel Grid.Column="1">
 					<WpfPlot  x:Name="TimetableGraph" Margin="20 20 20 40" cm:Bind.Model="{Binding}" 
 					          Width="{Binding ScottPlotWidth, Mode=TwoWay}" 
@@ -100,6 +132,6 @@
 					</WrapPanel>
 				</StackPanel>
 			</Grid>
-			</StackPanel>
-						</ScrollViewer>
+		</StackPanel>
+	</ScrollViewer>
 </windowSizing:SizableWindow>

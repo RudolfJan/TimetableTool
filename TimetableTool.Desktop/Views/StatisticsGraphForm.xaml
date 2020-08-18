@@ -1,0 +1,138 @@
+﻿<windowSizing:SizableWindow x:Class="TimetableTool.Desktop.Views.StatisticsGraphForm"
+                            xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                            xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                            xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                            xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                            xmlns:local="clr-namespace:TimetableTool.Desktop.Views"
+                            xmlns:windowSizing="clr-namespace:UISupport.Library.WindowSizing;assembly=Styles.Library"
+                            mc:Ignorable="d"
+                            WindowStartupLocation="CenterScreen"
+                            Loaded="WindowLoaded"
+                            Style="{StaticResource AllWindows}"
+                            Title="Statistics report">
+	<ScrollViewer>
+		<StackPanel>
+			<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition Width="*"/>
+				</Grid.ColumnDefinitions>
+				<StackPanel Grid.Column="0">
+					<TextBlock Style="{StaticResource HeaderTextBlock}">Routes</TextBlock>
+					<DataGrid Style="{StaticResource DataGridReadOnly}" 
+				          ItemsSource="{Binding RouteStatisticsList }" Height="500">
+						<DataGrid.Columns>
+							<DataGridTextColumn Header="Route" Binding="{Binding RouteAbbreviation}"/>
+							<DataGridTextColumn Header="Services" Binding="{Binding ServiceCount}">
+								<DataGridTextColumn.ElementStyle>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="HorizontalAlignment" Value="Stretch"/>
+										<Setter Property="TextAlignment" Value="Right"/>
+										<Style.Triggers>
+											<Trigger Property="Text" Value="0">
+												<Setter Property="Background" Value="Tomato"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</DataGridTextColumn.ElementStyle>
+							</DataGridTextColumn>
+							<DataGridTextColumn Header="Templates" Binding="{Binding ServiceTemplateCount}">
+								<DataGridTextColumn.ElementStyle>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="HorizontalAlignment" Value="Stretch"/>
+										<Setter Property="TextAlignment" Value="Right"/>
+										<Style.Triggers>
+											<Trigger Property="Text" Value="0">
+												<Setter Property="Background" Value="Tomato"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</DataGridTextColumn.ElementStyle>
+							</DataGridTextColumn>
+							<DataGridTextColumn Header="Trains" Binding="{Binding TrainCount}">
+								<DataGridTextColumn.ElementStyle>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="HorizontalAlignment" Value="Stretch"/>
+										<Setter Property="TextAlignment" Value="Right"/>
+										<Style.Triggers>
+											<Trigger Property="Text" Value="0">
+												<Setter Property="Background" Value="Tomato"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</DataGridTextColumn.ElementStyle>
+							</DataGridTextColumn>
+							<DataGridTextColumn Header="Locations" Binding="{Binding LocationCount}">
+								<DataGridTextColumn.ElementStyle>
+									<Style TargetType="{x:Type TextBlock}">
+										<Setter Property="HorizontalAlignment" Value="Stretch"/>
+										<Setter Property="TextAlignment" Value="Right"/>
+										<Style.Triggers>
+											<Trigger Property="Text" Value="0">
+												<Setter Property="Background" Value="Tomato"/>
+											</Trigger>
+										</Style.Triggers>
+									</Style>
+								</DataGridTextColumn.ElementStyle>
+							</DataGridTextColumn>
+						</DataGrid.Columns>
+					</DataGrid>
+				</StackPanel>
+			<StackPanel Grid.Column="1">
+					<TextBlock Style="{StaticResource HeaderTextBlock}"></TextBlock>
+				<DataGrid Style="{StaticResource DataGridReadOnly}" 
+				          ItemsSource="{Binding ServiceTemplateStatisticsList }" Height="500"
+				>
+<DataGrid.Columns>
+  <DataGridTextColumn Header="Route" Binding="{Binding RouteAbbreviation}"/>
+  <DataGridTextColumn Header="Template" Binding="{Binding ServiceTemplateName}"/>
+						<DataGridTextColumn Header="Services" Binding="{Binding ServiceCount}">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="HorizontalAlignment" Value="Stretch"/>
+									<Setter Property="TextAlignment" Value="Right"/>
+								<Style.Triggers>
+										<Trigger Property="Text" Value="0">
+											<Setter Property="Background" Value="Tomato"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+					</DataGridTextColumn>
+						<DataGridTextColumn Header="Events" Binding="{Binding TimeEventCount}">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="HorizontalAlignment" Value="Stretch"/>
+									<Setter Property="TextAlignment" Value="Right"/>
+									<Style.Triggers>
+										<Trigger Property="Text" Value="0">
+											<Setter Property="Background" Value="Tomato"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+							</DataGridTextColumn>
+						<DataGridTextColumn Header="Template" Binding="{Binding ServicesInTrainCount}">
+							<DataGridTextColumn.ElementStyle>
+								<Style TargetType="{x:Type TextBlock}">
+									<Setter Property="HorizontalAlignment" Value="Stretch"/>
+									<Setter Property="TextAlignment" Value="Right"/>
+									<Style.Triggers>
+										<Trigger Property="Text" Value="0">
+											<Setter Property="Background" Value="Tomato"/>
+										</Trigger>
+									</Style.Triggers>
+								</Style>
+							</DataGridTextColumn.ElementStyle>
+							</DataGridTextColumn>
+				</DataGrid.Columns>
+      </DataGrid>
+</StackPanel>
+			</Grid>
+			<WrapPanel HorizontalAlignment="Right" VerticalAlignment="Bottom">
+				<Button x:Name="Exit" Style="{StaticResource OKButton}"  Click="Exit_Click">Close</Button>
+			</WrapPanel>
+		</StackPanel>
+    </ScrollViewer>
+</windowSizing:SizableWindow>
